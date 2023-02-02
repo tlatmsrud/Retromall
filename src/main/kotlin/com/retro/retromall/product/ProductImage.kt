@@ -23,6 +23,4 @@ class ProductImage(
     @Column(name = "modified_at", updatable = true, nullable = true)
     var modifiedAt: LocalDateTime? = null
         private set
-
-
 }

@@ -1,6 +1,7 @@
 package com.retro.retromall.product
 
 import com.retro.retromall.category.Category
+import com.retro.retromall.hashtag.HashTag
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 import javax.persistence.*
@@ -26,6 +27,9 @@ class Product(
 
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val imageUrlList: MutableList<ProductImage> = mutableListOf()
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val productHashTagList: MutableList<ProductHashTag> = mutableListOf()
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
@@ -60,5 +64,10 @@ class Product(
             .map { url -> ProductImage(id = ProductImageId(productId = this.id!!, url = url), product = this) }
             .collect(Collectors.toList())
         this.imageUrlList.addAll(productImageList)
+    }
+
+    fun addHashTag(hashTag: HashTag) {
+        val productHashTag = ProductHashTag(id = ProductHashTagId(productId = this.id!!, tag = hashTag.tag), product = this, tag = hashTag)
+        this.productHashTagList.add(productHashTag)
     }
 }
