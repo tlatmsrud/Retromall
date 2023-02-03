@@ -1,7 +1,7 @@
 package com.retro.retromall.repository
 
-import com.retro.retromall.category.Category
-import com.retro.retromall.category.CategoryRepository
+import com.retro.retromall.category.domain.Category
+import com.retro.retromall.category.domain.CategoryRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -36,7 +36,7 @@ class CategoryRepositoryTest(
 
     @Test
     fun equalsCategory() {
-        var category = categoryRepository.findById(1L).orElseThrow()
+        var category = categoryRepository.findById("PC").orElseThrow()
 
         assertEquals(category.korValue, "데스크탑")
         assertEquals(category.products.size, 4)
@@ -45,13 +45,13 @@ class CategoryRepositoryTest(
     @Test
     fun addChild() {
         //given
-        var parent = categoryRepository.findById(1L).orElseThrow()
+        var parent = categoryRepository.findById("PC").orElseThrow()
         addChild(parent)
 
         //when
-        var child1 = categoryRepository.findById(2L).orElseThrow()
-        var child2 = categoryRepository.findById(3L).orElseThrow()
-        var child3 = categoryRepository.findById(4L).orElseThrow()
+        var child1 = categoryRepository.findById("CPU").orElseThrow()
+        var child2 = categoryRepository.findById("Graphic").orElseThrow()
+        var child3 = categoryRepository.findById("Power").orElseThrow()
 
         //then
         assertEquals(child1.category, "CPU")

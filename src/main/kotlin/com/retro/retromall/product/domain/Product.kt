@@ -1,6 +1,6 @@
-package com.retro.retromall.product
+package com.retro.retromall.product.domain
 
-import com.retro.retromall.category.Category
+import com.retro.retromall.category.domain.Category
 import com.retro.retromall.hashtag.HashTag
 import java.time.LocalDateTime
 import java.util.stream.Collectors
@@ -67,7 +67,22 @@ class Product(
     }
 
     fun addHashTag(hashTag: HashTag) {
-        val productHashTag = ProductHashTag(id = ProductHashTagId(productId = this.id!!, tag = hashTag.tag), product = this, tag = hashTag)
+        val productHashTag = ProductHashTag(
+            id = ProductHashTagId(productId = this.id!!, tag = hashTag.tag),
+            product = this,
+            tag = hashTag
+        )
         this.productHashTagList.add(productHashTag)
+    }
+
+    fun addHashTagList(hashTag: MutableList<HashTag>) {
+        val productHashTagList = hashTag.stream().map { hashTag ->
+            ProductHashTag(
+                ProductHashTagId(productId = this.id!!, tag = hashTag.tag),
+                product = this,
+                tag = hashTag
+            )
+        }.collect(Collectors.toList())
+        this.productHashTagList.addAll(productHashTagList)
     }
 }

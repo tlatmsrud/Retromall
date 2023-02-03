@@ -1,4 +1,4 @@
-package com.retro.retromall.product
+package com.retro.retromall.product.domain
 
 import com.retro.retromall.hashtag.HashTag
 import javax.persistence.*

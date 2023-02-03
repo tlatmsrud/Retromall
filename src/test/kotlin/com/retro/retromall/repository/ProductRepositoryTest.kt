@@ -1,11 +1,11 @@
 package com.retro.retromall.repository
 
-import com.retro.retromall.category.Category
-import com.retro.retromall.category.CategoryRepository
+import com.retro.retromall.category.domain.Category
+import com.retro.retromall.category.domain.CategoryRepository
 import com.retro.retromall.hashtag.HashTag
 import com.retro.retromall.hashtag.HashTagRepository
-import com.retro.retromall.product.Product
-import com.retro.retromall.product.ProductRepository
+import com.retro.retromall.product.domain.Product
+import com.retro.retromall.product.domain.ProductRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

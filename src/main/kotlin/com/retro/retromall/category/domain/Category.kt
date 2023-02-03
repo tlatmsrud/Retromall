@@ -1,6 +1,6 @@
-package com.retro.retromall.category
+package com.retro.retromall.category.domain
 
-import com.retro.retromall.product.Product
+import com.retro.retromall.product.domain.Product
 import javax.persistence.*
 
 @Entity

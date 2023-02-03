@@ -1,4 +1,4 @@
-package com.retro.retromall.product
+package com.retro.retromall.product.domain
 
 import java.io.Serializable
 import javax.persistence.*

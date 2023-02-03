@@ -1,4 +1,4 @@
-package com.retro.retromall.product
+package com.retro.retromall.product.domain
 
 import org.springframework.data.jpa.repository.JpaRepository
 

@@ -1,6 +1,6 @@
 package com.retro.retromall.hashtag
 
-import com.retro.retromall.product.ProductHashTag
+import com.retro.retromall.product.domain.ProductHashTag
 import java.time.LocalDateTime
 import javax.persistence.*
 
