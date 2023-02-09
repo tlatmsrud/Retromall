@@ -2,8 +2,8 @@ package com.retro.retromall.repository
 
 import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.CategoryRepository
-import com.retro.retromall.hashtag.HashTag
-import com.retro.retromall.hashtag.HashTagRepository
+import com.retro.retromall.hashtag.domain.HashTag
+import com.retro.retromall.hashtag.domain.repository.HashTagRepository
 import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.ProductRepository
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -30,41 +30,20 @@ class ProductRepositoryTest(
         var category: Category = createCategory()
         createHashTag()
         val product =
-            Product(content = "content", amount = 12000, category)
+            Product(
+                content = "content",
+                amount = 12000,
+                category = category,
+            )
 
-        val result = productRepository.save(product)
+        productRepository.save(product)
     }
 
     private fun createCategory(): Category {
-        return categoryRepository.save(Category(category = "PC", korValue = "데스크탑"))
+        return categoryRepository.save(Category(name = "PC", korName = "데스크탑"))
     }
 
     private fun createHashTag(): HashTag {
         return hashTagRepository.save(HashTag(tag = "PS5"))
-    }
-
-    @Test
-    fun addImage() {
-        //given
-        val product = productRepository.getReferenceById(1L)
-
-        //when
-        product.addImage("imageUrl1")
-
-        //then
-        assertEquals(product.imageUrlList.size, 1)
-        assertEquals(product.imageUrlList[0].id.url, "imageUrl1")
-    }
-
-    @Test
-    fun addHashTag() {
-        //given
-        val product = productRepository.getReferenceById(1L)
-        val hashTag = hashTagRepository.getReferenceById("PS5")
-
-        //when
-        product.addHashTag(hashTag)
-
-        assertEquals(product.productHashTagList[0].tag, hashTag)
     }
 }

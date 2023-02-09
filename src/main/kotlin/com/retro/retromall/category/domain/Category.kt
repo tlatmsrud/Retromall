@@ -6,22 +6,19 @@ import javax.persistence.*
 @Entity
 @Table(name = "tb_category")
 class Category(
-    category: String,
-    korValue: String,
+    name: String,
+    korName: String,
 ) {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
+    @Column(name = "category_name", nullable = false)
+    val name: String = name
 
-    @Column(name = "category", nullable = false)
-    val category: String = category
-
-    @Column(name = "kor_val", nullable = false)
-    var korValue: String = korValue
+    @Column(name = "category_kor_name", nullable = false)
+    var korName: String = korName
         private set
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @JoinColumn(name = "parent_id", referencedColumnName = "category_name")
     var parent: Category? = null
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.LAZY)

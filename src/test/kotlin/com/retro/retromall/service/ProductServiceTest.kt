@@ -3,40 +3,51 @@ package com.retro.retromall.service
 import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.CategoryRepository
 import com.retro.retromall.product.controller.dto.AddProductRequest
-import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.ProductRepository
 import com.retro.retromall.product.service.ProductService
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
-import org.mockito.Mock
-import org.mockito.Mockito.*
-import org.mockito.junit.jupiter.MockitoExtension
-import java.util.*
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.transaction.annotation.Transactional
 
-@ExtendWith(MockitoExtension::class)
+@ExtendWith(SpringExtension::class)
+@SpringBootTest
 class ProductServiceTest(
-    @Mock
+    @Autowired
+    private val productService: ProductService,
+
+    @Autowired
     private val productRepository: ProductRepository,
 
-    @Mock
-    private val categoryRepository: CategoryRepository
+    @Autowired
+    private val categoryRepository: CategoryRepository,
+
 ) {
+    @BeforeEach
+    @Transactional
+    fun init() {
+        categoryRepository.save(Category(name = "PC", korName = "데스크탑"))
+    }
+
     @Test
+    @Transactional
     fun addProduct() {
-        val category = Category(category = "PC", korValue = "데스크탑")
-        val product = Product(content = "", amount = 10000, category = category)
-//        given(categoryRepository.findById(anyString())).willReturn(Optional.ofNullable(any(Category::class.java)))
-//        given(productRepository.save(any(Product::class.java))).willReturn(any(Product::class.java))
+        val dto = AddProductRequest(
+            content = "",
+            amount = 1000,
+            category = "PC",
+            imageList = mutableListOf(),
+            hashTagList = mutableListOf("#PS", "#PC")
+        )
+        productService.addProduct(dto)
 
-        given(categoryRepository.findById(anyString())).willReturn(Optional.of(category))
-        given(productRepository.save(any(Product::class.java))).willReturn(product)
+        val result = productRepository.findById(1L).orElseThrow { IllegalArgumentException("") }
 
-
-        val service = ProductService(productRepository, categoryRepository)
-        service.addProduct(AddProductRequest("", 1000, "PC"))
-
-        verify(categoryRepository).findById(anyString())
-        verify(productRepository).save(any(Product::class.java))
+        assertEquals(result.category.name, "PC")
+        assertEquals(result.hashTags.size, 2)
     }
 }

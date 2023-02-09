@@ -1,4 +1,4 @@
-package com.retro.retromall.hashtag
+package com.retro.retromall.hashtag.domain
 
 import com.retro.retromall.product.domain.ProductHashTag
 import java.time.LocalDateTime
@@ -16,6 +16,6 @@ class HashTag(
     @Column(name = "created_at", updatable = false, nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now()
 
-    @OneToMany(mappedBy = "tag", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hashTag", fetch = FetchType.LAZY)
     val productHashTag: MutableList<ProductHashTag> = mutableListOf()
 }

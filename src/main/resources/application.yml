@@ -17,3 +17,6 @@ logging:
         type:
           descriptor:
             sql: trace
+
+jwt:
+  secret: testt323t2safdsa

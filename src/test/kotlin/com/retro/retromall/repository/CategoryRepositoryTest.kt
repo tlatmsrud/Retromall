@@ -15,18 +15,18 @@ class CategoryRepositoryTest(
 ) {
     @BeforeEach
     fun init() {
-        var category = Category(category = "PC", korValue = "데스크탑")
+        var category = Category(name = "PC", korName = "데스크탑")
         categoryRepository.save(category)
     }
 
     private fun addChild(parent: Category) {
-        val child1 = Category(category = "CPU", korValue = "CPU")
+        val child1 = Category(name = "CPU", korName = "CPU")
         child1.addParent(parent)
 
-        val child2 = Category(category = "Graphic", korValue = "Graphic")
+        val child2 = Category(name = "Graphic", korName = "Graphic")
         child2.addParent(parent)
 
-        val child3 = Category(category = "Power", korValue = "Power")
+        val child3 = Category(name = "Power", korName = "Power")
         child3.addParent(parent)
 
         categoryRepository.save(child1)
@@ -38,7 +38,7 @@ class CategoryRepositoryTest(
     fun equalsCategory() {
         var category = categoryRepository.findById("PC").orElseThrow()
 
-        assertEquals(category.korValue, "데스크탑")
+        assertEquals(category.korName, "데스크탑")
         assertEquals(category.products.size, 4)
     }
 
@@ -54,13 +54,13 @@ class CategoryRepositoryTest(
         var child3 = categoryRepository.findById("Power").orElseThrow()
 
         //then
-        assertEquals(child1.category, "CPU")
+        assertEquals(child1.name, "CPU")
         assertEquals(child1.parent, parent)
 
-        assertEquals(child2.category, "Graphic")
+        assertEquals(child2.name, "Graphic")
         assertEquals(child2.parent, parent)
 
-        assertEquals(child3.category, "Power")
+        assertEquals(child3.name, "Power")
         assertEquals(child3.parent, parent)
 
         assertEquals(parent.childList.size, 3)
