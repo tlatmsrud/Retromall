@@ -25,8 +25,8 @@ class CustomUserDetailService(
     private fun createUserDetails(member: Member): UserDetails {
         return User.builder()
             .username(member.username)
-            .password(passwordEncoder.encode(member.getPassword()))
-            .roles(member.roles.toString())
+            .password(passwordEncoder.encode(member.password))
+            .roles(member.authorities.toString())
             .build()
     }
 }

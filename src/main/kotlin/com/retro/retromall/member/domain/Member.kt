@@ -15,14 +15,13 @@ class Member(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false, updatable = false)
-    var id: String = id
-        private set
+    private var id: String = id
 
     @Column(name = "password", nullable = false)
-    val password: String = password
+    private val password: String = password
 
     @ElementCollection(fetch = FetchType.EAGER)
-    val roles: MutableList<String> = mutableListOf()
+    private val roles: MutableList<String> = mutableListOf()
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return this.roles.stream()
