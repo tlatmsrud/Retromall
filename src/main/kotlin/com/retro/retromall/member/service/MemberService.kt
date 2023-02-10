@@ -21,13 +21,13 @@ class MemberService(
     @Transactional
     fun findMemberByOauth(oAuth2Type: OAuth2Type, authorizationCode: String): TokenInfo {
         val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuth2Type)
-        val response = webClient.getToken(authorizationCode)
-        val oAuthAttributes = webClient.getUserInfo(response.accessToken)
-        return jwtTokenProvider.generateToken(findMemberByOAuthAttributes(oAuthAttributes))
+        val oAuthAttributes = webClient.getToken(authorizationCode)
+        val memberAttributes = webClient.getUserInfo(oAuthAttributes)
+        return jwtTokenProvider.generateToken(findMemberByOAuthAttributes(memberAttributes))
     }
 
     fun findMemberByOAuthAttributes(attributes: MemberAttributes): Member {
-        return memberRepository.findByIdOrNull(attributes.oauthId)
+        return memberRepository.findByOauth2Id(attributes.oauthId).orElse(null)
             ?: return addMember(attributes)
     }
 

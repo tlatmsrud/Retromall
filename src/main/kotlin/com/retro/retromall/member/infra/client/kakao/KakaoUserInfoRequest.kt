@@ -3,9 +3,12 @@ package com.retro.retromall.member.infra.client.kakao
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class KakaoUserInfoRequest(
-    @field:JsonProperty("secure_resource")
-    val secureResource: Boolean,
+    secureResource: Boolean,
+    scope: List<String>
+) {
+    @JsonProperty("secure_resource")
+    val secureResource: Boolean = secureResource
 
-    @field:JsonProperty("property_keys")
-    val scope: String
-)
+    @JsonProperty("property_keys")
+    val propertyKeys: String = "[\"" + scope.joinToString { "," } + "\"]"
+}

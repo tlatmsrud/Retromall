@@ -32,7 +32,7 @@ class KakaoProperties(
     val redirectUri: String,
 
     @Value("\${scope}")
-    val scope: String,
+    val scope: List<String>,
 
     @Value("\${secure-resource}")
     val secureResource: Boolean

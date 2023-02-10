@@ -2,7 +2,7 @@ package com.retro.retromall.member.infra.client.kakao
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class KakaoTokenRequest(
+data class KakaoTokenRequest(
     @field:JsonProperty("grant_type")
     val grantType: String,
 

@@ -9,7 +9,7 @@ import javax.persistence.*
 class Member(
     oauth2Id: String,
     email: String?,
-    nickname: String
+    nickname: String?
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +22,8 @@ class Member(
     @Column(name = "email", unique = true)
     private val email: String? = email
 
-    @Column(name = "nickname", unique = false, nullable = false)
-    private val nickname: String = nickname
+    @Column(name = "nickname", unique = false)
+    private val nickname: String? = nickname
 
     @ElementCollection(fetch = FetchType.EAGER)
     private val roles: MutableList<Role> = mutableListOf()
@@ -38,7 +38,7 @@ class Member(
         return this.roles
     }
 
-    fun getUsername(): String {
+    fun getUsername(): String? {
         return nickname
     }
 

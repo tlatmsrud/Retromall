@@ -48,7 +48,7 @@ class KakaoWebClientImpl(
             .retrieve()
             .onStatus({ it != HttpStatus.OK }, {
                 it.createException().flatMap { err ->
-                    logger.error(err.message)
+                    logger.error(err.responseBodyAsString)
                     throw IllegalStateException(err.message)
                 }
             })
@@ -64,19 +64,19 @@ class KakaoWebClientImpl(
         )
     }
 
-    override fun getUserInfo(accessToken: String): MemberAttributes {
+    override fun getUserInfo(attributes: OAuthAttributes): MemberAttributes {
         val kakaoUserInfoRequest =
             KakaoUserInfoRequest(secureResource = properties.secureResource, scope = properties.scope)
         val parameters = WebClientUtils.convertParameters(kakaoUserInfoRequest, objectMapper)
         val response = apiWebClient.post()
             .uri { uriBuilder -> uriBuilder.path(properties.userInfoUri).build() }
-            .header(HttpHeaders.AUTHORIZATION, accessToken)
+            .header(HttpHeaders.AUTHORIZATION, attributes.tokenType + " " + attributes.accessToken)
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .body(BodyInserters.fromFormData(parameters))
-            .retrieve().onStatus({ it -> it != HttpStatus.OK },
+            .retrieve().onStatus({ it != HttpStatus.OK },
                 {
                     it.createException().flatMap { err ->
-                        logger.error(err.message)
+                        logger.error(err.responseBodyAsString)
                         throw IllegalStateException(err.message)
                     }
                 })
@@ -84,10 +84,10 @@ class KakaoWebClientImpl(
             .block()
 
         return MemberAttributes(
-            name = response!!.kakaoAccount.name,
-            email = response.kakaoAccount.email,
-            image = response.kakaoAccount.profile.profileImageUrl,
-            oauthId = response.id.toString()
+            oauthId = response?.id.toString(),
+            name = response?.kakaoAccount?.name,
+            email = response?.kakaoAccount?.email,
+            image = response?.kakaoAccount?.profile?.profileImageUrl,
         )
     }
 
