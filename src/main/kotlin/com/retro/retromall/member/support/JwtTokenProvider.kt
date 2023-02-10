@@ -1,5 +1,7 @@
-package com.retro.retromall.common
+package com.retro.retromall.member.support
 
+import com.retro.retromall.member.dto.TokenInfo
+import com.retro.retromall.member.domain.Member
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
@@ -12,15 +14,9 @@ import io.jsonwebtoken.security.SecurityException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Component
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.RuntimeException
 
 @Component
 class JwtTokenProvider(
@@ -31,15 +27,15 @@ class JwtTokenProvider(
     private val keyBytes: ByteArray? = Decoders.BASE64.decode(secretKey)
     private val key = Keys.hmacShaKeyFor(keyBytes)
 
-    fun generateToken(authentication: Authentication): TokenInfo {
-        val authorities = authentication.authorities.stream()
-            .map(GrantedAuthority::getAuthority)
+    fun generateToken(member: Member): TokenInfo {
+        val authorities = member.getAuthorities().stream()
+            .map { role -> role.name }
             .collect(Collectors.joining(","))
 
         val now = Date().time
         val accessTokenExpiresIn = Date(now + 8640000)
         val accessToken = Jwts.builder()
-            .setSubject(authentication.name)
+            .setSubject(member.getUsername())
             .claim("auth", authorities)
             .setExpiration(accessTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256)
@@ -51,20 +47,6 @@ class JwtTokenProvider(
             .compact()
 
         return TokenInfo(grantType = "Bearer", accessToken = accessToken, refreshToken = refreshToken)
-    }
-
-    fun getAuthentication(accessToken: String): Authentication {
-        val claims = parseClaims(accessToken)
-        if (claims["auth"] == null) {
-            throw RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-        val authorities = claims["auth"].toString().split(",").stream()
-            .map { auth -> SimpleGrantedAuthority(auth) }
-            .collect(Collectors.toList())
-
-        val principal = User(claims.subject, "", authorities)
-        return UsernamePasswordAuthenticationToken(principal, "", authorities)
     }
 
     fun validateToken(token: String): Boolean {

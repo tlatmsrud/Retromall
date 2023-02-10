@@ -1,55 +1,60 @@
 package com.retro.retromall.member.domain
 
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
+import com.retro.retromall.member.enums.Role
 import java.util.stream.Collectors
 import javax.persistence.*
 
 @Entity
 @Table(name = "tb_member")
 class Member(
-    id: String,
-    password: String
-) : UserDetails {
+    oauth2Id: String,
+    email: String?,
+    nickname: String
+) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false, updatable = false)
-    private var id: String = id
+    private var id: Long? = null
 
-    @Column(name = "password", nullable = false)
-    private val password: String = password
+    @Column(name = "oauth2_id", unique = true, nullable = false)
+    private val oauth2Id: String = oauth2Id
+
+    @Column(name = "email", unique = true)
+    private val email: String? = email
+
+    @Column(name = "nickname", unique = false, nullable = false)
+    private val nickname: String = nickname
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private val roles: MutableList<String> = mutableListOf()
+    private val roles: MutableList<Role> = mutableListOf()
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return this.roles.stream()
-            .map { role -> SimpleGrantedAuthority(role) }
-            .collect(Collectors.toList())
+//    fun getAuthorities(): MutableCollection<out GrantedAuthority> {
+//        return this.roles.stream()
+//            .map { role -> SimpleGrantedAuthority(role.name) }
+//            .collect(Collectors.toList())
+//    }
+
+    fun getAuthorities(): MutableCollection<Role> {
+        return this.roles
     }
 
-    override fun getPassword(): String {
-        return password
+    fun getUsername(): String {
+        return nickname
     }
 
-    override fun getUsername(): String {
-        return id
-    }
-
-    override fun isAccountNonExpired(): Boolean {
+    fun isAccountNonExpired(): Boolean {
         return true
     }
 
-    override fun isAccountNonLocked(): Boolean {
+    fun isAccountNonLocked(): Boolean {
         return true
     }
 
-    override fun isCredentialsNonExpired(): Boolean {
+    fun isCredentialsNonExpired(): Boolean {
         return true
     }
 
-    override fun isEnabled(): Boolean {
+    fun isEnabled(): Boolean {
         return true
     }
 }

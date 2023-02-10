@@ -1,6 +1,6 @@
 package com.retro.retromall.member.controller
 
-import com.retro.retromall.common.TokenInfo
+import com.retro.retromall.member.dto.TokenInfo
 import com.retro.retromall.member.dto.LoginRequest
 import com.retro.retromall.member.service.MemberService
 import org.springframework.http.ResponseEntity
@@ -16,8 +16,7 @@ class MemberController(
 ) {
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<TokenInfo> {
-        val tokenInfo = memberService.login(loginRequest.memberId, loginRequest.password)
+        val tokenInfo = memberService.findMemberByOauth(loginRequest.oAuth2Type, loginRequest.authorizationCode)
         return ResponseEntity.ok(tokenInfo)
     }
-
 }

@@ -1,4 +1,4 @@
-package com.retro.retromall.common
+package com.retro.retromall.member.dto
 
 data class TokenInfo(
     private val grantType: String,

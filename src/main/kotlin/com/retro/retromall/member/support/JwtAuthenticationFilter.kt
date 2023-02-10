@@ -1,6 +1,6 @@
-package com.retro.retromall.common
+package com.retro.retromall.member.support
 
-import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 import org.springframework.web.filter.GenericFilterBean
 import javax.servlet.FilterChain
@@ -8,6 +8,7 @@ import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
 import javax.servlet.http.HttpServletRequest
 
+@Component
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider
 ) : GenericFilterBean() {
@@ -15,11 +16,8 @@ class JwtAuthenticationFilter(
         val token = resolveToken(request as HttpServletRequest)
 
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-            val authentication = jwtTokenProvider.getAuthentication(token)
-            SecurityContextHolder.getContext().authentication = authentication
+            chain?.doFilter(request, response)
         }
-
-        chain?.doFilter(request, response)
     }
 
     private fun resolveToken(request: HttpServletRequest): String {
