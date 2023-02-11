@@ -1,0 +1,76 @@
+pipeline {
+    agent any
+    stages {
+        stage('git pull') {
+            steps {
+                git branch: 'dev',
+                    url: 'https://github.com/dlwlgh9412/Retromall.git'
+            }
+
+            post {
+                success {
+                    sh 'echo "git pull success"'
+                }
+
+                failure {
+                    sh 'echo "git pull failed"'
+                }
+            }
+        }
+
+        stage('build') {
+            steps {
+                sh 'chmod +x gradlew'
+                sh './gradlew clean build'
+                sh 'ls -al ./build'
+            }
+            post {
+                success {
+                    sh 'echo "gradle build success"'
+                }
+
+                failure {
+                    sh 'echo "gradle build failed"'
+                }
+            }
+        }
+
+        stage('docker prune') {
+            steps {
+                sh 'echo "docker prune"'
+                sh 'docker system prune -a --volumes -f'
+            }
+            post {
+                success {
+                    sh 'echo "docker prune success"'
+                }
+                failure {
+                    sh 'echo "docker prune failed"'
+                }
+            }
+        }
+
+        stage('docker image build') {
+            steps {
+                sh 'cd /home/ubuntu/docker/retromall/dev'
+                sh 'docker build --tag retromall:0.5 .'
+            }
+        }
+
+        stage('docker build') {
+            steps {
+                sh 'echo "docker build"'
+                sh 'docker-compose up -d --build'
+                sh 'docker-compose ps'
+            }
+            post {
+                success {
+                    sh 'echo "docker build success"'
+                }
+                failure{
+                    sh 'echo "docker build failed"'
+                }
+            }
+        }
+    }
+}
