@@ -37,8 +37,7 @@ pipeline {
 
         stage('docker prune') {
             steps {
-                sh 'cd /home/ubuntu/volumes/jenkins/var/run'
-                sh 'chmod 666 docker.sock'
+                sh 'chmod 666 /var/run/docker.sock'
                 sh 'echo "docker prune"'
                 sh 'docker system prune -a --volumes -f'
             }
