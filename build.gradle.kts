@@ -14,7 +14,7 @@ noArg {
 }
 
 group = "com.retro"
-version = "0.0.1-SNAPSHOT"
+version = "0.5"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -29,6 +29,7 @@ dependencies {
 //    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -58,6 +59,7 @@ configurations.forEach {
     it.exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     it.exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
 }
+
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
