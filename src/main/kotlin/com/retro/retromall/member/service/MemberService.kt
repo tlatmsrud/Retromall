@@ -1,13 +1,12 @@
 package com.retro.retromall.member.service
 
-import com.retro.retromall.member.support.JwtTokenProvider
-import com.retro.retromall.member.dto.TokenInfo
+import com.retro.aop.JwtTokenProvider
+import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.domain.Member
 import com.retro.retromall.member.infra.repository.MemberRepository
-import com.retro.retromall.member.dto.MemberAttributes
-import com.retro.retromall.member.enums.OAuth2Type
+import com.retro.retromall.member.dto.OAuthMemberAttributes
+import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.support.OAuth2WebClientFactory
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -19,22 +18,22 @@ class MemberService(
     private val memberRepository: MemberRepository,
 ) {
     @Transactional
-    fun findMemberByOauth(oAuth2Type: OAuth2Type, authorizationCode: String): TokenInfo {
-        val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuth2Type)
+    fun findMemberByOauth(oAuthType: OAuthType, authorizationCode: String): TokenAttributes {
+        val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
         val oAuthAttributes = webClient.getToken(authorizationCode)
         val memberAttributes = webClient.getUserInfo(oAuthAttributes)
         return jwtTokenProvider.generateToken(findMemberByOAuthAttributes(memberAttributes))
     }
 
-    fun findMemberByOAuthAttributes(attributes: MemberAttributes): Member {
-        return memberRepository.findByOauth2Id(attributes.oauthId).orElse(null)
+    fun findMemberByOAuthAttributes(attributes: OAuthMemberAttributes): Member {
+        return memberRepository.findByOauthId(attributes.oauthId).orElse(null)
             ?: return addMember(attributes)
     }
 
     @Transactional
-    fun addMember(attributes: MemberAttributes): Member {
+    fun addMember(attributes: OAuthMemberAttributes): Member {
         val member =
-            Member(nickname = attributes.name, email = attributes.email, oauth2Id = attributes.oauthId)
+            Member(nickname = attributes.name, email = attributes.email, oAuthType = attributes.oAuthType, oauthId = attributes.oauthId)
         return memberRepository.save(member)
     }
 

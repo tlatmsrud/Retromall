@@ -1,6 +1,6 @@
-package com.retro.retromall.member.support
+package com.retro.aop
 
-import com.retro.retromall.member.dto.TokenInfo
+import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.domain.Member
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
-import java.util.stream.Collectors
 
 @Component
 class JwtTokenProvider(
@@ -27,16 +26,14 @@ class JwtTokenProvider(
     private val keyBytes: ByteArray? = Decoders.BASE64.decode(secretKey)
     private val key = Keys.hmacShaKeyFor(keyBytes)
 
-    fun generateToken(member: Member): TokenInfo {
-        val authorities = member.getAuthorities().stream()
-            .map { role -> role.name }
-            .collect(Collectors.joining(","))
+    fun generateToken(member: Member): TokenAttributes {
 
         val now = Date().time
         val accessTokenExpiresIn = Date(now + 8640000)
         val accessToken = Jwts.builder()
             .setSubject(member.getUsername())
-            .claim("auth", authorities)
+            .claim("id", member.id!!)
+            .claim("nickName", member.nickname)
             .setExpiration(accessTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
@@ -46,7 +43,7 @@ class JwtTokenProvider(
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 
-        return TokenInfo(grantType = "Bearer", accessToken = accessToken, refreshToken = refreshToken)
+        return TokenAttributes(grantType = "Bearer", accessToken = accessToken, refreshToken = refreshToken)
     }
 
     fun validateToken(token: String): Boolean {

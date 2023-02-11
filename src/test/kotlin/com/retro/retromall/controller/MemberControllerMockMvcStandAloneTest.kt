@@ -1,10 +1,10 @@
 package com.retro.retromall.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.retro.retromall.member.dto.TokenInfo
+import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.controller.MemberController
-import com.retro.retromall.member.dto.LoginRequest
-import com.retro.retromall.member.enums.OAuth2Type
+import com.retro.retromall.member.dto.LoginAttributes
+import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberService
 import io.mockk.every
 import io.mockk.mockk
@@ -19,9 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import javax.persistence.EntityNotFoundException
 
@@ -43,16 +41,16 @@ class MemberControllerMockMvcStandAloneTest {
     @Test
     fun canRetrieveByIdWhenExists() {
         //given
-        val loginRequest = LoginRequest(oAuth2Type = OAuth2Type.KAKAO, authorizationCode = "Password")
-        val tokenInfo = TokenInfo("Bearer", "access", "refresh")
-        every { memberService.findMemberByOauth(OAuth2Type.KAKAO, "Password") } returns tokenInfo
-        every { memberController.login(loginRequest) } returns ResponseEntity.ok(tokenInfo)
+        val loginAttributes = LoginAttributes(oAuthType = OAuthType.KAKAO, authorizationCode = "Password")
+        val tokenAttributes = TokenAttributes("Bearer", "access", "refresh")
+        every { memberService.findMemberByOauth(OAuthType.KAKAO, "Password") } returns tokenAttributes
+        every { memberController.login(loginAttributes) } returns ResponseEntity.ok(tokenAttributes)
 
         //when
         val response = mvc.perform(
             post("/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jacksonTester.write(loginRequest).json)
+                .content(jacksonTester.write(loginAttributes).json)
                 .accept(MediaType.APPLICATION_JSON)
         ).andReturn().response
 
@@ -60,7 +58,7 @@ class MemberControllerMockMvcStandAloneTest {
         assertEquals(HttpStatus.OK.value(), response.status)
         assertEquals(
             jacksonTester.write(
-                TokenInfo("Bearer", "access", "refresh")
+                TokenAttributes("Bearer", "access", "refresh")
             ).json, response.contentAsString
         )
     }
@@ -70,17 +68,17 @@ class MemberControllerMockMvcStandAloneTest {
         //given
         every {
             memberService.findMemberByOauth(
-                OAuth2Type.KAKAO,
+                OAuthType.KAKAO,
                 "Password"
             )
         }.throws(EntityNotFoundException("Entity Not Found"))
 
         //when
-        val loginRequest = LoginRequest(OAuth2Type.KAKAO, "Password")
+        val loginAttributes = LoginAttributes(OAuthType.KAKAO, "Password")
         val response = mvc.perform(
             post("/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jacksonTester.write(loginRequest).json)
+                .content(jacksonTester.write(loginAttributes).json)
                 .accept(MediaType.APPLICATION_JSON)
         ).andReturn().response
 

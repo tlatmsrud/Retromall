@@ -14,13 +14,9 @@ class ProductImage(
 
     @MapsId(value = "productId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     val product: Product = product
 
     @Column(name = "created_at", updatable = false, nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now()
-
-    @Column(name = "modified_at", updatable = true, nullable = true)
-    var modifiedAt: LocalDateTime? = null
-        private set
 }

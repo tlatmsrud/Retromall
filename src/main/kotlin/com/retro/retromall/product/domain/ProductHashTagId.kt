@@ -16,7 +16,7 @@ class ProductHashTagId(
     @Column(name = "product_id", nullable = false)
     val productId: Long = productId
 
-    @Column(name = "tag", nullable = false)
+    @Column(name = "hashtag_id", nullable = false)
     val tag: String = tag
 
     override fun equals(other: Any?): Boolean {

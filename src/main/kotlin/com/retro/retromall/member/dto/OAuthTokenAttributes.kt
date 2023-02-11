@@ -1,6 +1,6 @@
 package com.retro.retromall.member.dto
 
-data class OAuthAttributes(
+data class OAuthTokenAttributes(
     val tokenType: String,
     val accessToken: String,
     val accessTokenExpiresIn: Int,

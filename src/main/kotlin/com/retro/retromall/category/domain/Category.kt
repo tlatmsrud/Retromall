@@ -7,18 +7,13 @@ import javax.persistence.*
 @Table(name = "tb_category")
 class Category(
     name: String,
-    korName: String,
 ) {
     @Id
     @Column(name = "category_name", nullable = false)
     val name: String = name
 
-    @Column(name = "category_kor_name", nullable = false)
-    var korName: String = korName
-        private set
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", referencedColumnName = "category_name")
+    @JoinColumn(name = "parent_name", referencedColumnName = "category_name")
     var parent: Category? = null
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.LAZY)

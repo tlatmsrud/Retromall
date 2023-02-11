@@ -10,7 +10,7 @@ class HashTag(
     tag: String
 ) {
     @Id
-    @Column(name = "tag", updatable = false, nullable = false)
+    @Column(name = "hashtag_id", updatable = false, nullable = false)
     val tag: String = tag
 
     @Column(name = "created_at", updatable = false, nullable = false)

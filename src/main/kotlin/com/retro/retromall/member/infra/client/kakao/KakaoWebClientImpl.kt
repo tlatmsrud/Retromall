@@ -1,12 +1,12 @@
 package com.retro.retromall.member.infra.client.kakao
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.retro.retromall.member.dto.MemberAttributes
-import com.retro.retromall.member.dto.OAuthAttributes
-import com.retro.retromall.member.enums.OAuth2Type
+import com.retro.retromall.member.dto.OAuthMemberAttributes
+import com.retro.retromall.member.dto.OAuthTokenAttributes
+import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.infra.client.OAuth2WebClient
 import com.retro.retromall.member.infra.client.config.KakaoProperties
-import com.retro.retromall.util.WebClientUtils
+import com.retro.util.WebClientUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -30,7 +30,7 @@ class KakaoWebClientImpl(
     private val properties = kakaoProperties
 
 
-    override fun getToken(authorizationCode: String): OAuthAttributes {
+    override fun getToken(authorizationCode: String): OAuthTokenAttributes {
         val kakaoTokenRequest = KakaoTokenRequest(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
@@ -54,7 +54,7 @@ class KakaoWebClientImpl(
             })
             .bodyToMono(KakaoTokenResponse::class.java)
             .block()
-        return OAuthAttributes(
+        return OAuthTokenAttributes(
             tokenType = response!!.tokenType,
             accessToken = response.accessToken,
             accessTokenExpiresIn = response.accessTokenExpiresIn,
@@ -64,7 +64,7 @@ class KakaoWebClientImpl(
         )
     }
 
-    override fun getUserInfo(attributes: OAuthAttributes): MemberAttributes {
+    override fun getUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes {
         val kakaoUserInfoRequest =
             KakaoUserInfoRequest(secureResource = properties.secureResource, scope = properties.scope)
         val parameters = WebClientUtils.convertParameters(kakaoUserInfoRequest, objectMapper)
@@ -83,17 +83,18 @@ class KakaoWebClientImpl(
             .bodyToMono(KakaoUserInfoResponse::class.java)
             .block()
 
-        return MemberAttributes(
-            oauthId = response?.id.toString(),
-            name = response?.kakaoAccount?.name,
-            email = response?.kakaoAccount?.email,
-            image = response?.kakaoAccount?.profile?.profileImageUrl,
+        return OAuthMemberAttributes(
+            OAuthType.KAKAO,
+            response?.id.toString(),
+            response?.kakaoAccount?.name,
+            response?.kakaoAccount?.email,
+            response?.kakaoAccount?.profile?.profileImageUrl
         )
     }
 
 
-    override fun getOAuthType(): OAuth2Type {
-        return OAuth2Type.KAKAO
+    override fun getOAuthType(): OAuthType {
+        return OAuthType.KAKAO
     }
 
     override fun getClient(): OAuth2WebClient {

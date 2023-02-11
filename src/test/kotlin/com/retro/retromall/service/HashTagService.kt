@@ -18,10 +18,4 @@ class HashTagService (
         var hashtag = HashTag(tag = "PS")
         hashTagRepository.save(hashtag)
     }
-
-    @Test
-    fun 새로운_해쉬태그_조회() {
-        var hashTagList = Arrays.array("PS", "PC", "XBOX")
-
-    }
 }

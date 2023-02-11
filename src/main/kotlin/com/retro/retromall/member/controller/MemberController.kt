@@ -1,7 +1,7 @@
 package com.retro.retromall.member.controller
 
-import com.retro.retromall.member.dto.TokenInfo
-import com.retro.retromall.member.dto.LoginRequest
+import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.member.dto.LoginAttributes
 import com.retro.retromall.member.service.MemberService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -15,8 +15,8 @@ class MemberController(
     private val memberService: MemberService
 ) {
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<TokenInfo> {
-        val tokenInfo = memberService.findMemberByOauth(loginRequest.oAuth2Type, loginRequest.authorizationCode)
+    fun login(@RequestBody loginAttributes: LoginAttributes): ResponseEntity<TokenAttributes> {
+        val tokenInfo = memberService.findMemberByOauth(loginAttributes.oAuthType, loginAttributes.authorizationCode)
         return ResponseEntity.ok(tokenInfo)
     }
 }

@@ -15,18 +15,18 @@ class CategoryRepositoryTest(
 ) {
     @BeforeEach
     fun init() {
-        var category = Category(name = "PC", korName = "데스크탑")
+        var category = Category(name = "PC")
         categoryRepository.save(category)
     }
 
     private fun addChild(parent: Category) {
-        val child1 = Category(name = "CPU", korName = "CPU")
+        val child1 = Category(name = "CPU")
         child1.addParent(parent)
 
-        val child2 = Category(name = "Graphic", korName = "Graphic")
+        val child2 = Category(name = "Graphic")
         child2.addParent(parent)
 
-        val child3 = Category(name = "Power", korName = "Power")
+        val child3 = Category(name = "Power")
         child3.addParent(parent)
 
         categoryRepository.save(child1)
@@ -38,7 +38,6 @@ class CategoryRepositoryTest(
     fun equalsCategory() {
         var category = categoryRepository.findById("PC").orElseThrow()
 
-        assertEquals(category.korName, "데스크탑")
         assertEquals(category.products.size, 4)
     }
 

@@ -14,13 +14,13 @@ class ProductHashTag(
 
     @MapsId(value = "productId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     var product: Product = product
         private set
 
     @MapsId(value = "tag")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag", referencedColumnName = "tag")
+    @JoinColumn(name = "hashtag_id", referencedColumnName = "hashtag_id")
     var hashTag: HashTag = hashTag
         private set
 }

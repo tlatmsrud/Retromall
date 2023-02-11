@@ -2,12 +2,12 @@ package com.retro.retromall.member.enums
 
 import com.fasterxml.jackson.annotation.JsonCreator
 
-enum class OAuth2Type {
+enum class OAuthType {
     KAKAO, NAVER;
 
     @JsonCreator
-    fun create(value: String): OAuth2Type {
-        for (oauth in OAuth2Type.values()) {
+    fun create(value: String): OAuthType {
+        for (oauth in OAuthType.values()) {
             if (oauth.name == value)
                 return oauth
         }

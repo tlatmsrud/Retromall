@@ -1,4 +1,4 @@
-package com.retro.retromall.util
+package com.retro.util
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper

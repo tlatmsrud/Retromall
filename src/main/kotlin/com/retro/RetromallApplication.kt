@@ -1,4 +1,4 @@
-package com.retro.retromall
+package com.retro
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

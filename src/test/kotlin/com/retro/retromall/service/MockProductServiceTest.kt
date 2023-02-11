@@ -2,7 +2,7 @@ package com.retro.retromall.service
 
 import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.CategoryRepository
-import com.retro.retromall.product.controller.dto.AddProductRequest
+import com.retro.retromall.product.dto.AddProductRequest
 import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.ProductRepository
 import com.retro.retromall.product.service.ProductService
