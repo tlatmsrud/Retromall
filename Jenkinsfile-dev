@@ -35,17 +35,33 @@ pipeline {
             }
         }
 
-        stage('docker prune') {
+        stage('publish on ssh') {
             steps {
-                sh 'echo "docker prune"'
-                sh 'docker system prune -a --volumes -f'
-            }
-            post {
-                success {
-                    sh 'echo "docker prune success"'
-                }
-                failure {
-                    sh 'echo "docker prune failed"'
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'retromall',
+                            transfers:
+                                [sshTransfer(
+                                    cleanRemote: false,
+                                    excludes: '',
+                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/retromall-dockerfile.sh',
+                                    execTimeout: 120000,
+                                    flatten: false,
+                                    makeEmptyDirs: false,
+                                    noDefaultExcludes: false,
+                                    patternSeparator: '[, ]+',
+                                    remoteDirectory: '/docker/retromall/dev',
+                                    remoteDirectorySDF: false,
+                                    removePrefix: 'build/libs',
+                                    sourceFiles: 'build/libs/*jar')
+                                ],
+                                usePromotionTimestamp: false,
+                                useWorkspaceInPromotion: false,
+                                verbose: false)
+                            ]
+                        )
+                    }
                 }
             }
         }
