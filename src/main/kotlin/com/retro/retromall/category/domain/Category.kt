@@ -6,15 +6,20 @@ import javax.persistence.*
 @Entity
 @Table(name = "tb_category")
 class Category(
+    isClassification: Boolean,
+    parent: Category?,
     name: String,
 ) {
     @Id
     @Column(name = "category_name", nullable = false)
     val name: String = name
 
+    @Column(name = "is_classification", nullable = false)
+    var isClassification: Boolean = isClassification
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_name", referencedColumnName = "category_name")
-    var parent: Category? = null
+    @JoinColumn(name = "parent", referencedColumnName = "category_name")
+    var parent: Category? = parent
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.LAZY)
     val childList: MutableList<Category> = mutableListOf()
