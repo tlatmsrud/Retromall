@@ -45,7 +45,6 @@ pipeline {
                                 [sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh',
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -55,7 +54,10 @@ pipeline {
                                     remoteDirectorySDF: false,
                                     removePrefix: 'build/libs',
                                     sourceFiles: 'build/libs/*jar'
-                                    )
+                                    ),
+                                sshTransfer(
+                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh',
+                                ),
                                 ],
                                     usePromotionTimestamp: false,
                                     useWorkspaceInPromotion: false,
@@ -63,23 +65,6 @@ pipeline {
                         )
                     ]
                 )
-            }
-        }
-
-        stage('docker build') {
-            steps {
-                sh 'echo "docker build"'
-                sh 'sh /home/ubuntu/docker/retromall/dev/init.sh'
-            }
-
-            post {
-                success {
-                    sh 'echo "docker build success"'
-                }
-
-                failure {
-                    sh 'echo "docker build failed"'
-                }
             }
         }
     }
