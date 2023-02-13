@@ -45,6 +45,7 @@ pipeline {
                                 [sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
+                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh',
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -55,9 +56,6 @@ pipeline {
                                     removePrefix: 'build/libs',
                                     sourceFiles: 'build/libs/*jar'
                                     ),
-                                sshTransfer(
-                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh',
-                                ),
                                 ],
                                     usePromotionTimestamp: false,
                                     useWorkspaceInPromotion: false,
