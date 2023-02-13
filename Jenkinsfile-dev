@@ -69,7 +69,7 @@ pipeline {
                             configName: 'retromall',
                             transfers:
                                 [sshTransfer(
-                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh',
+                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh'
                                     )
                                 ]
                         )
