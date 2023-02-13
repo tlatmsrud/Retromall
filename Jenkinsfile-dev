@@ -68,7 +68,7 @@ pipeline {
 
         stage('docker build') {
             steps {
-                sh 'echo "docker build'
+                sh 'echo "docker build"'
                 sh 'sh /home/ubuntu/docker/retromall/dev/init.sh'
             }
 
