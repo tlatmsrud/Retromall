@@ -56,7 +56,7 @@ pipeline {
                                     sourceFiles: 'build/libs/*jar'
                                     ),
                                 sshTransfer(
-                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh', 'echo "init.sh'
+                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh', 'echo "init.sh"'
                                 ),
                                 ],
                                     usePromotionTimestamp: false,
