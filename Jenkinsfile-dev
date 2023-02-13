@@ -45,7 +45,7 @@ pipeline {
                                 [sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/retromall-dockerfile.sh',
+                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh',
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -63,44 +63,6 @@ pipeline {
                         )
                     ]
                 )
-            }
-        }
-
-        stage('docker image build') {
-            steps {
-                sh 'cd /home/ubuntu/docker/retromall/dev'
-                sh 'docker build --tag retromall:0.5 .'
-            }
-        }
-
-        stage('docker compose down') {
-            steps {
-                sh 'echo "docker compose down'
-                sh 'docker-compose down'
-            }
-            post {
-                success {
-                    sh 'echo "docker compose down success"'
-                }
-                failure {
-                    sh 'echo "docker compose down failed'
-                }
-            }
-        }
-
-        stage('docker build') {
-            steps {
-                sh 'echo "docker build"'
-                sh 'docker-compose up -d --build'
-                sh 'docker-compose ps'
-            }
-            post {
-                success {
-                    sh 'echo "docker build success"'
-                }
-                failure{
-                    sh 'echo "docker build failed"'
-                }
             }
         }
     }
