@@ -65,5 +65,20 @@ pipeline {
                 )
             }
         }
+
+        stage('docker build') {
+            sh 'echo "docker build'
+            sh '/home/ubuntu/docker/retromall/dev/init.sh'
+
+            post {
+                success {
+                    sh 'echo "docker build success"'
+                }
+
+                failure {
+                    sh 'echo "docker build failed"'
+                }
+            }
+        }
     }
 }
