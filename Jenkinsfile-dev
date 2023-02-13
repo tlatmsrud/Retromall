@@ -45,7 +45,7 @@ pipeline {
                                 [sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: 'echo "init"',
+                                    execCommand: 'mkdir test',
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
