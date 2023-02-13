@@ -45,7 +45,6 @@ pipeline {
                                 [sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: 'mkdir /home/ubuntu/test',
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
@@ -60,6 +59,19 @@ pipeline {
                                     usePromotionTimestamp: false,
                                     useWorkspaceInPromotion: false,
                                     verbose: false
+                        )
+                    ]
+                )
+
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'retromall',
+                            transfers:
+                                [sshTransfer(
+                                    execCommand: 'mkdir /home/ubuntu/test',
+                                    )
+                                ]
                         )
                     ]
                 )
