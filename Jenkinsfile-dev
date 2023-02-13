@@ -45,7 +45,7 @@ pipeline {
                                 [sshTransfer(
                                     cleanRemote: false,
                                     excludes: '',
-                                    execCommand: 'sh /home/ubuntu/docker/retromall/dev/init.sh',
+                                    execCommand: 'echo "init"',
                                     execTimeout: 120000,
                                     flatten: false,
                                     makeEmptyDirs: false,
