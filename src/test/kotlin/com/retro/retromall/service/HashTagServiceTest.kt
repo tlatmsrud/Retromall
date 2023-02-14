@@ -30,7 +30,7 @@ class HashTagServiceTest {
     @Test
     fun findOrCreateHashTagsWithNewTags() {
         //given
-        val tagNames = listOf("tag1", "tag2", "tag3")
+        val tagNames = setOf("tag1", "tag2", "tag3")
         val tags = tagNames.map { HashTag(it) }
         testEntityManager.persistAndFlush(tags)
 

@@ -23,7 +23,7 @@ class ProductController(
     fun productAdd(
         @MemberAuthentication memberAttributes: MemberAttributes, @RequestBody addProductRequest: AddProductRequest
     ): ResponseEntity<Long> {
-        val id = productService.registerProduct(memberAttributes, addProductRequest)
+        val id = productService.createProduct(memberAttributes, addProductRequest)
         return ResponseEntity.ok(id)
     }
 }

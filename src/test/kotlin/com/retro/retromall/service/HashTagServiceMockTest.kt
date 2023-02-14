@@ -25,8 +25,8 @@ class HashTagServiceMockTest {
     @Test
     fun findOrCreateHashTagsWithNewTags() {
         //given
-        val tagNames = listOf("tag1", "tag2", "tag3", "tag4")
-        val existingTags = listOf(HashTag("tag1"), HashTag("tag2"))
+        val tagNames = setOf("tag1", "tag2", "tag3", "tag4")
+        val existingTags = setOf(HashTag("tag1"), HashTag("tag2"))
         Mockito.`when`(hashTagRepository.findAllByNameIn(tagNames)).thenReturn(existingTags)
 
         //when
@@ -43,8 +43,8 @@ class HashTagServiceMockTest {
     @Test
     fun findOrCreateHashTagsExistingTags() {
         //given
-        val tagNames = listOf("tag1", "tag2", "tag3", "tag4")
-        val existingTags = listOf(HashTag("tag1"), HashTag("tag2"), HashTag("tag3"), HashTag("tag4"))
+        val tagNames = setOf("tag1", "tag2", "tag3", "tag4")
+        val existingTags = setOf(HashTag("tag1"), HashTag("tag2"), HashTag("tag3"), HashTag("tag4"))
         Mockito.`when`(hashTagRepository.findAllByNameIn(tagNames)).thenReturn(existingTags)
 
         //when

@@ -4,7 +4,6 @@ import com.retro.retromall.hashtag.domain.HashTag
 import com.retro.retromall.hashtag.domain.repository.HashTagRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.stream.Collectors
 import kotlin.streams.toList
 
 @Service
@@ -13,7 +12,7 @@ class HashTagService(
     private val hashTagRepository: HashTagRepository
 ) {
     @Transactional
-    fun findOrCreateHashtags(hashtagNames: List<String>): MutableList<HashTag> {
+    fun findOrCreateHashtags(hashtagNames: Set<String>): List<HashTag> {
         val existingHashTags = hashTagRepository.findAllByNameIn(hashtagNames)
         val existingHashTagNames = existingHashTags.map { it.name }.toSet()
 

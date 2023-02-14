@@ -14,10 +14,8 @@ class ProductHashTag(
     var id: Long? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     val product: Product = product
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hashtag_id", referencedColumnName = "hashtag_id")
     val hashTag: HashTag = hashTag
 }
