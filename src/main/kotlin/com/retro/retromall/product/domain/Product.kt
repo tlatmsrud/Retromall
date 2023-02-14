@@ -28,11 +28,11 @@ class Product(
     @Column(name = "amount", nullable = false)
     var amount: Int,
 
-    @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @ManyToMany(cascade = [CascadeType.MERGE])
     @JoinTable(
-        name = "ProductHashTag",
-        joinColumns = [JoinColumn(name = "product_id")],
-        inverseJoinColumns = [JoinColumn(name = "hashtag_id")]
+        name = "tb_product_hashtag",
+        joinColumns = [JoinColumn(name = "product_id", referencedColumnName = "product_id")],
+        inverseJoinColumns = [JoinColumn(name = "hashtag_name", referencedColumnName = "hashtag_name")]
     )
     var hashtags: MutableSet<HashTag> = mutableSetOf(),
 

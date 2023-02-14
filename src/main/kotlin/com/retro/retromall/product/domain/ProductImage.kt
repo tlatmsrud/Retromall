@@ -9,6 +9,7 @@ class ProductImage(
     val imageUrl: String,
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     var product: Product
 ) {
     @Id

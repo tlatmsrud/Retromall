@@ -32,7 +32,8 @@ class MemberAttributeResolver(
         logger.info("{}", token)
         jwtTokenProvider.validateToken(token)
         val claims = jwtTokenProvider.parseClaims(token)
-        return MemberAttributes(id = claims.get("id", Long::class.java))
+        val id = claims.get("id", Integer::class.java).toLong()
+        return MemberAttributes(id = id)
     }
 
     private fun resolveToken(request: HttpServletRequest): String {

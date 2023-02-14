@@ -31,11 +31,11 @@ class Member(
     @Column(name = "nickname", unique = false)
     val nickname: String? = nickname
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE])
-    val products: MutableList<Product> = mutableListOf()
+//    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE])
+//    val products: MutableList<Product> = mutableListOf()
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    val roles: MutableList<Role> = mutableListOf()
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    val roles: MutableList<Role> = mutableListOf()
 
 //    fun getAuthorities(): MutableCollection<out GrantedAuthority> {
 //        return this.roles.stream()
@@ -43,9 +43,9 @@ class Member(
 //            .collect(Collectors.toList())
 //    }
 
-    fun getAuthorities(): MutableCollection<Role> {
-        return this.roles
-    }
+//    fun getAuthorities(): MutableCollection<Role> {
+//        return this.roles
+//    }
 
     fun getUsername(): String? {
         return nickname

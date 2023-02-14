@@ -9,6 +9,7 @@ import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.io.Decoders
+import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SecurityException
 import org.slf4j.Logger
@@ -65,7 +66,7 @@ class JwtTokenProvider(
 
     fun parseClaims(accessToken: String): Claims {
         return try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).body
+            Jwts.parserBuilder().deserializeJsonWith(JacksonDeserializer()).setSigningKey(key).build().parseClaimsJws(accessToken).body
         } catch (e: ExpiredJwtException) {
             e.claims
         }

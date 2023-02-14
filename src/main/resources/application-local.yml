@@ -9,7 +9,11 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-
+  datasource:
+    url: ENC(n27579lQvYztbJDu3AOD2pzAvgtri5EQfaV92MKuXHwDITE99lmE9Bvx6kwipH+Hs1z31fIBZStFAw+Ml5YsngbVWc0/y0yF5rHrFXv83fjCRAAVMKbDnKgAYXWQbLIqSnqE7dQ3Ud64cDEqjwjGZ8RBx1yb3y8sXp4PoyY3v6R11DLCJuYu0A==)
+    username: ENC(ot79q2Iy88CPWViGt/AnvQ==)
+    password: ENC(EOh97G7L7FTaRDNiaoCcWYPLuSPQIKDQ)
+    driver-class-name: com.mysql.cj.jdbc.Driver
 logging:
   level:
     org:

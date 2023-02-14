@@ -24,34 +24,31 @@ create table tb_product
 
 create table tb_hashtag
 (
-    hashtag_id bigint unsigned not null auto_increment primary key,
-    tag_name   varchar(50)     not null,
-    created_at datetime        not null
+    hashtag_name varchar(50) not null primary key
 ) engine = InnoDB
   charset = utf8;
 
 create table tb_category
 (
-    category_name  varchar(50) not null primary key,
-    classification varchar(50),
-    parent         boolean
+    category_name     varchar(50) not null primary key,
+    parent            varchar(50),
+    is_classification boolean
 ) engine = InnoDB
   charset = utf8;
 
 create table tb_product_image
 (
-    product_id bigint unsigned not null,
-    url        varchar(255)    not null,
-    created_at datetime        not null,
-    primary key (product_id, url)
+    id         bigint unsigned not null primary key auto_increment,
+    image_url  varchar(255)    not null,
+    product_id bigint unsigned not null
 ) engine = InnoDB
   charset = utf8;
 
 create table tb_product_hashtag
 (
-    id         bigint unsigned not null primary key,
-    product_id bigint unsigned not null,
-    hashtag_id bigint unsigned not null
+    id           bigint unsigned not null primary key auto_increment,
+    product_id   bigint unsigned not null,
+    hashtag_name bigint unsigned not null
 ) engine = InnoDB
   charset = utf8;
 
@@ -71,7 +68,7 @@ alter table tb_product_image
 alter table tb_product_hashtag
     add constraint tb_product_hashtag_product_foreign foreign key (product_id) references tb_product (product_id);
 alter table tb_product_hashtag
-    add constraint tb_product_hashtag_hashtag_foreign foreign key (hashtag_id) references tb_hashtag (hashtag_id);
+    add constraint tb_product_hashtag_hashtag_foreign foreign key (hashtag_name) references tb_hashtag (hashtag_name);
 
 alter table tb_category
-    add constraint tb_category_parent_foreign foreign key (classification) references tb_category (category_name);
+    add constraint tb_category_parent_foreign foreign key (parent) references tb_category (category_name);
