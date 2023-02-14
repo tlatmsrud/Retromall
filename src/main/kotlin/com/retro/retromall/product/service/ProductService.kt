@@ -1,6 +1,7 @@
 package com.retro.retromall.product.service
 
 import com.retro.retromall.category.domain.repository.CategoryRepository
+import com.retro.retromall.hashtag.domain.HashTag
 import com.retro.retromall.hashtag.domain.repository.HashTagRepository
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.infra.repository.MemberRepository
@@ -20,7 +21,7 @@ class ProductService(
     private val hashTagRepository: HashTagRepository,
 ) {
     @Transactional
-    fun addProduct(memberAttributes: MemberAttributes, dto: AddProductRequest): Long {
+    fun registerProduct(memberAttributes: MemberAttributes, dto: AddProductRequest): Long {
         val member =
             memberRepository.findByIdOrNull(memberAttributes.id) ?: throw IllegalStateException("해당 유저를 찾을 수 없습니다.")
         val category = categoryRepository.findById(dto.category)
@@ -32,10 +33,10 @@ class ProductService(
             category = category,
         )
 
-        productRepository.save(product)
 
         product.addImages(dto.imageList)
-        product.addHashTags(dto.hashTagList)
+        productRepository.save(product)
+
 
         return product.id!!
     }

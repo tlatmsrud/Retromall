@@ -24,8 +24,9 @@ create table tb_product
 
 create table tb_hashtag
 (
-    hashtag_id varchar(50) not null primary key,
-    created_at datetime    not null
+    hashtag_id bigint unsigned not null auto_increment primary key,
+    tag_name   varchar(50)     not null,
+    created_at datetime        not null
 ) engine = InnoDB
   charset = utf8;
 
@@ -33,7 +34,7 @@ create table tb_category
 (
     category_name  varchar(50) not null primary key,
     classification varchar(50),
-    parent boolean
+    parent         boolean
 ) engine = InnoDB
   charset = utf8;
 
@@ -48,9 +49,9 @@ create table tb_product_image
 
 create table tb_product_hashtag
 (
+    id         bigint unsigned not null primary key,
     product_id bigint unsigned not null,
-    hashtag_id varchar(50)     not null,
-    primary key (product_id, hashtag_id)
+    hashtag_id bigint unsigned not null
 ) engine = InnoDB
   charset = utf8;
 

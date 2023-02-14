@@ -41,6 +41,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
 //    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.assertj:assertj-core:3.19.0")
     testImplementation("io.mockk:mockk:1.13.4")
 
     implementation("com.querydsl:querydsl-jpa:5.0.0")

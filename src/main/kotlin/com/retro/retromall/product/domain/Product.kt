@@ -6,6 +6,7 @@ import com.retro.retromall.member.domain.Member
 import java.time.LocalDateTime
 import java.util.stream.Collectors
 import javax.persistence.*
+import kotlin.streams.toList
 
 @Entity
 @Table(name = "tb_product")
@@ -22,7 +23,7 @@ class Product(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "member_id")
-    var author: Member = author
+    val author: Member = author
 
     @Column(name = "content", nullable = true)
     var content: String? = content
@@ -41,8 +42,13 @@ class Product(
     var imageUrls: MutableList<ProductImage> = mutableListOf()
         private set
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var hashTags: MutableList<ProductHashTag> = mutableListOf()
+    @ManyToMany
+    @JoinTable(
+        name = "ProductHashTag",
+        joinColumns = [JoinColumn(name = "product_id")],
+        inverseJoinColumns = [JoinColumn(name = "hashtag_id")]
+    )
+    var hashtags: MutableSet<HashTag> = mutableSetOf()
         private set
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -66,17 +72,6 @@ class Product(
                 .map { url -> ProductImage(id = ProductImageId(productId = this.id!!, url = url), product = this) }
                 .collect(Collectors.toList())
             this.imageUrls.addAll(imageUrlLists)
-        }
-    }
-
-    fun addHashTags(hashTags: MutableList<String>?) {
-        hashTags?.let {
-            val tags = it.stream()
-                .map { tag ->
-                    ProductHashTag(hashTag = HashTag(tag), product = this)
-                }
-                .collect(Collectors.toList())
-            this.hashTags.addAll(tags)
         }
     }
 }

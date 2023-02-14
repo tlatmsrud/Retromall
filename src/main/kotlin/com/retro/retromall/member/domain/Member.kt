@@ -2,6 +2,7 @@ package com.retro.retromall.member.domain
 
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.enums.Role
+import com.retro.retromall.product.domain.Product
 import javax.persistence.*
 
 @Entity
@@ -29,6 +30,9 @@ class Member(
 
     @Column(name = "nickname", unique = false)
     val nickname: String? = nickname
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = [CascadeType.REMOVE])
+    val products: MutableList<Product> = mutableListOf()
 
     @ElementCollection(fetch = FetchType.EAGER)
     val roles: MutableList<Role> = mutableListOf()

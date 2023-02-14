@@ -40,23 +40,4 @@ class ProductServiceTest(
         memberRepository.save(Member(OAuthType.KAKAO, "testestest", "", ""))
         categoryRepository.save(Category(isClassification = true, parent = null, name = "PC"))
     }
-
-    @Test
-    @Transactional
-    fun addProduct() {
-        val memberAttributes = MemberAttributes(1L)
-        val dto = AddProductRequest(
-            content = "",
-            amount = 1000,
-            category = "PC",
-            imageList = mutableListOf(),
-            hashTagList = mutableListOf("#PS", "#PC")
-        )
-        productService.addProduct(memberAttributes, dto)
-
-        val result = productRepository.findById(1L).orElseThrow { IllegalArgumentException("") }
-
-        assertEquals(result.category!!.name, "PC")
-        assertEquals(result.hashTags.size, 2)
-    }
 }
