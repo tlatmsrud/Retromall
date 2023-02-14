@@ -1,6 +1,6 @@
 package com.retro.retromall.product.service
 
-import com.retro.retromall.category.domain.CategoryRepository
+import com.retro.retromall.category.domain.repository.CategoryRepository
 import com.retro.retromall.hashtag.domain.repository.HashTagRepository
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.infra.repository.MemberRepository

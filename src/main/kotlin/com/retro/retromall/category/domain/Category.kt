@@ -15,21 +15,21 @@ class Category(
     val name: String = name
 
     @Column(name = "is_classification", nullable = false)
-    var isClassification: Boolean = isClassification
+    val isClassification: Boolean = isClassification
+
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.LAZY)
+    val lowerCategoryList: MutableList<Category> = mutableListOf()
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent", referencedColumnName = "category_name")
     var parent: Category? = parent
 
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.LAZY)
-    val childList: MutableList<Category> = mutableListOf()
-
     @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], mappedBy = "category", fetch = FetchType.LAZY)
     val products: MutableList<Product> = mutableListOf()
 
-    fun addParent(parent: Category) {
-        this.parent = parent
-        this.parent!!.childList.add(this)
+    fun addLowerCategory(category: Category) {
+        this.lowerCategoryList.add(category)
+        category.parent = this
     }
 
     fun addProduct(product: Product) {

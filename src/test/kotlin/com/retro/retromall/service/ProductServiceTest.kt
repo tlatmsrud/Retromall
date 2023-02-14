@@ -1,7 +1,7 @@
 package com.retro.retromall.service
 
 import com.retro.retromall.category.domain.Category
-import com.retro.retromall.category.domain.CategoryRepository
+import com.retro.retromall.category.domain.repository.CategoryRepository
 import com.retro.retromall.member.domain.Member
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.enums.OAuthType
@@ -38,7 +38,7 @@ class ProductServiceTest(
     @Transactional
     fun init() {
         memberRepository.save(Member(OAuthType.KAKAO, "testestest", "", ""))
-        categoryRepository.save(Category(name = "PC"))
+        categoryRepository.save(Category(isClassification = true, parent = null, name = "PC"))
     }
 
     @Test
