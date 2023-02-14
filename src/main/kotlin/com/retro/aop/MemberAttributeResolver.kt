@@ -2,6 +2,8 @@ package com.retro.aop
 
 import com.retro.aop.annotation.MemberAuthentication
 import com.retro.retromall.member.dto.MemberAttributes
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest
 class MemberAttributeResolver(
     private val jwtTokenProvider: JwtTokenProvider
 ) : HandlerMethodArgumentResolver {
+    private val logger: Logger = LoggerFactory.getLogger(MemberAttributeResolver::class.java)
     override fun supportsParameter(parameter: MethodParameter): Boolean {
         return parameter.parameterType == MemberAttributes::class.java && parameter.hasParameterAnnotation(MemberAuthentication::class.java)
     }
@@ -26,6 +29,7 @@ class MemberAttributeResolver(
         binderFactory: WebDataBinderFactory?
     ): Any? {
         val token = resolveToken(webRequest.nativeRequest as HttpServletRequest)
+        logger.info("{}", token)
         jwtTokenProvider.validateToken(token)
         val claims = jwtTokenProvider.parseClaims(token)
         return MemberAttributes(id = claims.get("id", Long::class.java))

@@ -27,7 +27,6 @@ class JwtTokenProvider(
     private val key = Keys.hmacShaKeyFor(keyBytes)
 
     fun generateToken(member: Member): TokenAttributes {
-
         val now = Date().time
         val accessTokenExpiresIn = Date(now + 8640000)
         val accessToken = Jwts.builder()
