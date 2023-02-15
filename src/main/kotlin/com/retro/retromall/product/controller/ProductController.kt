@@ -8,6 +8,12 @@ import com.retro.retromall.product.dto.ProductResponse
 import com.retro.retromall.product.dto.UpdateProductRequest
 import com.retro.retromall.product.service.ProductReadService
 import com.retro.retromall.product.service.ProductService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Tag(name = "dev", description = "Retromall-dev api")
 @RestController
 @RequestMapping("/api/v1/products")
 class ProductController(
@@ -28,6 +35,19 @@ class ProductController(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(ProductController::class.java)
 
+    @Operation(summary = "Product 조회", description = "Product 조회 컨트롤러")
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "Product 조회성공",
+            content = [Content(schema = Schema(implementation = ProductResponse::class))]
+        ),
+        ApiResponse(
+            responseCode = "400",
+            description = "Product 조회실패",
+            content = [Content(schema = Schema(implementation = IllegalStateException::class))]
+        )
+    )
     @GetMapping("/{id}")
     fun product(@PathVariable id: Long): ResponseEntity<ProductResponse> {
         return ResponseEntity.ok(productReadService.getProduct(id))
@@ -58,7 +78,10 @@ class ProductController(
     }
 
     @DeleteMapping("/{id}")
-    fun productDelete(@MemberAuthentication memberAttributes: MemberAttributes, @PathVariable id: Long): ResponseEntity<Unit> {
+    fun productDelete(
+        @MemberAuthentication memberAttributes: MemberAttributes,
+        @PathVariable id: Long
+    ): ResponseEntity<Unit> {
         productService.deleteProduct(memberAttributes, id)
         return ResponseEntity.ok().build()
     }
