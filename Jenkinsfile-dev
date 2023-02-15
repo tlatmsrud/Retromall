@@ -15,7 +15,7 @@ pipeline {
         stage("Checkout") {
             steps {
                 // GitHub에서 프로젝트 체크아웃
-                git 'https://github.com/dlwlgh9412/Retromall.git' || error('Check out failed')
+                checkout scm
             }
         }
 
