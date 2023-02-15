@@ -39,7 +39,7 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: 'build/libs/Retromall-0.5.jar',
                                     removePrefix: 'build/libs/',
-                                    execCommand: "cd ${env.REMOTE_PATH}/bin && chmod +x start.sh && ./start.sh"
+                                    execCommand: "cd ${env.REMOTE_PATH} && chmod +x start.sh && ./start.sh"
                                 )
                             ]
                         )
