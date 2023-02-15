@@ -22,7 +22,7 @@ pipeline {
         stage("Build") {
             steps {
                 // 프로젝트 빌드
-                sh './gradlew clean build"' || error('Build failed')
+                sh './gradlew clean build' || error('Build failed')
             }
         }
 
