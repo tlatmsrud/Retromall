@@ -1,4 +1,4 @@
-package com.retro.aop.annotation
+package com.retro.common.annotation
 
 
 @Target(AnnotationTarget.VALUE_PARAMETER)

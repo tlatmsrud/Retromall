@@ -1,4 +1,4 @@
-package com.retro.aop
+package com.retro.common
 
 import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.domain.Member

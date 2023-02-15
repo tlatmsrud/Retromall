@@ -1,6 +1,6 @@
 package com.retro.retromall.member.service
 
-import com.retro.aop.JwtTokenProvider
+import com.retro.common.JwtTokenProvider
 import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.domain.Member
 import com.retro.retromall.member.infra.repository.MemberRepository

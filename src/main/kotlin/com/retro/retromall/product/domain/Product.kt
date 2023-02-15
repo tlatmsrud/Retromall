@@ -60,6 +60,11 @@ class Product(
         images.forEach { it.product = this }
     }
 
+    fun isAuthor(member: Member) {
+        if (author != member)
+            throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
+    }
+
     fun modifyProduct(content: String, amount: Int, category: Category) {
         this.content = content
         this.amount = amount

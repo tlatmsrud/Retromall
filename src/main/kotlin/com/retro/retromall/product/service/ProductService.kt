@@ -21,11 +21,11 @@ class ProductService(
 
     @Transactional
     fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: UpdateProductRequest): Long {
-        return productModifier.updateProduct(productId, dto)
+        return productModifier.updateProduct(memberAttributes, productId, dto)
     }
 
     @Transactional
     fun deleteProduct(memberAttributes: MemberAttributes, productId: Long) {
-        productModifier.deleteProduct(productId)
+        productModifier.deleteProduct(memberAttributes, productId)
     }
 }

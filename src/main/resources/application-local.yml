@@ -29,3 +29,12 @@ jwt:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
