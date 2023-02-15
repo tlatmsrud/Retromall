@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface CategoryRepository: JpaRepository<Category, String>, CustomCategoryRepository {
-    @EntityGraph(attributePaths = ["lowerCategoryList"])
-    fun findAllProjectedByParentIsNull(): CategoryResponse
+//    @EntityGraph(attributePaths = ["lowerCategoryList"])
+//    fun findAllProjectedByParentIsNull(): CategoryResponse
 }
