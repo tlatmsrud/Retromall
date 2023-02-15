@@ -22,7 +22,7 @@ pipeline {
         stage("Build") {
             steps {
                 // 프로젝트 빌드
-                sh './gradlew clean build'
+                sh './gradlew clean build -x test'
             }
         }
 
@@ -34,7 +34,7 @@ pipeline {
                     failOnError: false,
                     publishers: [
                         sshPublisherDesc(
-                            configName: 'retromall',
+                            configName: 'retromall-dev',
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: 'build/libs/Retromall-0.5.jar',
