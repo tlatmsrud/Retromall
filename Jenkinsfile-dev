@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        REMOTE_SERVER = credentials('retromall')
+        // 원격 서버의 SSH 포트 번호
+        REMOTE_PORT = "22"
+        // 원격 서버의 계정 이름
+        REMOTE_USER = "ubuntu"
+        // 원격 서버에 복사할 경로
+        REMOTE_PATH = "/home/ubuntu/retromall/dev"
+    }
+
+    stages {
+        stage("Checkout") {
+            steps {
+                // GitHub에서 프로젝트 체크아웃
+                git 'https://github.com/dlwlgh9412/Retromall.git'
+            }
+        }
+
+        stage("Build") {
+            steps {
+                // 프로젝트 빌드
+                sh "./gradlew clean build"
+            }
+        }
+
+        stage("Deploy") {
+            steps {
+                // 원격 서버에 파일 전송
+                sshPublisher(
+                    continueOnError: true,
+                    failOnError: false,
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'retromall',
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: 'build/libs/Retromall-0.5.jar',
+                                    removePrefix: 'build/libs/',
+                                    execCommand: "cd ${env.REMOTE_PATH}/bin && chmod +x start.sh && ./start.sh"
+                                )
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
+    }
+}
