@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
-class MemberService(
+class MemberWriteService(
     private val oAuth2WebClientFactory: OAuth2WebClientFactory,
     private val jwtTokenProvider: JwtTokenProvider,
     private val memberRepository: MemberRepository,
@@ -25,6 +25,7 @@ class MemberService(
         return jwtTokenProvider.generateToken(findMemberByOAuthAttributes(memberAttributes))
     }
 
+    @Transactional
     fun findMemberByOAuthAttributes(attributes: OAuthMemberAttributes): Member {
         return memberRepository.findByOauthId(attributes.oauthId).orElse(null)
             ?: return addMember(attributes)

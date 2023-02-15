@@ -1,6 +1,6 @@
 package com.retro.retromall.service
 
-import com.retro.retromall.category.service.CategoryService
+import com.retro.retromall.category.service.CategoryReadService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,9 +12,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @ActiveProfiles("dev")
-class CategoryServiceTest(
+class CategoryReadServiceTest(
     @Autowired
-    private val categoryService: CategoryService
+    private val categoryReadService: CategoryReadService
 ) {
     @Test
     fun findCategoryList() {
@@ -22,7 +22,7 @@ class CategoryServiceTest(
         val root = "Play Station"
 
         //when
-        val result = categoryService.findCategoryList(root)
+        val result = categoryReadService.getCategoryList(root)
 
         //then
         assertEquals(4, result.categoryList.size)

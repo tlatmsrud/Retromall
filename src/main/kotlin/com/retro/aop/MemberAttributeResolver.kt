@@ -29,7 +29,6 @@ class MemberAttributeResolver(
         binderFactory: WebDataBinderFactory?
     ): Any? {
         val token = resolveToken(webRequest.nativeRequest as HttpServletRequest)
-        logger.info("{}", token)
         jwtTokenProvider.validateToken(token)
         val claims = jwtTokenProvider.parseClaims(token)
         val id = claims.get("id", Integer::class.java).toLong()

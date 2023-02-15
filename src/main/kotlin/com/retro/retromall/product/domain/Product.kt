@@ -14,19 +14,19 @@ class Product(
     @Column(name = "product_id")
     val id: Long? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", referencedColumnName = "member_id")
-    val author: Member,
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_name", referencedColumnName = "category_name")
-    var category: Category?,
-
     @Column(name = "content", nullable = true)
     var content: String?,
 
     @Column(name = "amount", nullable = false)
     var amount: Int,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", referencedColumnName = "member_id")
+    var author: Member? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_name", referencedColumnName = "category_name")
+    var category: Category? = null,
 
     @ManyToMany(cascade = [CascadeType.MERGE])
     @JoinTable(
@@ -46,11 +46,9 @@ class Product(
     var modifiedAt: LocalDateTime = LocalDateTime.now()
 ) {
     constructor(
-        author: Member,
-        category: Category,
         content: String?,
         amount: Int,
-    ) : this(null, author, category, content, amount)
+    ) : this(null, content, amount)
 
     fun addHashTags(hashtags: List<HashTag>) {
         this.hashtags.addAll(hashtags)

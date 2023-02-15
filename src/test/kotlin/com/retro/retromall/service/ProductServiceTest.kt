@@ -3,15 +3,11 @@ package com.retro.retromall.service
 import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.repository.CategoryRepository
 import com.retro.retromall.member.domain.Member
-import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.infra.repository.MemberRepository
-import com.retro.retromall.product.dto.AddProductRequest
 import com.retro.retromall.product.domain.ProductRepository
 import com.retro.retromall.product.service.ProductService
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

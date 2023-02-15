@@ -5,7 +5,7 @@ import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.controller.MemberController
 import com.retro.retromall.member.dto.LoginAttributes
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.service.MemberService
+import com.retro.retromall.member.service.MemberWriteService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -28,7 +28,7 @@ class MemberControllerMockMvcTest {
     private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private lateinit var memberService: MemberService
+    private lateinit var memberWriteService: MemberWriteService
 
     private lateinit var jsonTester: JacksonTester<Any>
 
@@ -42,7 +42,7 @@ class MemberControllerMockMvcTest {
         val tokenAttributes = TokenAttributes(grantType = "Bearer", accessToken = "access", refreshToken = "refresh")
 
         //given
-        given(memberService.findMemberByOauth(OAuthType.KAKAO, "Password")).willReturn(tokenAttributes)
+        given(memberWriteService.findMemberByOauth(OAuthType.KAKAO, "Password")).willReturn(tokenAttributes)
 
         //when
         val loginAttributes = LoginAttributes(OAuthType.KAKAO, "Password")
