@@ -9,7 +9,7 @@ pipeline {
         REMOTE_USER = "ubuntu"
         // 원격 서버에 복사할 경로
         REMOTE_PATH = "/home/ubuntu/retromall/dev"
-    //}
+    }
 
     stages {
         stage("Checkout") {
