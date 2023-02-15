@@ -34,7 +34,7 @@ class Product(
         joinColumns = [JoinColumn(name = "product_id", referencedColumnName = "product_id")],
         inverseJoinColumns = [JoinColumn(name = "hashtag_name", referencedColumnName = "hashtag_name")]
     )
-    var hashtags: MutableSet<HashTag> = mutableSetOf(),
+    var hashTags: MutableSet<HashTag> = mutableSetOf(),
 
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
     var images: MutableSet<ProductImage> = mutableSetOf(),
@@ -43,7 +43,7 @@ class Product(
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "modified_at")
-    var modifiedAt: LocalDateTime = LocalDateTime.now()
+    var modifiedAt: LocalDateTime = LocalDateTime.now(),
 ) {
     constructor(
         content: String?,
@@ -51,7 +51,7 @@ class Product(
     ) : this(null, content, amount)
 
     fun addHashTags(hashtags: List<HashTag>) {
-        this.hashtags.addAll(hashtags)
+        this.hashTags.addAll(hashtags)
         hashtags.forEach { it.products.add(this) }
     }
 

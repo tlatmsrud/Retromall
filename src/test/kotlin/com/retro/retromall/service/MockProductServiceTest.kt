@@ -1,7 +1,7 @@
 package com.retro.retromall.service
 
 import com.retro.retromall.category.domain.repository.CategoryRepository
-import com.retro.retromall.product.domain.ProductRepository
+import com.retro.retromall.product.domain.repository.ProductRepository
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.*

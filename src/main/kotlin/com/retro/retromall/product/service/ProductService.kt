@@ -1,7 +1,6 @@
 package com.retro.retromall.product.service
 
 import com.retro.retromall.member.dto.MemberAttributes
-import com.retro.retromall.product.domain.ProductRepository
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.dto.UpdateProductRequest
 import com.retro.retromall.product.support.ProductFactory

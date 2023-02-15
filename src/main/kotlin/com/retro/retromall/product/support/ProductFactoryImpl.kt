@@ -5,7 +5,7 @@ import com.retro.retromall.hashtag.service.HashTagService
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.service.MemberReadService
 import com.retro.retromall.product.domain.Product
-import com.retro.retromall.product.domain.ProductRepository
+import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.service.ProductImageService
 import org.springframework.stereotype.Component

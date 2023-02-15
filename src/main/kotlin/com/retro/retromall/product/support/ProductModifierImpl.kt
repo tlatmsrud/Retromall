@@ -4,21 +4,19 @@ import com.retro.retromall.category.service.CategoryReadService
 import com.retro.retromall.hashtag.service.HashTagService
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.service.MemberReadService
-import com.retro.retromall.product.domain.ProductRepository
+import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.UpdateProductRequest
 import com.retro.retromall.product.service.ProductImageService
-import com.retro.retromall.product.service.ProductReadService
 import com.retro.security.AuthenticationService
 import org.springframework.stereotype.Component
 
 @Component
 class ProductModifierImpl(
     private val productRepository: ProductRepository,
+    private val memberReadService: MemberReadService,
     private val categoryReadService: CategoryReadService,
     private val hashTagService: HashTagService,
     private val productImageService: ProductImageService,
-    private val productReadService: ProductReadService,
-    private val memberReadService: MemberReadService,
     private val authenticationService: AuthenticationService
 
 ) : ProductModifier {
@@ -32,7 +30,7 @@ class ProductModifierImpl(
         dto.category.let {
             product.category = categoryReadService.getCategory(it)
         }
-        dto.hashTags.let { product.hashtags = hashTagService.findOrCreateHashtags(it).toMutableSet() }
+        dto.hashTags.let { product.hashTags = hashTagService.findOrCreateHashtags(it).toMutableSet() }
         dto.images.let { product.images = productImageService.createProductImages(it, product).toMutableSet() }
 
         return productRepository.save(product).id!!
@@ -40,7 +38,8 @@ class ProductModifierImpl(
 
     override fun deleteProduct(memberAttributes: MemberAttributes, productId: Long) {
         val member = memberReadService.getMember(memberAttributes.id)
-        val product = productReadService.getProduct(productId)
+        val product =
+            productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
         authenticationService.validateUser(member, product)
         productRepository.delete(product)
     }

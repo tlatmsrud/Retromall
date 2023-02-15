@@ -13,7 +13,7 @@ class HashTag(
     val name: String = name
 
 
-    @ManyToMany(mappedBy = "hashtags")
+    @ManyToMany(mappedBy = "hashTags")
     var products: MutableSet<Product> = mutableSetOf()
 
     override fun equals(other: Any?): Boolean {
