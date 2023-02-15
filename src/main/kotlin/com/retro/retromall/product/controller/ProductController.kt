@@ -26,9 +26,9 @@ class ProductController(
     fun productAdd(
         @MemberAuthentication memberAttributes: MemberAttributes,
         @RequestBody createProductRequest: CreateProductRequest
-    ): ResponseEntity<Unit> {
+    ): ResponseEntity<Long> {
         val id = productService.createProduct(memberAttributes, createProductRequest)
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok(id)
     }
 
     @PutMapping("/{id}")
