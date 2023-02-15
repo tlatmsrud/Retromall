@@ -1,15 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-        REMOTE_SERVER = credentials('retromall')
+    //environment {
+        //REMOTE_SERVER = credentials('retromall')
         // 원격 서버의 SSH 포트 번호
-        REMOTE_PORT = "22"
+        //REMOTE_PORT = "22"
         // 원격 서버의 계정 이름
-        REMOTE_USER = "ubuntu"
+        //REMOTE_USER = "ubuntu"
         // 원격 서버에 복사할 경로
-        REMOTE_PATH = "/home/ubuntu/retromall/dev"
-    }
+        //REMOTE_PATH = "/home/ubuntu/retromall/dev"
+    //}
 
     stages {
         stage("Checkout") {
