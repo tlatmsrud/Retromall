@@ -3,19 +3,19 @@ package com.retro.retromall.category.domain.repository
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.retro.retromall.category.domain.QCategory
-import com.retro.retromall.category.dto.CategoryListResponse
+import com.retro.retromall.category.dto.CategoryResponse
 import org.springframework.util.StringUtils
 
 class CustomCategoryRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : CustomCategoryRepository {
-    override fun selectCategoryListByRootCategory(root: String): CategoryListResponse {
+    override fun selectCategoryListByRootCategory(root: String): CategoryResponse {
         val result = jpaQueryFactory.select(QCategory.category.name)
             .from(QCategory.category)
             .where(eqRootCategory(root))
             .fetch()
 
-        return CategoryListResponse(result)
+        return CategoryResponse(result)
     }
 
     private fun eqRootCategory(root: String): BooleanBuilder {

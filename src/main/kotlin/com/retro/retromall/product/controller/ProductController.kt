@@ -8,7 +8,6 @@ import com.retro.retromall.product.dto.ProductResponse
 import com.retro.retromall.product.dto.UpdateProductRequest
 import com.retro.retromall.product.service.ProductReadService
 import com.retro.retromall.product.service.ProductService
-import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content

@@ -1,5 +1,5 @@
 package com.retro.retromall.category.dto
 
-data class CategoryListResponse(
+data class CategoryResponse(
     val categoryList: List<String>
 )
