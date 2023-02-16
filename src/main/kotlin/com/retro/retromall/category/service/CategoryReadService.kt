@@ -15,7 +15,7 @@ class CategoryReadService(
         return categoryRepository.findById(name)
             .orElseThrow { IllegalArgumentException("존재하지 않는 카테고리입니다.") }
     }
-    fun getCategoryList(root: String): CategoryResponse {
+    fun getCategoryList(root: String?): CategoryResponse {
         return categoryRepository.selectCategoryListByRootCategory(root);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils
 class CustomCategoryRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : CustomCategoryRepository {
-    override fun selectCategoryListByRootCategory(root: String): CategoryResponse {
+    override fun selectCategoryListByRootCategory(root: String?): CategoryResponse {
         val result = jpaQueryFactory.select(QCategory.category.name)
             .from(QCategory.category)
             .where(eqRootCategory(root))
@@ -18,7 +18,7 @@ class CustomCategoryRepositoryImpl(
         return CategoryResponse(result)
     }
 
-    private fun eqRootCategory(root: String): BooleanBuilder {
+    private fun eqRootCategory(root: String?): BooleanBuilder {
         val booleanBuilder = BooleanBuilder()
         if (!StringUtils.hasText(root))
             booleanBuilder.and(QCategory.category.parent.isNull)
