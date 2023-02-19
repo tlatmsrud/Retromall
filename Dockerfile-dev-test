@@ -1,0 +1,68 @@
+pipeline {
+  agent any
+
+  environment {
+    APP_NAME = 'retromall'
+    APP_VERSION = '0.5'
+    IMAGE_TAG = "${APP_NAME}:${APP_VERSION}"
+    CONTAINER_NAME = "${APP_NAME}_container"
+    DOCKER_COMPOSE_FILE = 'docker-compose.yml'
+    DOCKER_COMPOSE_PROJECT_NAME = 'retromall'
+    REMOTE_SCRIPT_PATH = '/home/ubuntu/retromall/deploy.sh'
+  }
+
+  stages {
+    stage('Build Jar') {
+      steps {
+        sh "./gradlew clean build -Pprofile=dev"
+      }
+    }
+
+    stage('Stop Container') {
+      steps {
+        sh "docker-compose -p ${DOCKER_COMPOSE_PROJECT_NAME} -f ${DOCKER_COMPOSE_FILE} down"
+      }
+    }
+
+    stage('Remove Old Image') {
+      steps {
+        sh "docker rmi -f ${IMAGE_TAG}"
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        script {
+          docker.build(IMAGE_TAG, "--build-arg JAR_FILE=./build/libs/${APP_NAME}-${APP_VERSION}.jar")
+        }
+      }
+    }
+
+    stage('Run Container') {
+      steps {
+        sh "docker-compose -p ${DOCKER_COMPOSE_PROJECT_NAME} -f ${DOCKER_COMPOSE_FILE} up -d"
+      }
+    }
+
+    stage('Remote Script Execution') {
+      steps {
+        sshPublisher(
+          continueOnError: true,
+          failOnError: true,
+          publishers: [
+            sshPublisherDesc(
+              configName: 'REMOTE_SERVER',
+              verbose: true,
+              transfers: [
+                sshTransfer(
+                  sourceFiles: 'deploy.sh',
+                  execCommand: "sh ${REMOTE_SCRIPT_PATH}"
+                )
+              ]
+            )
+          ]
+        )
+      }
+    }
+  }
+}
