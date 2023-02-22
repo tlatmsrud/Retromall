@@ -15,7 +15,7 @@ noArg {
 
 group = "com.retro"
 version = "0.5"
-java.sourceCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_14
 
 repositories {
     mavenCentral()

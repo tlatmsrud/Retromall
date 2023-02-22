@@ -40,7 +40,8 @@ pipeline {
                             configName: 'retromall-dev',
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: 'build/libs/Retromall-0.5.jar',
+                                    sourceFiles: 'build/libs/${PROJECT_NAME}-${PROJECT_VERSION}.jar',
+                                    target: '${REMOTE_PATH}/retromall.jar'
                                     removePrefix: 'build/libs/',
                                     execCommand: "cd ${env.REMOTE_PATH}/bin && chmod +x deploy.sh && sh deploy.sh ${PROJECT_NAME} ${PROJECT_VERSION}"
                                 )
