@@ -9,6 +9,8 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
     url: ENC(hFaYf1WbBH6ORu0fQdDItKkOvEncMjea/lkiOtCrF/o/hC4rC/GXb8kRkimkCRjVl7lAMViKFdQRoXeH/vkMWePY5c2rbIcS63VPD6jHHKJ2oMfA/yMQyR82lwK8QUzQ80illLAeNO1SbD+u1jtaAg==)
     username: ENC(869OCI47yhuVlUk8ITjnfA==)
