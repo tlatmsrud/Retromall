@@ -41,7 +41,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: 'build/libs/${PROJECT_NAME}-${PROJECT_VERSION}.jar',
-                                    target: '${REMOTE_PATH}/retromall.jar'
+                                    target: '${REMOTE_PATH}/retromall.jar',
                                     removePrefix: 'build/libs/',
                                     execCommand: "cd ${env.REMOTE_PATH}/bin && chmod +x deploy.sh && sh deploy.sh ${PROJECT_NAME} ${PROJECT_VERSION}"
                                 )
