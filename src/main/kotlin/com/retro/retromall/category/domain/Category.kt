@@ -1,6 +1,5 @@
 package com.retro.retromall.category.domain
 
-import com.retro.retromall.product.domain.Product
 import javax.persistence.*
 
 @Entity
@@ -21,18 +20,11 @@ class Category(
     val lowerCategoryList: MutableList<Category> = mutableListOf()
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent", referencedColumnName = "category_name")
+    @JoinColumn(name = "parent")
     var parent: Category? = parent
-
-    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], mappedBy = "category", fetch = FetchType.LAZY)
-    val products: MutableList<Product> = mutableListOf()
 
     fun addLowerCategory(category: Category) {
         this.lowerCategoryList.add(category)
         category.parent = this
-    }
-
-    fun addProduct(product: Product) {
-        this.products.add(product)
     }
 }

@@ -21,11 +21,11 @@ class Product(
     var amount: Int,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", referencedColumnName = "member_id")
+    @JoinColumn(name = "author_id")
     var author: Member? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_name", referencedColumnName = "category_name")
+    @JoinColumn(name = "category")
     var category: Category? = null,
 
     @ManyToMany(cascade = [CascadeType.MERGE])

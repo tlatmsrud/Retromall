@@ -2,6 +2,9 @@ pipeline {
     agent any
 
     environment {
+        PROJECT_NAME = "retromall"
+        PROJECT_VERSION = "0.5"
+
         REMOTE_SERVER = credentials('ubuntu-server')
         // 원격 서버의 SSH 포트 번호
         REMOTE_PORT = "22"
@@ -39,7 +42,7 @@ pipeline {
                                 sshTransfer(
                                     sourceFiles: 'build/libs/Retromall-0.5.jar',
                                     removePrefix: 'build/libs/',
-                                    execCommand: "cd ${env.REMOTE_PATH}/bin && chmod +x start.sh && ./start.sh"
+                                    execCommand: "cd ${env.REMOTE_PATH}/bin && chmod +x deploy.sh && sh deploy.sh ${PROJECT_NAME} ${PROJECT_VERSION}"
                                 )
                             ]
                         )

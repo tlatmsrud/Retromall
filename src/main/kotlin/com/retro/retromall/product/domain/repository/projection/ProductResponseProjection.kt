@@ -1,4 +1,4 @@
-package com.retro.retromall.product.projection
+package com.retro.retromall.product.domain.repository.projection
 
 import java.time.LocalDateTime
 
