@@ -1,4 +1,3 @@
-use retromall;
 insert into tb_category(category_name, parent, is_classification) values ('Play Station', null, true);
 insert into tb_category(category_name, parent, is_classification) values ('PS4', 'Play Station', false);
 insert into tb_category(category_name, parent, is_classification) values ('PS3', 'Play Station', false);
@@ -16,3 +15,4 @@ insert into tb_category(category_name, parent, is_classification) values ('Xbox 
 insert into tb_category(category_name, parent, is_classification) values ('Xbox One All Digital(2019)', 'Xbox One Series', false);
 insert into tb_category(category_name, parent, is_classification) values ('Xbox Series S(2020)', 'Xbox', false);
 insert into tb_category(category_name, parent, is_classification) values ('Xbox Series X(2020)', 'Xbox', false);
+insert into tb_member(member_id, oauth_type, oauth_id, email, nickname) values (1000, 'KAKAO', '00200000', 'test@gmail.com', 'janchen');

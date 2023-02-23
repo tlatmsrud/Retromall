@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "User", description = "User API")
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 class MemberController(
     private val memberWriteService: MemberWriteService
 ) {

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "Product", description = "Product Read API")
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/products")
 class ProductReadController(
     private val productReadService: ProductReadService
 ) {

@@ -12,13 +12,13 @@ create table tb_member
 
 create table tb_product
 (
-    product_id    bigint unsigned not null auto_increment primary key,
-    author_id     bigint unsigned not null,
-    content       text,
-    amount        int             not null,
-    category_name varchar(50)     not null,
-    created_at    datetime        not null,
-    modified_at   datetime        not null
+    product_id  bigint unsigned not null auto_increment primary key,
+    author_id   bigint unsigned not null,
+    content     text,
+    amount      int             not null,
+    category    varchar(50)     not null,
+    created_at  datetime        not null,
+    modified_at datetime        not null
 ) engine = InnoDB
   charset = utf8;
 
@@ -60,7 +60,7 @@ alter table tb_member
 alter table tb_product
     add constraint tb_product_author_foreign_key foreign key (author_id) references tb_member (member_id);
 alter table tb_product
-    add constraint tb_product_category_foreign_key foreign key (category_name) references tb_category (category_name);
+    add constraint tb_product_category_foreign_key foreign key (category) references tb_category (category_name);
 
 alter table tb_product_image
     add constraint tb_product_image_product_foreign foreign key (product_id) references tb_product (product_id);

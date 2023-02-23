@@ -5,7 +5,6 @@ import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.dto.ProductResponse
 import com.retro.retromall.product.dto.UpdateProductRequest
-import com.retro.retromall.product.service.ProductReadService
 import com.retro.retromall.product.service.ProductService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -28,9 +27,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "Product", description = "Product API")
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/products")
 class ProductController(
-    private val productReadService: ProductReadService,
     private val productService: ProductService
 ) {
     private val logger: Logger = LoggerFactory.getLogger(ProductController::class.java)
