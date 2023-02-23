@@ -2,6 +2,7 @@ package com.retro.retromall.member.controller
 
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.dto.LoginRequest
+import com.retro.retromall.member.dto.LoginTokenRequest
 import com.retro.retromall.member.service.MemberWriteService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
@@ -18,7 +19,14 @@ class MemberController(
 ) {
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
-        val tokenInfo = memberWriteService.findMemberByOauth(loginRequest.oAuthType, loginRequest.authorizationCode)
-        return ResponseEntity.ok(tokenInfo)
+        val loginResponse = memberWriteService.findMemberByOauth(loginRequest.oAuthType, loginRequest.authorizationCode)
+        return ResponseEntity.ok(loginResponse)
+    }
+
+    @PostMapping("/tokenLogin")
+    fun tokenLogin(@RequestBody loginTokenRequest: LoginTokenRequest): ResponseEntity<LoginResponse> {
+        val loginResponse =
+            memberWriteService.findMemberByOauthToken(loginTokenRequest.oAuthType, loginTokenRequest.accessToken)
+        return ResponseEntity.ok(loginResponse)
     }
 }

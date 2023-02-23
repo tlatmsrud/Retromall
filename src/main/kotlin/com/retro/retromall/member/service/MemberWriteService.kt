@@ -17,12 +17,22 @@ class MemberWriteService(
     private val jwtTokenProvider: JwtTokenProvider,
     private val memberRepository: MemberRepository,
 ) {
+    //인가코드로 인증
     @Transactional
     fun findMemberByOauth(oAuthType: OAuthType, authorizationCode: String): LoginResponse {
         val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
         val oAuthAttributes = webClient.getToken(authorizationCode)
         val memberAttributes = webClient.getUserInfo(oAuthAttributes)
-//        val memberAttributes = webClient.getUserInfoByAccessToken(accessToken)
+        val member = findMemberByOAuthAttributes(memberAttributes)
+        val tokenAttributes = jwtTokenProvider.generateToken(member)
+        return LoginResponse(member.nickname, tokenAttributes)
+    }
+
+    // 액세스토큰으로 인증
+    @Transactional
+    fun findMemberByOauthToken(oAuthType: OAuthType, accessToken: String): LoginResponse {
+        val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
+        val memberAttributes = webClient.getUserInfoByAccessToken(accessToken)
         val member = findMemberByOAuthAttributes(memberAttributes)
         val tokenAttributes = jwtTokenProvider.generateToken(member)
         return LoginResponse(member.nickname, tokenAttributes)
