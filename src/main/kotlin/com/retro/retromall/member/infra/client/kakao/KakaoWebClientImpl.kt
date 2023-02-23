@@ -48,8 +48,7 @@ class KakaoWebClientImpl(
             .retrieve()
             .onStatus({ it != HttpStatus.OK }, {
                 it.createException().flatMap { err ->
-                    logger.error(err.responseBodyAsString)
-                    throw IllegalStateException(err.message)
+                    throw IllegalStateException(err.responseBodyAsString)
                 }
             })
             .bodyToMono(KakaoTokenResponse::class.java)
@@ -76,8 +75,7 @@ class KakaoWebClientImpl(
             .retrieve().onStatus({ it != HttpStatus.OK },
                 {
                     it.createException().flatMap { err ->
-                        logger.error(err.responseBodyAsString)
-                        throw IllegalStateException(err.message)
+                        throw IllegalStateException(err.responseBodyAsString)
                     }
                 })
             .bodyToMono(KakaoUserInfoResponse::class.java)
@@ -104,8 +102,7 @@ class KakaoWebClientImpl(
             .retrieve().onStatus({ it != HttpStatus.OK },
                 {
                     it.createException().flatMap { err ->
-                        logger.error(err.responseBodyAsString)
-                        throw IllegalStateException(err.message)
+                        throw IllegalStateException(err.responseBodyAsString)
                     }
                 })
             .bodyToMono(KakaoUserInfoResponse::class.java)
