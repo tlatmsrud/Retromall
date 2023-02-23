@@ -18,7 +18,7 @@ class MemberController(
 ) {
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
-        val tokenInfo = memberWriteService.findMemberByOauth(loginRequest.oAuthType, loginRequest.accessToken)
+        val tokenInfo = memberWriteService.findMemberByOauth(loginRequest.oAuthType, loginRequest.authorizationCode)
         return ResponseEntity.ok(tokenInfo)
     }
 }

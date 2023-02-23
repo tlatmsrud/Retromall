@@ -18,11 +18,11 @@ class MemberWriteService(
     private val memberRepository: MemberRepository,
 ) {
     @Transactional
-    fun findMemberByOauth(oAuthType: OAuthType, accessToken: String): LoginResponse {
+    fun findMemberByOauth(oAuthType: OAuthType, authorizationCode: String): LoginResponse {
         val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
-//        val oAuthAttributes = webClient.getToken(authorizationCode)
-//        val memberAttributes = webClient.getUserInfo(oAuthAttributes)
-        val memberAttributes = webClient.getUserInfoByAccessToken(accessToken)
+        val oAuthAttributes = webClient.getToken(authorizationCode)
+        val memberAttributes = webClient.getUserInfo(oAuthAttributes)
+//        val memberAttributes = webClient.getUserInfoByAccessToken(accessToken)
         val member = findMemberByOAuthAttributes(memberAttributes)
         val tokenAttributes = jwtTokenProvider.generateToken(member)
         return LoginResponse(member.nickname, tokenAttributes)

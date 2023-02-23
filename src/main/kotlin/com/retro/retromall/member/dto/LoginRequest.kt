@@ -4,5 +4,5 @@ import com.retro.retromall.member.enums.OAuthType
 
 data class LoginRequest(
     val oAuthType: OAuthType,
-    val accessToken: String
+    val authorizationCode: String
 )

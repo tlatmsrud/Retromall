@@ -42,7 +42,7 @@ class MemberControllerMockMvcStandAloneTest {
     @Test
     fun canRetrieveByIdWhenExists() {
         //given
-        val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, accessToken = "Password")
+        val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, authorizationCode = "Password")
         val tokenAttributes = TokenAttributes("Bearer", "access", "refresh")
         val loginResponse = LoginResponse("nickName", tokenAttributes)
         every { memberWriteService.findMemberByOauth(OAuthType.KAKAO, "Password") } returns loginResponse
