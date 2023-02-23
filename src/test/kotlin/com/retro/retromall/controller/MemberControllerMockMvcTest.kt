@@ -1,9 +1,10 @@
 package com.retro.retromall.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.controller.MemberController
-import com.retro.retromall.member.dto.LoginAttributes
+import com.retro.retromall.member.dto.LoginRequest
+import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberWriteService
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -40,17 +41,18 @@ class MemberControllerMockMvcTest {
     @Test
     fun canRetrieveByIdWhenExist() {
         val tokenAttributes = TokenAttributes(grantType = "Bearer", accessToken = "access", refreshToken = "refresh")
+        val loginResponse = LoginResponse("nickName", tokenAttributes)
 
         //given
-        given(memberWriteService.findMemberByOauth(OAuthType.KAKAO, "Password")).willReturn(tokenAttributes)
+        given(memberWriteService.findMemberByOauth(OAuthType.KAKAO, "Password")).willReturn(loginResponse)
 
         //when
-        val loginAttributes = LoginAttributes(OAuthType.KAKAO, "Password")
+        val loginRequest = LoginRequest(OAuthType.KAKAO, "Password")
         val response = mockMvc
             .perform(post("/members/login")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonTester.write(loginAttributes).json))
+                .content(jsonTester.write(loginRequest).json))
             .andReturn().response
 
         assertEquals(response.status, HttpStatus.OK.value())

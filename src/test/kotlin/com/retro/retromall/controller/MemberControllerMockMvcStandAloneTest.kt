@@ -1,9 +1,10 @@
 package com.retro.retromall.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.controller.MemberController
-import com.retro.retromall.member.dto.LoginAttributes
+import com.retro.retromall.member.dto.LoginRequest
+import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberWriteService
 import io.mockk.every
@@ -41,25 +42,24 @@ class MemberControllerMockMvcStandAloneTest {
     @Test
     fun canRetrieveByIdWhenExists() {
         //given
-        val loginAttributes = LoginAttributes(oAuthType = OAuthType.KAKAO, authorizationCode = "Password")
+        val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, accessToken = "Password")
         val tokenAttributes = TokenAttributes("Bearer", "access", "refresh")
-        every { memberWriteService.findMemberByOauth(OAuthType.KAKAO, "Password") } returns tokenAttributes
-        every { memberController.login(loginAttributes) } returns ResponseEntity.ok(tokenAttributes)
+        val loginResponse = LoginResponse("nickName", tokenAttributes)
+        every { memberWriteService.findMemberByOauth(OAuthType.KAKAO, "Password") } returns loginResponse
+        every { memberController.login(loginRequest) } returns ResponseEntity.ok(loginResponse)
 
         //when
         val response = mvc.perform(
-            post("/members/login")
+            post("/api/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jacksonTester.write(loginAttributes).json)
+                .content(jacksonTester.write(loginRequest).json)
                 .accept(MediaType.APPLICATION_JSON)
         ).andReturn().response
 
         //then
         assertEquals(HttpStatus.OK.value(), response.status)
         assertEquals(
-            jacksonTester.write(
-                TokenAttributes("Bearer", "access", "refresh")
-            ).json, response.contentAsString
+            jacksonTester.write(loginResponse).json, response.contentAsString
         )
     }
 
@@ -74,11 +74,11 @@ class MemberControllerMockMvcStandAloneTest {
         }.throws(EntityNotFoundException("Entity Not Found"))
 
         //when
-        val loginAttributes = LoginAttributes(OAuthType.KAKAO, "Password")
+        val loginRequest = LoginRequest(OAuthType.KAKAO, "Password")
         val response = mvc.perform(
             post("/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(jacksonTester.write(loginAttributes).json)
+                .content(jacksonTester.write(loginRequest).json)
                 .accept(MediaType.APPLICATION_JSON)
         ).andReturn().response
 

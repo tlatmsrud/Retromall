@@ -1,8 +1,6 @@
 package com.retro.retromall.member.domain
 
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.enums.Role
-import com.retro.retromall.product.domain.Product
 import javax.persistence.*
 
 @Entity

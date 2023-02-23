@@ -1,7 +1,7 @@
 package com.retro.retromall.member.service
 
 import com.retro.common.JwtTokenProvider
-import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.domain.Member
 import com.retro.retromall.member.infra.repository.MemberRepository
 import com.retro.retromall.member.dto.OAuthMemberAttributes
@@ -18,11 +18,14 @@ class MemberWriteService(
     private val memberRepository: MemberRepository,
 ) {
     @Transactional
-    fun findMemberByOauth(oAuthType: OAuthType, authorizationCode: String): TokenAttributes {
+    fun findMemberByOauth(oAuthType: OAuthType, accessToken: String): LoginResponse {
         val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
-        val oAuthAttributes = webClient.getToken(authorizationCode)
-        val memberAttributes = webClient.getUserInfo(oAuthAttributes)
-        return jwtTokenProvider.generateToken(findMemberByOAuthAttributes(memberAttributes))
+//        val oAuthAttributes = webClient.getToken(authorizationCode)
+//        val memberAttributes = webClient.getUserInfo(oAuthAttributes)
+        val memberAttributes = webClient.getUserInfoByAccessToken(accessToken)
+        val member = findMemberByOAuthAttributes(memberAttributes)
+        val tokenAttributes = jwtTokenProvider.generateToken(member)
+        return LoginResponse(member.nickname, tokenAttributes)
     }
 
     @Transactional

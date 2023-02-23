@@ -92,6 +92,32 @@ class KakaoWebClientImpl(
         )
     }
 
+    override fun getUserInfoByAccessToken(accessToken: String): OAuthMemberAttributes {
+        val kakaoUserInfoRequest =
+            KakaoUserInfoRequest(secureResource = properties.secureResource, scope = properties.scope)
+        val parameters = WebClientUtils.convertParameters(kakaoUserInfoRequest, objectMapper)
+        val response = apiWebClient.post()
+            .uri { uriBuilder -> uriBuilder.path(properties.userInfoUri).build() }
+            .header(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(BodyInserters.fromFormData(parameters))
+            .retrieve().onStatus({ it != HttpStatus.OK },
+                {
+                    it.createException().flatMap { err ->
+                        logger.error(err.responseBodyAsString)
+                        throw IllegalStateException(err.message)
+                    }
+                })
+            .bodyToMono(KakaoUserInfoResponse::class.java)
+            .block()
+
+        return OAuthMemberAttributes(
+            OAuthType.KAKAO,
+            response?.id.toString(),
+            response?.kakaoAccount?.name,
+            response?.kakaoAccount?.email,
+            response?.kakaoAccount?.profile?.profileImageUrl
+        )    }
 
     override fun getOAuthType(): OAuthType {
         return OAuthType.KAKAO
