@@ -1,7 +1,7 @@
 package com.retro.retromall.product.domain.repository
 
-import com.retro.retromall.product.dto.ProductResponse
+import com.retro.retromall.product.dto.ProductListResponse
 
 interface ProductRepositoryCustom {
-    fun selectAllProductResponseByCategoryName(categoryName: String?): List<ProductResponse>
+    fun selectProductList(): ProductListResponse
 }

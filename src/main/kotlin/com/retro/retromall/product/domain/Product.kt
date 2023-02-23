@@ -36,6 +36,9 @@ class Product(
     )
     var hashTags: MutableSet<HashTag> = mutableSetOf(),
 
+    @Column(name = "thumbnail", columnDefinition = "TEXT")
+    var thumbnail: String? = null,
+
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
     var images: MutableSet<ProductImage> = mutableSetOf(),
 

@@ -8,7 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ProductRepository : JpaRepository<Product, Long>, ProductRepositoryCustom {
     @EntityGraph(attributePaths = ["author", "category", "hashTags", "images"])
     fun findProjectedById(productId: Long): ProductResponseProjection?
-
-    @EntityGraph(attributePaths = ["author", "category", "hashTags", "images"])
-    fun findAllProjectedBy(): List<ProductResponseProjection>
 }

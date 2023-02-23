@@ -15,7 +15,7 @@ class ProductReadService(
         val projection =
             productRepository.findProjectedById(productId) ?: throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.")
         val authorName = projection.author.nickname
-        val categoryName = projection.category.id
+        val categoryName = projection.category.name
         val hashTagNames = projection.hashTags.map { it.name }.toSet()
         val imageUrls = projection.images.map { it.imageUrl }.toSet()
 
@@ -33,7 +33,6 @@ class ProductReadService(
     }
 
     fun getProductList(category: String?): ProductListResponse {
-        val result = productRepository.selectAllProductResponseByCategoryName(category)
-        return ProductListResponse(result)
+        return productRepository.selectProductList()
     }
 }
