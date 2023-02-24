@@ -37,7 +37,7 @@ pipeline {
                     failOnError: false,
                     publishers: [
                         sshPublisherDesc(
-                            configName: 'retromall-dev',
+                            configName: 'retromall-ubuntu',
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: 'init.sql',
