@@ -12,6 +12,8 @@ pipeline {
         REMOTE_USER = "ubuntu"
         // 원격 서버에 복사할 경로
         REMOTE_PATH = "/home/ubuntu/retromall/dev"
+        // 원격 서버 작업 경로
+        REMOTE_WORK_DIR = "/home/ubuntu/retromall/bin"
     }
 
     stages {
@@ -41,6 +43,7 @@ pipeline {
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: 'init.sql',
+                                    execCommand: "cd ${env.REMOTE_WORK_DIR} && chmod +rwx init.sql"
                                 ),
                                 sshTransfer(
                                     sourceFiles: "build/libs/${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar",
