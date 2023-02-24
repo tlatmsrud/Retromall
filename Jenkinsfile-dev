@@ -45,7 +45,7 @@ pipeline {
                                     execCommand: "cd ${env.REMOTE_PATH} && chmod +x deploy.sh && sh deploy.sh ${env.PROJECT_NAME} ${env.PROJECT_VERSION}"
                                 ),
                                 sshTransfer(
-                                    sourceFiles: "/init.sql"
+                                    sourceFiles: "init.sql"
                                 )
                             ]
                         )
