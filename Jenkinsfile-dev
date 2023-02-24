@@ -40,7 +40,7 @@ pipeline {
                             configName: 'retromall-dev',
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: "./init.sql",
+                                    sourceFiles: 'init.sql',
                                     execCommand: "cd ${env.REMOTE_PATH} && chmod +rwx init.sql"
                                 ),
                                 sshTransfer(
