@@ -41,7 +41,6 @@ pipeline {
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: 'init.sql',
-                                    execCommand: "cd ${env.REMOTE_PATH} && chmod +rwx init.sql"
                                 ),
                                 sshTransfer(
                                     sourceFiles: "build/libs/${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar",
