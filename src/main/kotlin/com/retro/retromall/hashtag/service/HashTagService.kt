@@ -12,18 +12,18 @@ class HashTagService(
     private val hashTagRepository: HashTagRepository
 ) {
     @Transactional
-    fun findOrCreateHashtags(hashtagNames: Set<String>): List<HashTag> {
+    fun findOrCreateHashtags(hashtagNames: Set<String>): Set<String> {
         val existingHashTags = hashTagRepository.findAllByNameIn(hashtagNames)
         val existingHashTagNames = existingHashTags.map { it.name }.toSet()
 
         val newHashTags = hashtagNames.stream().filter { !existingHashTagNames.contains(it) }
             .map { HashTag(it) }.toList()
 
-        val allHashTags = mutableListOf<HashTag>()
-        allHashTags.addAll(existingHashTags)
-        allHashTags.addAll(newHashTags)
+        val allHashTags = mutableSetOf<String>()
+        allHashTags.addAll(existingHashTags.stream().map { it.name }.toList())
+        allHashTags.addAll(newHashTags.stream().map { it.name }.toList())
 
-        if(newHashTags.isNotEmpty())
+        if (newHashTags.isNotEmpty())
             hashTagRepository.saveAll(newHashTags)
 
         return allHashTags

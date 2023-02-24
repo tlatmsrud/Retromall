@@ -38,8 +38,6 @@ class HashTagServiceTest {
         val result = hashTagService.findOrCreateHashtags(tagNames)
 
         //then
-        assertThat(result).containsExactlyElementsOf(tags)
-
-
+        assertThat(result).containsExactlyElementsOf(tagNames)
     }
 }

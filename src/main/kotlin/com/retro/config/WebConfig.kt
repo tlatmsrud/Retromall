@@ -16,6 +16,7 @@ class WebConfig(
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
-            .allowedOrigins("https://retromall.herokuapp.com")
+//            .allowedOrigins("https://retromall.herokuapp.com")
+            .allowedOrigins("*")
     }
 }

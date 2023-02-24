@@ -6,7 +6,7 @@ data class ProductResponse(
     val productId: Long,
     val content: String?,
     val amount: Int,
-    var author: String?,
+    var author: String,
     var category: String,
     var hashTags: Set<String>,
     var images: Set<String>,

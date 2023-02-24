@@ -1,11 +1,11 @@
 package com.retro.retromall.product.support
 
 import com.retro.retromall.category.service.CategoryReadService
-import com.retro.retromall.hashtag.service.HashTagService
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.service.MemberReadService
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.UpdateProductRequest
+import com.retro.retromall.product.service.ProductHashTagService
 import com.retro.retromall.product.service.ProductImageService
 import com.retro.security.AuthenticationService
 import org.springframework.stereotype.Component
@@ -15,8 +15,8 @@ class ProductModifierImpl(
     private val productRepository: ProductRepository,
     private val memberReadService: MemberReadService,
     private val categoryReadService: CategoryReadService,
-    private val hashTagService: HashTagService,
     private val productImageService: ProductImageService,
+    private val productHashTagService: ProductHashTagService,
     private val authenticationService: AuthenticationService
 
 ) : ProductModifier {
@@ -28,9 +28,9 @@ class ProductModifierImpl(
         product.content = dto.content ?: product.content
         product.amount = dto.amount
         dto.category.let {
-            product.category = categoryReadService.getCategory(it)
+            product.category = categoryReadService.getCategory(it).name
         }
-        dto.hashTags.let { product.hashTags = hashTagService.findOrCreateHashtags(it).toMutableSet() }
+        dto.hashTags.let { product.hashTags = productHashTagService.createProductHashTags(product, it) }
         dto.images.let { product.images = productImageService.createProductImages(it, product).toMutableSet() }
 
         return productRepository.save(product).id!!

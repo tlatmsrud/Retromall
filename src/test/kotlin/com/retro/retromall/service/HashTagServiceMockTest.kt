@@ -37,7 +37,7 @@ class HashTagServiceMockTest {
         Mockito.verify(hashTagRepository).saveAll(anyList())
 
         assertThat(result.size).isEqualTo(4)
-        assertThat(result).containsExactly(HashTag("tag1"), HashTag("tag2"), HashTag("tag3"), HashTag("tag4"))
+        assertThat(result).containsExactly("tag1", "tag2", "tag3", "tag4")
     }
 
     @Test
@@ -55,6 +55,6 @@ class HashTagServiceMockTest {
         Mockito.verify(hashTagRepository, never()).saveAll(anyList())
 
         assertThat(result.size).isEqualTo(4)
-        assertThat(result).containsExactly(HashTag("tag1"), HashTag("tag2"), HashTag("tag3"), HashTag("tag4"))
+        assertThat(result).containsExactly("tag1", "tag2", "tag3", "tag4")
     }
 }

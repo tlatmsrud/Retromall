@@ -1,6 +1,5 @@
 package com.retro.retromall.hashtag.domain
 
-import com.retro.retromall.product.domain.Product
 import javax.persistence.*
 
 @Entity
@@ -11,10 +10,6 @@ class HashTag(
     @Id
     @Column(name = "hashtag_name", nullable = false)
     val name: String = name
-
-
-    @ManyToMany(mappedBy = "hashTags")
-    var products: MutableSet<Product> = mutableSetOf()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

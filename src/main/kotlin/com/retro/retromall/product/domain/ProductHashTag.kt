@@ -1,13 +1,12 @@
 package com.retro.retromall.product.domain
 
-import com.retro.retromall.hashtag.domain.HashTag
 import javax.persistence.*
 
 @Entity
 @Table(name = "tb_product_hashtag")
 class ProductHashTag(
     product: Product,
-    hashTag: HashTag
+    hashTag: String
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +16,8 @@ class ProductHashTag(
     @JoinColumn(name = "product_id")
     val product: Product = product
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hashtag_name")
-    val hashTag: HashTag = hashTag
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "hashtag_name")
+    @Column(name = "hashtag_name")
+    val hashTag: String = hashTag
 }

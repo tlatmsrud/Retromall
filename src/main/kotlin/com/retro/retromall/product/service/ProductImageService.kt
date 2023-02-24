@@ -10,5 +10,4 @@ class ProductImageService(
     fun createProductImages(images: Set<String>, product: Product): List<ProductImage> {
         return images.map { ProductImage(imageUrl = it, product) }
     }
-
 }
