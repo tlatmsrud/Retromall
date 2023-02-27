@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.retro.retromall.category.domain.QCategory.category
 import com.retro.retromall.category.dto.CategoryResponse
+import org.springframework.util.StringUtils
 
 class CustomCategoryRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
@@ -18,10 +19,9 @@ class CustomCategoryRepositoryImpl(
     }
 
     private fun eqRootCategory(root: String?): BooleanExpression? {
-        return root?.let {
+        return if (StringUtils.hasText(root))
             category.parent.name.eq(root)
-        } ?: let {
+        else
             category.parent.isNull
-        }
     }
 }

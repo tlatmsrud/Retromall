@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -55,7 +58,20 @@ class ProductReadController(
         )
     )
     @GetMapping
-    fun productList(@Parameter(required = false) @RequestParam("category") category: String?): ResponseEntity<ProductListResponse> {
-        return ResponseEntity.ok(productReadService.getProductList(category))
+    fun productList(
+        @Parameter(required = false) @RequestParam("category") category: String?,
+        @Parameter(
+            required = false,
+            description = "필수X 기본 기본 페이지 사이즈 값 20, 정렬 값 createdAt 기준으로 내림차순 정렬이 필요한 경우 ex) \"sort\": [\"createdAt,asc]\""
+        )
+        @PageableDefault(
+            size =
+            20,
+            sort = ["createdAt"],
+            direction = Sort.Direction.DESC
+        )
+        pageable: Pageable
+    ): ResponseEntity<ProductListResponse> {
+        return ResponseEntity.ok(productReadService.getProductList(category, pageable))
     }
 }

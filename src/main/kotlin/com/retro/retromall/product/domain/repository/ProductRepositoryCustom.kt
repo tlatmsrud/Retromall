@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable
 
 interface ProductRepositoryCustom {
     fun selectProduct(productId: Long): ProductResponse
-    fun selectProductList(pageable: Pageable): ProductListResponse
+    fun selectProductList(category: String?, pageable: Pageable): ProductListResponse
 }

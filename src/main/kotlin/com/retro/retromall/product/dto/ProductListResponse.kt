@@ -1,9 +1,10 @@
 package com.retro.retromall.product.dto
 
+import org.springframework.data.domain.Slice
 import java.time.LocalDateTime
 
 data class ProductListResponse(
-    val data: List<Data>
+    val data: Slice<Data>
 ) {
     data class Data(
         val productId: Long,

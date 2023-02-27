@@ -3,6 +3,7 @@ package com.retro.retromall.product.service
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.ProductResponse
 import com.retro.retromall.product.dto.ProductListResponse
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,8 +16,7 @@ class ProductReadService(
         return productRepository.selectProduct(productId)
     }
 
-    fun getProductList(category: String?): ProductListResponse? {
-//        return productRepository.selectProductList()
-        return null
+    fun getProductList(category: String?, pageable: Pageable): ProductListResponse? {
+        return productRepository.selectProductList(category, pageable)
     }
 }
