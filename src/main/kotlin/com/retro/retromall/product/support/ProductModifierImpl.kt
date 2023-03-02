@@ -21,7 +21,7 @@ class ProductModifierImpl(
 
 ) : ProductModifier {
     override fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: UpdateProductRequest): Long {
-        val member = memberReadService.getMember(memberAttributes.id)
+        val member = memberReadService.getMember(memberAttributes.id!!)
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
         authenticationService.validateUser(member, product)
@@ -37,7 +37,7 @@ class ProductModifierImpl(
     }
 
     override fun deleteProduct(memberAttributes: MemberAttributes, productId: Long) {
-        val member = memberReadService.getMember(memberAttributes.id)
+        val member = memberReadService.getMember(memberAttributes.id!!)
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
         authenticationService.validateUser(member, product)

@@ -5,6 +5,6 @@ import com.retro.retromall.product.dto.ProductResponse
 import org.springframework.data.domain.Pageable
 
 interface ProductRepositoryCustom {
-    fun selectProduct(productId: Long): ProductResponse
+    fun selectProduct(productId: Long, memberId: Long?): ProductResponse
     fun selectProductList(category: String?, pageable: Pageable): ProductListResponse
 }

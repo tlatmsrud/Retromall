@@ -6,10 +6,12 @@ data class ProductResponse(
     val productId: Long,
     val content: String?,
     val amount: Int,
-    var author: String,
-    var category: String,
-    var hashTags: Set<String>,
-    var images: Set<String>,
+    val author: String,
+    val category: String,
+    val likes: Long,
+    val isLiked: Boolean,
+    val hashTags: Set<String>,
+    val images: Set<String>,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime
 )

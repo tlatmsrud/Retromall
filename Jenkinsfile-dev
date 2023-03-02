@@ -43,12 +43,12 @@ pipeline {
                             transfers: [
                                 sshTransfer(
                                     sourceFiles: 'init.sql',
-                                    execCommand: "cd ${env.REMOTE_WORK_DIR} && chmod +rwx init.sql"
+                                    execCommand: "cd ${env.REMOTE_WORK_DIR} && chmod +rwx init.sql && cp init.sql ${env.REMOTE_PATH}"
                                 ),
                                 sshTransfer(
                                     sourceFiles: "build/libs/${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar",
                                     removePrefix: 'build/libs/',
-                                    execCommand: "cd ${env.REMOTE_PATH} && chmod +x deploy.sh && sh deploy.sh ${env.PROJECT_NAME} ${env.PROJECT_VERSION}"
+                                    execCommand: "cd ${env.REMOTE_WORK_DIR} && cp ${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar ${env.REMOTE_PATH} && cd ${env.REMOTE_PATH} && chmod +x deploy.sh && sh deploy.sh ${env.PROJECT_NAME} ${env.PROJECT_VERSION}"
                                 )
                             ]
                         )

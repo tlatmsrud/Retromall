@@ -36,6 +36,11 @@ class Product(
 //    )
 //    var hashTags: MutableSet<HashTag> = mutableSetOf(),
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    var productLikes: MutableList<ProductLike> = mutableListOf(),
+
+    var likes: Long = 0L,
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
     var hashTags: MutableSet<ProductHashTag> = mutableSetOf(),
 
     @Column(name = "thumbnail", columnDefinition = "TEXT")
@@ -64,6 +69,11 @@ class Product(
     fun addImages(images: List<ProductImage>) {
         this.images.addAll(images)
         images.forEach { it.product = this }
+    }
+
+    fun addLikes(productLike: ProductLike) {
+        this.productLikes.add(productLike)
+        this.likes++
     }
 
     fun isAuthor(member: Member) {

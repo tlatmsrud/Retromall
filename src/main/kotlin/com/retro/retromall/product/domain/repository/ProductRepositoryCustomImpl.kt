@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import com.retro.retromall.member.domain.QMember.member
 import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.QProduct.product
+import com.retro.retromall.product.domain.QProductLike.productLike
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse
 import com.retro.util.QueryDslUtils
@@ -19,22 +20,35 @@ import java.util.stream.Collectors
 class ProductRepositoryCustomImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : ProductRepositoryCustom {
-    override fun selectProduct(productId: Long): ProductResponse {
-
-        val data = jpaQueryFactory.select(product, member.nickname)
+    override fun selectProduct(productId: Long, memberId: Long?): ProductResponse {
+//        val likeExpression = CaseBuilder()
+//            .`when`(productLike.memberId.eq(memberId).and(productLike.isLiked.isTrue)).then(true)
+//            .otherwise(false)
+        val query = memberId?.let {
+            jpaQueryFactory.select(product, member.nickname, productLike.isLiked)
+                .from(product)
+                .innerJoin(member).on(product.authorId.eq(member.id))
+                .leftJoin(productLike)
+                .on(product.id.eq(productLike.product.id).and(productLike.memberId.eq(memberId)))
+                .where(product.id.eq(productId))
+                .fetchOne()
+        } ?: jpaQueryFactory.select(product, member.nickname)
             .from(product)
             .innerJoin(member).on(product.authorId.eq(member.id))
             .where(product.id.eq(productId))
             .fetchOne()
 
-        data?.let {
-            val product = data.get(product)!!
+        query?.let {
+            val product = query.get(product)!!
+            val isLiked = query.get(productLike.isLiked)
             return ProductResponse(
                 productId = product.id!!,
                 content = product.content,
                 amount = product.amount,
-                author = data.get(member.nickname)!!,
+                author = query.get(member.nickname)!!,
                 category = product.category,
+                likes = product.likes,
+                isLiked = isLiked ?: false,
                 hashTags = getHashTags(product),
                 images = getImages(product),
                 createdAt = product.createdAt,

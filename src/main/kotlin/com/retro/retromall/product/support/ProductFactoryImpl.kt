@@ -20,7 +20,7 @@ class ProductFactoryImpl(
         val product = Product(
             content = dto.content,
             amount = dto.amount,
-            authorId = memberAttributes.id,
+            authorId = memberAttributes.id!!,
             category = categoryReadService.getCategory(dto.category).name,
             thumbnail = dto.thumbnail
         )

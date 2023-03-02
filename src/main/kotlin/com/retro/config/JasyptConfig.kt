@@ -6,7 +6,9 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
+//@Profile(value = ["!local"])
 @Configuration
 class JasyptConfig(
     @Value("\${jasypt.encryptor.password}")
@@ -20,7 +22,6 @@ class JasyptConfig(
         config.algorithm = "PBEWithMD5AndDES"
         config.setKeyObtentionIterations("1000")
         config.setPoolSize("1")
-//        config.setProviderClassName("SunJCE")
         config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator")
         config.stringOutputType = "base64"
         encryptor.setConfig(config)

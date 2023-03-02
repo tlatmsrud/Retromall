@@ -36,7 +36,7 @@ class MemberAttributeResolver(
         val token = resolveToken(webRequest.nativeRequest as HttpServletRequest)
         jwtTokenProvider.validateToken(token)
         val claims = jwtTokenProvider.parseClaims(token)
-        val id = claims.get("id", Integer::class.java).toLong()
+        val id: Long? = claims.get("id", Integer::class.java)?.toLong()
         return MemberAttributes(id = id)
     }
 

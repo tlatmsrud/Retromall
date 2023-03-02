@@ -15,8 +15,12 @@ class WebConfig(
     }
 
     override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
-//            .allowedOrigins("https://retromall.herokuapp.com")
-            .allowedOrigins("*")
+        if (System.getProperty("spring.profiles.active") == "local") {
+            registry.addMapping("/**")
+                .allowedOrigins("*")
+        } else {
+            registry.addMapping("/**")
+                .allowedOrigins("https://retromall.herokuapp.com")
+        }
     }
 }
