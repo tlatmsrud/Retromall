@@ -1,6 +1,6 @@
 package com.retro.retromall.product.dto
 
-data class UpdateProductRequest (
+data class ProductUpdateRequest (
     val content: String?,
     val amount: Int,
     val category: String,

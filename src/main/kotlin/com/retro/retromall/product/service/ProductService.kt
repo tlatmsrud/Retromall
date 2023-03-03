@@ -2,7 +2,7 @@ package com.retro.retromall.product.service
 
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.product.dto.CreateProductRequest
-import com.retro.retromall.product.dto.UpdateProductRequest
+import com.retro.retromall.product.dto.ProductUpdateRequest
 import com.retro.retromall.product.support.ProductFactory
 import com.retro.retromall.product.support.ProductModifier
 import org.springframework.stereotype.Service
@@ -19,7 +19,7 @@ class ProductService(
     }
 
     @Transactional
-    fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: UpdateProductRequest): Long {
+    fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: ProductUpdateRequest): Long {
         return productModifier.updateProduct(memberAttributes, productId, dto)
     }
 

@@ -2,6 +2,7 @@ package com.retro.retromall.product.domain
 
 import com.retro.retromall.member.domain.Member
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 import javax.persistence.*
 
 @Entity
@@ -20,6 +21,8 @@ class Product(
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "author_id")
+
+
     @Column(name = "author_id")
     var authorId: Long,
 
@@ -81,10 +84,28 @@ class Product(
             throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
     }
 
-    fun modifyProduct(content: String, amount: Int, category: String) {
+    fun modifyProduct(
+        content: String?,
+        amount: Int,
+        category: String,
+        hashTags: MutableSet<ProductHashTag>,
+        images: MutableSet<ProductImage>
+    ) {
         this.content = content
         this.amount = amount
         this.category = category
+        modifyHashTag(hashTags)
+        modifyImages(images)
         this.modifiedAt = LocalDateTime.now()
+    }
+
+    private fun modifyHashTag(hashTags: MutableSet<ProductHashTag>) {
+        this.hashTags.removeIf { hashTag -> !hashTags.contains(hashTag) }
+        this.hashTags.addAll(hashTags)
+    }
+
+    private fun modifyImages(images: MutableSet<ProductImage>) {
+        this.images.removeIf { image -> !images.contains(image) }
+        this.images.addAll(images)
     }
 }

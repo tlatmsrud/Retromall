@@ -20,4 +20,23 @@ class ProductHashTag(
 //    @JoinColumn(name = "hashtag_name")
     @Column(name = "hashtag_name")
     val hashTag: String = hashTag
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ProductHashTag
+
+        if (product != other.product) return false
+        if (hashTag != other.hashTag) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = product.hashCode()
+        result = 31 * result + hashTag.hashCode()
+        return result
+    }
+
+
 }

@@ -4,7 +4,7 @@ import com.retro.common.annotation.MemberAuthentication
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.dto.ProductResponse
-import com.retro.retromall.product.dto.UpdateProductRequest
+import com.retro.retromall.product.dto.ProductUpdateRequest
 import com.retro.retromall.product.service.ProductService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -18,6 +18,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -73,13 +74,13 @@ class ProductController(
             content = [Content(schema = Schema(implementation = IllegalStateException::class))]
         )
     )
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     fun productUpdate(
         @Parameter(hidden = true) @MemberAuthentication memberAttributes: MemberAttributes,
         @Parameter(description = "수정할 Product Id") @PathVariable id: Long,
-        @RequestBody updateProductRequest: UpdateProductRequest
+        @RequestBody productUpdateRequest: ProductUpdateRequest
     ): ResponseEntity<Unit> {
-        productService.updateProduct(memberAttributes, id, updateProductRequest)
+        productService.updateProduct(memberAttributes, id, productUpdateRequest)
         return ResponseEntity.ok().build()
     }
 

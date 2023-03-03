@@ -1,4 +1,4 @@
-package com.retro.retromall.member.infra.client.config
+package com.retro.retromall.member.infra.client.properties
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration

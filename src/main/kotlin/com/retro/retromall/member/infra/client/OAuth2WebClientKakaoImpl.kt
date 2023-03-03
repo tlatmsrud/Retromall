@@ -1,12 +1,15 @@
-package com.retro.retromall.member.infra.client.kakao
+package com.retro.retromall.member.infra.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.retromall.member.dto.OAuthMemberAttributes
 import com.retro.retromall.member.dto.OAuthTokenAttributes
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.infra.client.OAuth2WebClient
-import com.retro.retromall.member.infra.client.OAuthMemberAttributeFactory
-import com.retro.retromall.member.infra.client.config.KakaoProperties
+import com.retro.retromall.member.support.OAuthMemberAttributeFactory
+import com.retro.retromall.member.infra.client.properties.KakaoProperties
+import com.retro.retromall.member.infra.client.dto.kakao.KakaoTokenRequest
+import com.retro.retromall.member.infra.client.dto.kakao.KakaoTokenResponse
+import com.retro.retromall.member.infra.client.dto.kakao.KakaoUserInfoRequest
+import com.retro.retromall.member.infra.client.dto.kakao.KakaoUserInfoResponse
 import com.retro.util.WebClientUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,13 +22,13 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 
 @Component
-class KakaoWebClientImpl(
+class OAuth2WebClientKakaoImpl(
     kakaoAuthClient: WebClient,
     kakaoApiClient: WebClient,
     kakaoProperties: KakaoProperties,
     private val objectMapper: ObjectMapper
     ) : OAuth2WebClient {
-    private val logger: Logger = LoggerFactory.getLogger(KakaoWebClientImpl::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(OAuth2WebClientKakaoImpl::class.java)
     private val authWebClient = kakaoAuthClient
     private val apiWebClient = kakaoApiClient
     private val properties = kakaoProperties

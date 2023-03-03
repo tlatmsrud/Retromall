@@ -7,6 +7,7 @@ import com.retro.retromall.product.dto.ProductResponse
 import com.retro.retromall.product.service.ProductReadService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -42,7 +43,7 @@ class ProductReadController(
         )
     )
     @GetMapping("/{id}")
-    fun product(@MemberAuthentication memberAttributes: MemberAttributes, @PathVariable id: Long): ResponseEntity<ProductResponse> {
+    fun product(@MemberAuthentication(required = false) memberAttributes: MemberAttributes, @PathVariable id: Long): ResponseEntity<ProductResponse> {
         return ResponseEntity.ok(productReadService.getProduct(memberAttributes, id))
     }
 

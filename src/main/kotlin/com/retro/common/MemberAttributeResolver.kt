@@ -19,7 +19,9 @@ class MemberAttributeResolver(
 ) : HandlerMethodArgumentResolver {
     private val logger: Logger = LoggerFactory.getLogger(MemberAttributeResolver::class.java)
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.parameterType == MemberAttributes::class.java && parameter.hasParameterAnnotation(MemberAuthentication::class.java)
+        return parameter.parameterType == MemberAttributes::class.java &&
+                parameter.hasParameterAnnotation(MemberAuthentication::class.java) &&
+                parameter.getParameterAnnotation(MemberAuthentication::class.java)!!.required
     }
 
     override fun resolveArgument(

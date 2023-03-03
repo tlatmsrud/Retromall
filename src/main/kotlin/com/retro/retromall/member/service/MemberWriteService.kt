@@ -25,7 +25,7 @@ class MemberWriteService(
         val memberAttributes = webClient.getUserInfo(oAuthAttributes)
         val member = findMemberByOAuthAttributes(memberAttributes)
         val tokenAttributes = jwtTokenProvider.generateToken(member)
-        return LoginResponse(member.nickname, tokenAttributes)
+        return LoginResponse(member.nickname, member.profileImageUrl, tokenAttributes)
     }
 
     @Transactional

@@ -1,4 +1,4 @@
-package com.retro.retromall.member.infra.client.kakao
+package com.retro.retromall.member.infra.client.dto.kakao
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
