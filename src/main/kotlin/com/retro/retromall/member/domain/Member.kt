@@ -36,8 +36,4 @@ class Member(
 
     @Column(name = "profile_image_url", length = 255)
     var profileImageUrl = profileImageUrl
-
-    fun getUsername(): String? {
-        return nickname
-    }
 }

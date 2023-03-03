@@ -6,7 +6,7 @@ import com.retro.retromall.member.controller.MemberController
 import com.retro.retromall.member.dto.LoginRequest
 import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.service.MemberWriteService
+import com.retro.retromall.member.service.MemberService
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -26,7 +26,7 @@ import javax.persistence.EntityNotFoundException
 
 @ExtendWith(MockitoExtension::class)
 class MemberControllerMockMvcStandAloneTest {
-    private var memberWriteService: MemberWriteService = mockk()
+    private var memberService: MemberService = mockk()
     private var memberController: MemberController = mockk()
 
     private val mvc: MockMvc = MockMvcBuilders.standaloneSetup(memberController)
@@ -44,8 +44,8 @@ class MemberControllerMockMvcStandAloneTest {
         //given
         val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, authorizationCode = "Password")
         val tokenAttributes = TokenAttributes("Bearer", "access", "refresh")
-        val loginResponse = LoginResponse("nickName", tokenAttributes)
-        every { memberWriteService.findMemberByOauth(OAuthType.KAKAO, "Password") } returns loginResponse
+        val loginResponse = LoginResponse("nickName", "profileImage",tokenAttributes)
+        every { memberService.findMemberByOauth(OAuthType.KAKAO, "Password") } returns loginResponse
         every { memberController.login(loginRequest) } returns ResponseEntity.ok(loginResponse)
 
         //when
@@ -67,7 +67,7 @@ class MemberControllerMockMvcStandAloneTest {
     fun canRetrieveByIdWhenDoesNotExist() {
         //given
         every {
-            memberWriteService.findMemberByOauth(
+            memberService.findMemberByOauth(
                 OAuthType.KAKAO,
                 "Password"
             )

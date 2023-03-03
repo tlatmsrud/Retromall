@@ -28,10 +28,13 @@ class JwtTokenProvider(
     private val key = Keys.hmacShaKeyFor(keyBytes)
 
     fun generateToken(member: Member): TokenAttributes {
-        val now = Date().time
-        val accessTokenExpiresIn = Date(now + 8640000)
+        val now = Date()
+        val accessTokenExpiresIn = Date(now.time + 8640000)
         val accessToken = Jwts.builder()
-            .setSubject(member.getUsername())
+            .setIssuer("Retromall")
+            .setSubject("Retromall Jwt Token")
+            .setAudience("Retroall User")
+            .setIssuedAt(now)
             .claim("id", member.id!!)
             .claim("nickName", member.nickname)
             .setExpiration(accessTokenExpiresIn)
@@ -39,7 +42,7 @@ class JwtTokenProvider(
             .compact()
 
         val refreshToken = Jwts.builder()
-            .setExpiration(Date(now + 8640000))
+            .setExpiration(Date(now.time + 8640000))
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 

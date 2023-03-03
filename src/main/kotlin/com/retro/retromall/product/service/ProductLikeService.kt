@@ -2,7 +2,6 @@ package com.retro.retromall.product.service
 
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.product.domain.repository.ProductRepository
-import com.retro.security.AuthenticationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

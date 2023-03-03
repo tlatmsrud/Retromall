@@ -1,8 +1,6 @@
 package com.retro.retromall.product.domain
 
-import com.retro.retromall.member.domain.Member
 import java.time.LocalDateTime
-import java.util.stream.Collectors
 import javax.persistence.*
 
 @Entity
