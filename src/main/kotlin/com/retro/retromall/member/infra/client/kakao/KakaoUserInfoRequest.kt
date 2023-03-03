@@ -10,5 +10,5 @@ class KakaoUserInfoRequest(
     val secureResource: Boolean = secureResource
 
     @JsonProperty("property_keys")
-    val propertyKeys: String = "[\"" + scope.joinToString { "," } + "\"]"
+    val propertyKeys: String = scope.joinToString(prefix = "[\"", separator = "\", \"", postfix = "\"]")
 }

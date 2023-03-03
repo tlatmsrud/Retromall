@@ -5,6 +5,7 @@ import com.retro.retromall.member.dto.OAuthMemberAttributes
 import com.retro.retromall.member.dto.OAuthTokenAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.infra.client.OAuth2WebClient
+import com.retro.retromall.member.infra.client.OAuthMemberAttributeFactory
 import com.retro.retromall.member.infra.client.config.KakaoProperties
 import com.retro.util.WebClientUtils
 import org.slf4j.Logger
@@ -15,16 +16,16 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 @Component
 class KakaoWebClientImpl(
     kakaoAuthClient: WebClient,
     kakaoApiClient: WebClient,
-    objectMapper: ObjectMapper,
     kakaoProperties: KakaoProperties,
-) : OAuth2WebClient {
+    private val objectMapper: ObjectMapper
+    ) : OAuth2WebClient {
     private val logger: Logger = LoggerFactory.getLogger(KakaoWebClientImpl::class.java)
-    private val objectMapper = objectMapper
     private val authWebClient = kakaoAuthClient
     private val apiWebClient = kakaoApiClient
     private val properties = kakaoProperties
@@ -48,7 +49,7 @@ class KakaoWebClientImpl(
             .retrieve()
             .onStatus({ it != HttpStatus.OK }, {
                 it.createException().flatMap { err ->
-                    throw IllegalStateException(err.responseBodyAsString)
+                    return@flatMap Mono.error(IllegalStateException(err.responseBodyAsString))
                 }
             })
             .bodyToMono(KakaoTokenResponse::class.java)
@@ -75,46 +76,17 @@ class KakaoWebClientImpl(
             .retrieve().onStatus({ it != HttpStatus.OK },
                 {
                     it.createException().flatMap { err ->
-                        throw IllegalStateException(err.responseBodyAsString)
+                        return@flatMap Mono.error(IllegalStateException(err.responseBodyAsString))
                     }
                 })
             .bodyToMono(KakaoUserInfoResponse::class.java)
             .block()
 
-        return OAuthMemberAttributes(
-            OAuthType.KAKAO,
-            response?.id.toString(),
-            response?.kakaoAccount?.name,
-            response?.kakaoAccount?.email,
-            response?.kakaoAccount?.profile?.profileImageUrl
+        return OAuthMemberAttributeFactory.createOauthMemberAttributes(
+            oAuthType = OAuthType.KAKAO,
+            response = response!!
         )
     }
-
-    override fun getUserInfoByAccessToken(accessToken: String): OAuthMemberAttributes {
-        val kakaoUserInfoRequest =
-            KakaoUserInfoRequest(secureResource = properties.secureResource, scope = properties.scope)
-        val parameters = WebClientUtils.convertParameters(kakaoUserInfoRequest, objectMapper)
-        val response = apiWebClient.post()
-            .uri { uriBuilder -> uriBuilder.path(properties.userInfoUri).build() }
-            .header(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(BodyInserters.fromFormData(parameters))
-            .retrieve().onStatus({ it != HttpStatus.OK },
-                {
-                    it.createException().flatMap { err ->
-                        throw IllegalStateException(err.responseBodyAsString)
-                    }
-                })
-            .bodyToMono(KakaoUserInfoResponse::class.java)
-            .block()
-
-        return OAuthMemberAttributes(
-            OAuthType.KAKAO,
-            response?.id.toString(),
-            response?.kakaoAccount?.name,
-            response?.kakaoAccount?.email,
-            response?.kakaoAccount?.profile?.profileImageUrl
-        )    }
 
     override fun getOAuthType(): OAuthType {
         return OAuthType.KAKAO

@@ -28,16 +28,6 @@ class MemberWriteService(
         return LoginResponse(member.nickname, tokenAttributes)
     }
 
-    // 액세스토큰으로 인증
-    @Transactional
-    fun findMemberByOauthToken(oAuthType: OAuthType, accessToken: String): LoginResponse {
-        val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
-        val memberAttributes = webClient.getUserInfoByAccessToken(accessToken)
-        val member = findMemberByOAuthAttributes(memberAttributes)
-        val tokenAttributes = jwtTokenProvider.generateToken(member)
-        return LoginResponse(member.nickname, tokenAttributes)
-    }
-
     @Transactional
     fun findMemberByOAuthAttributes(attributes: OAuthMemberAttributes): Member {
         return memberRepository.findByOauthId(attributes.oauthId).orElse(null)
@@ -47,7 +37,14 @@ class MemberWriteService(
     @Transactional
     fun addMember(attributes: OAuthMemberAttributes): Member {
         val member =
-            Member(nickname = attributes.name, email = attributes.email, oAuthType = attributes.oAuthType, oauthId = attributes.oauthId)
+            Member(
+                name = attributes.name,
+                profileImageUrl = attributes.image,
+                nickname = attributes.nickName,
+                email = attributes.email,
+                oAuthType = attributes.oAuthType,
+                oauthId = attributes.oauthId
+            )
         return memberRepository.save(member)
     }
 

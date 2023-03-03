@@ -9,5 +9,4 @@ interface OAuth2WebClient {
     fun getOAuthType(): OAuthType
     fun getToken(authorizationCode: String): OAuthTokenAttributes
     fun getUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes
-    fun getUserInfoByAccessToken(accessToken: String): OAuthMemberAttributes
 }

@@ -2,11 +2,13 @@ use retromall;
 
 create table tb_member
 (
-    member_id  bigint unsigned not null auto_increment primary key,
-    oauth_type varchar(10)     not null,
-    oauth_id   varchar(255)    not null,
-    email      varchar(100),
-    nickname   varchar(100)
+    member_id         bigint unsigned not null auto_increment primary key,
+    oauth_type        varchar(10)     not null,
+    oauth_id          varchar(255)    not null,
+    member_name       varchar(50),
+    email             varchar(100),
+    nickname          varchar(100),
+    profile_image_url varchar(255)
 ) engine = InnoDB
   charset = utf8;
 
