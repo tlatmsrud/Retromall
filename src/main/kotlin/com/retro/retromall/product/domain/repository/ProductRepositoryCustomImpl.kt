@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.retro.retromall.member.domain.QMember.member
 import com.retro.retromall.product.domain.Product
+import com.retro.retromall.product.domain.ProductLike
 import com.retro.retromall.product.domain.QProduct.product
 import com.retro.retromall.product.domain.QProductLike.productLike
 import com.retro.retromall.product.dto.ProductListResponse
@@ -86,8 +87,12 @@ class ProductRepositoryCustomImpl(
         }
 
         return ProductListResponse(data = SliceImpl(content, pageable, hasNext))
+    }
 
-
+    override fun selectProductLike(productId: Long, memberId: Long): ProductLike? {
+        return jpaQueryFactory.selectFrom(productLike)
+            .where(productLike.product.id.eq(productId).and(productLike.memberId.eq(memberId)))
+            .fetchOne()
     }
 
     private fun eqCategory(category: String?): BooleanExpression? {

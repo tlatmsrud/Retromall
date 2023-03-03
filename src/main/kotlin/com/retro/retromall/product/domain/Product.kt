@@ -74,13 +74,29 @@ class Product(
         images.forEach { it.product = this }
     }
 
-    fun addLikes(productLike: ProductLike) {
-        this.productLikes.add(productLike)
-        this.likes++
+    fun addLikes(memberId: Long, productLike: ProductLike?) {
+        productLike?.let {
+            if (!it.isLiked) {
+                it.isLiked = true
+                this.likes++
+            }
+        } ?: run {
+            this.productLikes.add(ProductLike(this, memberId))
+            this.likes++
+        }
     }
 
-    fun isAuthor(member: Member) {
-        if (authorId != member.id)
+    fun removeLikes(productLike: ProductLike?) {
+        productLike?.let {
+            if (it.isLiked) {
+                it.isLiked = false
+                this.likes--
+            }
+        } ?: throw IllegalStateException("해당 상품에 대해 좋아요를 누른적이 없습니다.")
+    }
+
+    fun isAuthor(memberId: Long) {
+        if (authorId != memberId)
             throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
     }
 
@@ -107,5 +123,20 @@ class Product(
     private fun modifyImages(images: MutableSet<ProductImage>) {
         this.images.removeIf { image -> !images.contains(image) }
         this.images.addAll(images)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Product
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
     }
 }

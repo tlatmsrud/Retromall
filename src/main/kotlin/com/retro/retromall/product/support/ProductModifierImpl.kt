@@ -15,19 +15,16 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class ProductModifierImpl(
     private val productRepository: ProductRepository,
-    private val memberRepository: MemberRepository,
     private val categoryReadService: CategoryReadService,
     private val productImageService: ProductImageService,
     private val productHashTagService: ProductHashTagService,
-    private val authenticationService: AuthenticationService
+    private val productAuthenticationService: AuthenticationService
 
 ) : ProductModifier {
     override fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: ProductUpdateRequest): Long {
-        val member = memberRepository.findById(memberAttributes.id!!)
-            .orElseThrow { throw IllegalArgumentException("사용자를 찾을 수 없습니다.") }
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        authenticationService.validateUser(member, product)
+        productAuthenticationService.validateUser(memberAttributes.id!!, product)
         product.modifyProduct(
             content = dto.content ?: product.content,
             amount = dto.amount,
@@ -40,11 +37,9 @@ class ProductModifierImpl(
     }
 
     override fun deleteProduct(memberAttributes: MemberAttributes, productId: Long) {
-        val member = memberRepository.findById(memberAttributes.id!!)
-            .orElseThrow { throw IllegalArgumentException("사용자를 찾을 수 없습니다.") }
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        authenticationService.validateUser(member, product)
+        productAuthenticationService.validateUser(memberAttributes.id!!, product)
         productRepository.delete(product)
     }
 }
