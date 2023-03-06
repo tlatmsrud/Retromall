@@ -2,9 +2,12 @@ package com.retro.retromall.category.domain.repository
 
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.QCategory.category
+import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.dto.CategoryResponse
 import org.springframework.util.StringUtils
+import java.util.stream.Collectors
 
 class CustomCategoryRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
@@ -16,6 +19,20 @@ class CustomCategoryRepositoryImpl(
             .fetch()
 
         return CategoryResponse(result)
+    }
+
+    override fun selectCategories(): CategoryListResponse {
+        val categories = jpaQueryFactory.selectFrom(category).fetch()
+        val rootCategories = categories.stream().filter { it.parent == null }.map { it.name }
+        val data = rootCategories.map { createCategoryData(categories, it) }.collect(Collectors.toList())
+
+        return CategoryListResponse(data)
+    }
+
+    private fun createCategoryData(categories: MutableList<Category>, categoryName: String): CategoryListResponse.Data {
+        val category = categories.find { it.name == categoryName }!!
+        val lowerCategories = category.lowerCategoryList.map { createCategoryData(categories, it.name) }
+        return CategoryListResponse.Data(category.name, lowerCategories)
     }
 
     private fun eqRootCategory(root: String?): BooleanExpression? {

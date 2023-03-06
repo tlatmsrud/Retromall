@@ -2,6 +2,7 @@ package com.retro.retromall.category.service
 
 import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.repository.CategoryRepository
+import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.dto.CategoryResponse
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,5 +18,9 @@ class CategoryReadService(
     }
     fun getCategoryList(root: String?): CategoryResponse {
         return categoryRepository.selectCategoryListByRootCategory(root)
+    }
+
+    fun getCategoryList(): CategoryListResponse {
+        return categoryRepository.selectCategories()
     }
 }
