@@ -8,9 +8,11 @@ import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.dto.CategoryResponse
 import org.springframework.util.StringUtils
 import java.util.stream.Collectors
+import javax.persistence.EntityManager
 
 class CustomCategoryRepositoryImpl(
-    private val jpaQueryFactory: JPAQueryFactory
+    private val jpaQueryFactory: JPAQueryFactory,
+    private val entityManager: EntityManager
 ) : CustomCategoryRepository {
     override fun selectCategoryListByRootCategory(root: String?): CategoryResponse {
         val result = jpaQueryFactory.select(category.name)
@@ -31,7 +33,7 @@ class CustomCategoryRepositoryImpl(
 
     private fun createCategoryData(categories: MutableList<Category>, categoryName: String): CategoryListResponse.Data {
         val category = categories.find { it.name == categoryName }!!
-        val lowerCategories = category.lowerCategoryList.map { createCategoryData(categories, it.name) }
+        val lowerCategories = categories.filter { it.parent?.name == categoryName }.map { createCategoryData(categories, it.name) }
         return CategoryListResponse.Data(category.name, lowerCategories)
     }
 
