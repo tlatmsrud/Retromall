@@ -4,13 +4,16 @@ import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.repository.CategoryRepository
 import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.dto.CategoryResponse
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
 class CategoryReadService(
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val redisTemplate: RedisTemplate<String, Any>
 ) {
     fun getCategory(name: String): Category {
         return categoryRepository.findById(name)
@@ -20,6 +23,7 @@ class CategoryReadService(
         return categoryRepository.selectCategoryListByRootCategory(root)
     }
 
+    @Cacheable("categories")
     fun getCategoryList(): CategoryListResponse {
         return categoryRepository.selectCategories()
     }

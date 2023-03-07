@@ -8,11 +8,9 @@ import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.dto.CategoryResponse
 import org.springframework.util.StringUtils
 import java.util.stream.Collectors
-import javax.persistence.EntityManager
 
 class CustomCategoryRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
-    private val entityManager: EntityManager
 ) : CustomCategoryRepository {
     override fun selectCategoryListByRootCategory(root: String?): CategoryResponse {
         val result = jpaQueryFactory.select(category.name)
