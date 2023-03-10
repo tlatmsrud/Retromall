@@ -6,6 +6,7 @@ data class CategoryListResponse(
     val data: List<Data>
 ) : Serializable {
     data class Data(
+        val id: String,
         val category: String,
         val lowerCategories: List<Data>
     ) : Serializable

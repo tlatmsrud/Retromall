@@ -44,7 +44,7 @@ class Product(
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
     var hashTags: MutableSet<ProductHashTag> = mutableSetOf(),
 
-    @Column(name = "thumbnail", columnDefinition = "TEXT")
+    @Column(name = "thumbnail", length = 255)
     var thumbnail: String? = null,
 
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
@@ -62,15 +62,6 @@ class Product(
         authorId: Long,
         category: String
     ) : this(null, content, amount, authorId, category)
-
-    fun addHashTags(hashtags: Set<ProductHashTag>) {
-        this.hashTags.addAll(hashtags)
-    }
-
-    fun addImages(images: List<ProductImage>) {
-        this.images.addAll(images)
-        images.forEach { it.product = this }
-    }
 
     fun addLikes(memberId: Long, productLike: ProductLike?) {
         productLike?.let {
@@ -96,31 +87,6 @@ class Product(
     fun isAuthor(memberId: Long) {
         if (authorId != memberId)
             throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
-    }
-
-    fun modifyProduct(
-        content: String?,
-        amount: Int,
-        category: String,
-        hashTags: MutableSet<ProductHashTag>,
-        images: MutableSet<ProductImage>
-    ) {
-        this.content = content
-        this.amount = amount
-        this.category = category
-        modifyHashTag(hashTags)
-        modifyImages(images)
-        this.modifiedAt = LocalDateTime.now()
-    }
-
-    private fun modifyHashTag(hashTags: MutableSet<ProductHashTag>) {
-        this.hashTags.removeIf { hashTag -> !hashTags.contains(hashTag) }
-        this.hashTags.addAll(hashTags)
-    }
-
-    private fun modifyImages(images: MutableSet<ProductImage>) {
-        this.images.removeIf { image -> !images.contains(image) }
-        this.images.addAll(images)
     }
 
     override fun equals(other: Any?): Boolean {

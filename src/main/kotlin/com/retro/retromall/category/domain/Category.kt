@@ -9,8 +9,8 @@ class Category(
     @Column(name = "category_name", nullable = false)
     val name: String,
 
-    @Column(name = "is_classification", nullable = false)
-    val isClassification: Boolean,
+    @Column(name = "id", unique = true)
+    val id: String,
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.LAZY)
     val lowerCategoryList: MutableList<Category> = mutableListOf(),

@@ -17,7 +17,7 @@ create table tb_product
     product_id  bigint unsigned  not null auto_increment primary key,
     author_id   bigint unsigned  not null,
     content     text,
-    thumbnail   text,
+    thumbnail   varchar(255),
     amount      int              not null,
     category    varchar(50)      not null,
     likes       bigint default 0 not null,
@@ -34,9 +34,9 @@ create table tb_hashtag
 
 create table tb_category
 (
-    category_name     varchar(50) primary key not null,
-    parent            varchar(50),
-    is_classification boolean
+    id            varchar(20) unique      not null,
+    category_name varchar(50) primary key not null,
+    parent        varchar(50)
 ) engine = InnoDB
   charset = utf8;
 

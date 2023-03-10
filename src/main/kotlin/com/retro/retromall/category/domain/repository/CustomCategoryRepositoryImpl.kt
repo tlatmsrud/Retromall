@@ -32,7 +32,7 @@ class CustomCategoryRepositoryImpl(
     private fun createCategoryData(categories: MutableList<Category>, categoryName: String): CategoryListResponse.Data {
         val category = categories.find { it.name == categoryName }!!
         val lowerCategories = categories.filter { it.parent?.name == categoryName }.map { createCategoryData(categories, it.name) }
-        return CategoryListResponse.Data(category.name, lowerCategories)
+        return CategoryListResponse.Data(category.id, category.name, lowerCategories)
     }
 
     private fun eqRootCategory(root: String?): BooleanExpression? {

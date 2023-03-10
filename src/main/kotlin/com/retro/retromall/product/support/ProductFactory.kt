@@ -3,6 +3,8 @@ package com.retro.retromall.product.support
 import com.retro.retromall.category.service.CategoryReadService
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.product.domain.Product
+import com.retro.retromall.product.domain.ProductHashTag
+import com.retro.retromall.product.domain.ProductImage
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.service.ProductHashTagService
@@ -26,10 +28,19 @@ class ProductFactory(
             category = categoryReadService.getCategory(dto.category).name,
             thumbnail = dto.thumbnail
         )
-        product.addHashTags(productHashTagService.createProductHashTags(product, dto.hashTags))
-        product.addImages(productImageService.createProductImages(dto.images, product))
+        addHashTags(product, productHashTagService.createProductHashTags(product, dto.hashTags))
+        addImages(product, productImageService.createProductImages(dto.images, product))
 
         productRepository.save(product)
         return product.id!!
+    }
+
+    private fun addHashTags(product: Product, hashtags: Set<ProductHashTag>) {
+        product.hashTags.addAll(hashtags)
+    }
+
+    private fun addImages(product: Product, images: List<ProductImage>) {
+        product.images.addAll(images)
+        images.forEach { it.product = product }
     }
 }
