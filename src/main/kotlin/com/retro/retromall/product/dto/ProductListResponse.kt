@@ -11,6 +11,7 @@ data class ProductListResponse(
         val author: String?,
         val content: String?,
         val amount: Int,
+        val likes: Long,
         val thumbnail: String?,
         val createdAt: LocalDateTime,
         val modifiedAt: LocalDateTime

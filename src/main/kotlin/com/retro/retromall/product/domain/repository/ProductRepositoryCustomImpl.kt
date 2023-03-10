@@ -66,6 +66,7 @@ class ProductRepositoryCustomImpl(
                 member.nickname,
                 product.content,
                 product.amount,
+                product.likes,
                 product.thumbnail,
                 product.createdAt,
                 product.modifiedAt
