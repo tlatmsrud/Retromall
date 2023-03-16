@@ -18,6 +18,10 @@ class WebConfig(
         if (System.getProperty("spring.profiles.active") == "local") {
             registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedMethods("GET", "POST", "PATCH", "DELETE")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600)
         } else {
             registry.addMapping("/**")
                 .allowedOrigins("https://retromall.herokuapp.com")
