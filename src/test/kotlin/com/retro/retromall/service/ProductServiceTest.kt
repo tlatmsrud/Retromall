@@ -33,7 +33,7 @@ class ProductServiceTest(
     @BeforeEach
     @Transactional
     fun init() {
-        memberRepository.save(Member(OAuthType.KAKAO, "testestest", "", ""))
-        categoryRepository.save(Category(isClassification = true, parent = null, name = "PC"))
+        memberRepository.save(Member(OAuthType.KAKAO, "testestest", "", "", "", ""))
+        categoryRepository.save(Category(parent = null, name = "PC", id = ""))
     }
 }

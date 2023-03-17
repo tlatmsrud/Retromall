@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class ProductAuthenticationServiceImpl : AuthenticationService {
-    override fun validateUser(memberId: Any, target: Any) {
+    override fun validateUser(user: Any, target: Any) {
         val product = target as Product
 
-        return product.isAuthor(memberId as Long)
+        return product.isAuthor(user as Long)
     }
 }
