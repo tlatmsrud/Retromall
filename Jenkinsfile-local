@@ -27,7 +27,8 @@ pipeline {
         stage("Build") {
             steps {
                 // 프로젝트 빌드
-                './gradlew clean build -x test'
+                sh './gradlew clean'
+                sh './gradlew build -x test'
             }
         }
 
