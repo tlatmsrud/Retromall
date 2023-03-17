@@ -23,7 +23,6 @@ class WebConfig(
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
                 .allowedHeaders("*")
-                .allowCredentials(true)
                 .maxAge(3600)
         } else {
             registry.addMapping("/**")
