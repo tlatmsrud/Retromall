@@ -84,9 +84,10 @@ class Product(
         } ?: throw IllegalStateException("해당 상품에 대해 좋아요를 누른적이 없습니다.")
     }
 
-    fun isAuthor(memberId: Long) {
+    fun isAuthor(memberId: Long): Boolean {
         if (authorId != memberId)
-            throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
+            return false
+        return true
     }
 
     override fun equals(other: Any?): Boolean {

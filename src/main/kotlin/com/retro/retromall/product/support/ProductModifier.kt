@@ -27,7 +27,9 @@ class ProductModifier(
     fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: ProductUpdateRequest): Long {
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        productAuthenticationService.validateUser(memberAttributes.id!!, product)
+        if (!productAuthenticationService.validateUser(memberAttributes.id!!, product))
+            throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
+
         modifyProduct(
             product = product,
             content = dto.content ?: product.content,
@@ -43,7 +45,9 @@ class ProductModifier(
     fun deleteProduct(memberAttributes: MemberAttributes, productId: Long) {
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        productAuthenticationService.validateUser(memberAttributes.id!!, product)
+        if (!productAuthenticationService.validateUser(memberAttributes.id!!, product))
+            throw IllegalStateException("해당 상품을 삭제할 권한이 없습니다.")
+
         productRepository.delete(product)
     }
 

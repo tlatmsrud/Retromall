@@ -3,6 +3,7 @@ package com.retro.retromall.product.dto
 import java.time.LocalDateTime
 
 data class ProductResponse(
+    val isAuthor: Boolean,
     val productId: Long,
     val content: String?,
     val amount: Int,

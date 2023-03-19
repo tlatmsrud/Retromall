@@ -43,6 +43,7 @@ class ProductRepositoryCustomImpl(
             val product = query.get(product)!!
             val isLiked = query.get(productLike.isLiked)
             return ProductResponse(
+                isAuthor = memberId?.let { product.isAuthor(it) } ?: false,
                 productId = product.id!!,
                 content = product.content,
                 amount = product.amount,
