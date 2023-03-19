@@ -16,7 +16,8 @@ create table tb_product
 (
     product_id  bigint unsigned  not null auto_increment primary key,
     author_id   bigint unsigned  not null,
-    content     text,
+    title       varchar(255),
+    content     varchar(5000),
     thumbnail   varchar(255),
     amount      int              not null,
     category    varchar(50)      not null,

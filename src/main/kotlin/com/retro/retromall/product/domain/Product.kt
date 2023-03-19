@@ -11,6 +11,9 @@ class Product(
     @Column(name = "product_id")
     val id: Long? = null,
 
+    @Column(name = "title", length = 255, nullable = false)
+    var title: String,
+
     @Column(name = "content", length = 5000, nullable = true)
     var content: String?,
 
@@ -57,11 +60,12 @@ class Product(
     var modifiedAt: LocalDateTime = LocalDateTime.now(),
 ) {
     constructor(
+        title: String,
         content: String?,
         amount: Int,
         authorId: Long,
         category: String
-    ) : this(null, content, amount, authorId, category)
+    ) : this(null, title, content, amount, authorId, category)
 
     fun addLikes(memberId: Long, productLike: ProductLike?) {
         productLike?.let {

@@ -1,6 +1,7 @@
 package com.retro.retromall.product.dto
 
 data class CreateProductRequest(
+    val title: String,
     val content: String?,
     val amount: Int,
     val category: String,

@@ -32,6 +32,7 @@ class ProductModifier(
 
         modifyProduct(
             product = product,
+            title = dto.title ?: product.title,
             content = dto.content ?: product.content,
             amount = dto.amount,
             category = dto.category.let { categoryReadService.getCategory(it).name },
@@ -53,12 +54,14 @@ class ProductModifier(
 
     private fun modifyProduct(
         product: Product,
+        title: String,
         content: String?,
         amount: Int,
         category: String,
         hashTags: MutableSet<ProductHashTag>,
         images: MutableSet<ProductImage>
     ) {
+        product.title = title
         product.content = content
         product.amount = amount
         product.category = category

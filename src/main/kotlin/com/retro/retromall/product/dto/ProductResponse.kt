@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 data class ProductResponse(
     val isAuthor: Boolean,
     val productId: Long,
+    val title: String,
     val content: String?,
     val amount: Int,
     val author: String,

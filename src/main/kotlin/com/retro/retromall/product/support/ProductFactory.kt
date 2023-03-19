@@ -22,6 +22,7 @@ class ProductFactory(
 ) {
     fun createProduct(memberAttributes: MemberAttributes, dto: CreateProductRequest): Long {
         val product = Product(
+            title = dto.title,
             content = dto.content,
             amount = dto.amount,
             authorId = memberAttributes.id!!,

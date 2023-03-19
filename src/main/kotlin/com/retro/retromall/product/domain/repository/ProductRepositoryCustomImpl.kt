@@ -45,6 +45,7 @@ class ProductRepositoryCustomImpl(
             return ProductResponse(
                 isAuthor = memberId?.let { product.isAuthor(it) } ?: false,
                 productId = product.id!!,
+                title = product.title,
                 content = product.content,
                 amount = product.amount,
                 author = query.get(member.nickname)!!,
@@ -65,7 +66,7 @@ class ProductRepositoryCustomImpl(
                 ProductListResponse.Data::class.java,
                 product.id,
                 member.nickname,
-                product.content,
+                product.title,
                 product.amount,
                 product.likes,
                 product.thumbnail,

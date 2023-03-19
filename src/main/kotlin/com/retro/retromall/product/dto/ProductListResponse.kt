@@ -9,7 +9,7 @@ data class ProductListResponse(
     data class Data(
         val productId: Long,
         val author: String?,
-        val content: String?,
+        val title: String,
         val amount: Int,
         val likes: Long,
         val thumbnail: String?,
