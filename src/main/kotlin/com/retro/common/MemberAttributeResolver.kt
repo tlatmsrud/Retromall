@@ -20,8 +20,7 @@ class MemberAttributeResolver(
     private val logger: Logger = LoggerFactory.getLogger(MemberAttributeResolver::class.java)
     override fun supportsParameter(parameter: MethodParameter): Boolean {
         return parameter.parameterType == MemberAttributes::class.java &&
-                parameter.hasParameterAnnotation(MemberAuthentication::class.java) &&
-                parameter.getParameterAnnotation(MemberAuthentication::class.java)!!.required
+                parameter.hasParameterAnnotation(MemberAuthentication::class.java)
     }
 
     override fun resolveArgument(
@@ -30,24 +29,28 @@ class MemberAttributeResolver(
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): Any? {
-        //Test Token
-        val testToken = (webRequest.nativeRequest as HttpServletRequest).getHeader("Authorization")
-        if (StringUtils.hasText(testToken) && testToken == "Bearer TestToken")
-            return MemberAttributes(id = 1000L)
+        val authorization = (webRequest.nativeRequest as HttpServletRequest).getHeader("Authorization")
+        if (!parameter.getParameterAnnotation(MemberAuthentication::class.java)!!.required && !StringUtils.hasText(authorization)) {
+            return MemberAttributes(id = null)
+        }
 
-        val token = resolveToken(webRequest.nativeRequest as HttpServletRequest)
+        //Test Token
+        if (authorization == "Bearer TestToken") {
+            return MemberAttributes(id = 1000L)
+        }
+
+        val token = resolveToken(authorization)
         jwtTokenProvider.validateToken(token)
         val claims = jwtTokenProvider.parseClaims(token)
         val id: Long? = claims.get("id", Integer::class.java)?.toLong()
         return MemberAttributes(id = id)
     }
 
-    private fun resolveToken(request: HttpServletRequest): String {
-        val token = request.getHeader("Authorization")
-        if (StringUtils.hasText(token) && token.startsWith("Bearer")) {
-            return token.substring(7)
+    private fun resolveToken(authorization: String): String {
+        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer")) {
+            return authorization.substring(7)
         }
 
-        return "";
+        return ""
     }
 }

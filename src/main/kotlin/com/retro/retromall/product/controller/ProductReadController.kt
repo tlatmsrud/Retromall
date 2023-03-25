@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController
 class ProductReadController(
     private val productReadService: ProductReadService
 ) {
-
     @GetMapping("/{id}")
     fun product(
         @MemberAuthentication(required = false) memberAttributes: MemberAttributes,
