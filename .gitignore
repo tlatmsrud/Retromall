@@ -40,3 +40,7 @@ out/
 /init.sql
 /info.txt
 /ubuntu.pem
+
+### local ###
+/src/main/resources/application-local.yml
+/src/main/resources/properties/local/
