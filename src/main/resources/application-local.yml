@@ -24,7 +24,11 @@ logging:
             sql: trace
 
 jwt:
-  secret: 12345678901234567890123456789010
+  secret: ENC(s9MlePyeyjYhoNHUgwZ36VetjiEA5g9CS+nIBkHS1yvm2raaXeF9NRsUHDnHs4wXDxoMfDFRiBR71vAAJVbnMahLa4X8B66T)
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
 
 management:
   endpoints:
