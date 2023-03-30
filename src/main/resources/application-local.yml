@@ -14,9 +14,9 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: ENC(n27579lQvYztbJDu3AOD2pzAvgtri5EQfaV92MKuXHwDITE99lmE9Bvx6kwipH+Hs1z31fIBZStFAw+Ml5YsngbVWc0/y0yF5rHrFXv83fjCRAAVMKbDnKgAYXWQbLIqSnqE7dQ3Ud64cDEqjwjGZ8RBx1yb3y8sXp4PoyY3v6R11DLCJuYu0A==)
-    username: ENC(ot79q2Iy88CPWViGt/AnvQ==)
-    password: ENC(EOh97G7L7FTaRDNiaoCcWYPLuSPQIKDQ)
+    url: jdbc:mysql://localhost:3306/test
+    username: tlatmsrud
+    password: tla1203#
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: localhost
