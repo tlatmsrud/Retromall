@@ -1,6 +1,7 @@
 package com.retro.retromall.member.service
 
 import com.retro.common.JwtTokenProvider
+import com.retro.retromall.member.dto.LoginRequest
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.support.MemberFactory
@@ -17,9 +18,9 @@ class MemberService(
     private val memberFactory: MemberFactory
 ) {
     @Transactional
-    fun findMemberByOauth(oAuthType: OAuthType, authorizationCode: String): LoginResponse {
-        val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
-        val oAuthAttributes = webClient.getToken(authorizationCode)
+    fun findMemberByOauth(loginRequest: LoginRequest): LoginResponse {
+        val webClient = oAuth2WebClientFactory.getOAuth2WebClient(loginRequest.oAuthType)
+        val oAuthAttributes = webClient.getToken(loginRequest)
         val memberAttributes = webClient.getUserInfo(oAuthAttributes)
         val member =
             memberReadService.findMemberByOAuthId(memberAttributes.oauthId) ?: memberFactory.addMemberByOAuthMemberAttributes(memberAttributes)

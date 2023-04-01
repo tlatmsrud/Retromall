@@ -6,6 +6,6 @@ data class OAuthTokenAttributes(
     val accessTokenExpiresIn: Int,
     val refreshToken: String,
     val refreshTokenExpiresIn: Int,
-    val scope: String
+    val scope: String?
 ) {
 }

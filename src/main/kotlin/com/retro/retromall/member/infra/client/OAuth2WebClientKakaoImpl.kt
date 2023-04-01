@@ -1,6 +1,7 @@
 package com.retro.retromall.member.infra.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.retro.retromall.member.dto.LoginRequest
 import com.retro.retromall.member.dto.OAuthMemberAttributes
 import com.retro.retromall.member.dto.OAuthTokenAttributes
 import com.retro.retromall.member.enums.OAuthType
@@ -34,13 +35,13 @@ class OAuth2WebClientKakaoImpl(
     private val properties = kakaoProperties
 
 
-    override fun getToken(authorizationCode: String): OAuthTokenAttributes {
+    override fun getToken(loginRequest: LoginRequest): OAuthTokenAttributes {
         val kakaoTokenRequest = KakaoTokenRequest(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
             clientSecret = properties.clientSecret,
             redirectUri = properties.redirectUri,
-            code = authorizationCode
+            code = loginRequest.authorizationCode
         )
         val parameters = WebClientUtils.convertParameters(kakaoTokenRequest, objectMapper)
 

@@ -29,4 +29,10 @@ class KakaoWebClientConfig(
             .baseUrl(kakaoProperties.apiUrl)
             .build()
     }
+
+    private fun getReactorHttpConnector(): ReactorClientHttpConnector {
+        val sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build()
+        val httpClient = HttpClient.create().secure { t -> t.sslContext(sslContext) }
+        return ReactorClientHttpConnector(httpClient)
+    }
 }
