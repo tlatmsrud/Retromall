@@ -16,7 +16,8 @@ class MemberController(
 ) {
     @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
-        val loginResponse = memberService.findMemberByOauth(loginRequest.oAuthType, loginRequest.authorizationCode)
+        val loginResponse = memberService.findMemberByOauth(loginRequest)
         return ResponseEntity.ok(loginResponse)
     }
+
 }
