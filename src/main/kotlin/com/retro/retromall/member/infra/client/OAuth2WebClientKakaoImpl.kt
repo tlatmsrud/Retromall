@@ -5,15 +5,16 @@ import com.retro.retromall.member.dto.LoginRequest
 import com.retro.retromall.member.dto.OAuthMemberAttributes
 import com.retro.retromall.member.dto.OAuthTokenAttributes
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.support.OAuthMemberAttributeFactory
 import com.retro.retromall.member.infra.client.properties.KakaoProperties
 import com.retro.retromall.member.infra.client.dto.kakao.KakaoTokenRequest
 import com.retro.retromall.member.infra.client.dto.kakao.KakaoTokenResponse
 import com.retro.retromall.member.infra.client.dto.kakao.KakaoUserInfoRequest
 import com.retro.retromall.member.infra.client.dto.kakao.KakaoUserInfoResponse
+import com.retro.retromall.member.support.OAuthMemberAttributesProvider
 import com.retro.util.WebClientUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -24,6 +25,8 @@ import reactor.core.publisher.Mono
 
 @Component
 class OAuth2WebClientKakaoImpl(
+    @Qualifier("OAuthKakaoMemberAttributesProvider")
+    private val oAuthMemberAttributesProvider: OAuthMemberAttributesProvider,
     kakaoAuthClient: WebClient,
     kakaoApiClient: WebClient,
     kakaoProperties: KakaoProperties,
@@ -86,10 +89,7 @@ class OAuth2WebClientKakaoImpl(
             .bodyToMono(KakaoUserInfoResponse::class.java)
             .block()
 
-        return OAuthMemberAttributeFactory.createOauthMemberAttributes(
-            oAuthType = OAuthType.KAKAO,
-            response = response!!
-        )
+        return oAuthMemberAttributesProvider.createOAuthMemberAttributes(response!!)
     }
 
     override fun getOAuthType(): OAuthType {

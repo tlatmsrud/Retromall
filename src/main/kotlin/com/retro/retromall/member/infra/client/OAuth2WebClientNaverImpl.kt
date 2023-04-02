@@ -9,9 +9,11 @@ import com.retro.retromall.member.infra.client.naver.NaverTokenRequest
 import com.retro.retromall.member.infra.client.naver.NaverTokenResponse
 import com.retro.retromall.member.infra.client.naver.NaverUserInfoResponse
 import com.retro.retromall.member.infra.client.properties.NaverProperties
+import com.retro.retromall.member.support.OAuthMemberAttributesProvider
 import com.retro.util.WebClientUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -22,14 +24,15 @@ import reactor.core.publisher.Mono
 
 @Component
 class OAuth2WebClientNaverImpl (
-    objectMapper: ObjectMapper,
+    @Qualifier("OAuthNaverMemberAttributesProvider")
+    private val oAuthMemberAttributesProvider: OAuthMemberAttributesProvider,
+    private val objectMapper: ObjectMapper,
     naverProperties: NaverProperties,
     naverAuthClient: WebClient,
     naverApiClient: WebClient,
 ) : OAuth2WebClient {
 
     private val logger: Logger = LoggerFactory.getLogger(OAuth2WebClientNaverImpl::class.java)
-    private val objectMapper = objectMapper
     private val properties = naverProperties
     private val authWebClient = naverAuthClient
     private val apiWebClient = naverApiClient
@@ -80,14 +83,7 @@ class OAuth2WebClientNaverImpl (
             .bodyToMono(NaverUserInfoResponse::class.java)
             .block()
 
-        return OAuthMemberAttributes(
-            OAuthType.NAVER,
-            response?.naverAccount?.id.toString(),
-            response?.naverAccount?.name,
-            response?.naverAccount?.nickname,
-            response?.naverAccount?.email,
-            response?.naverAccount?.profileImageUrl
-        )
+        return oAuthMemberAttributesProvider.createOAuthMemberAttributes(response!!)
     }
 
     override fun getOAuthType(): OAuthType {
