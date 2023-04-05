@@ -37,7 +37,7 @@ class OAuth2WebClientNaverImpl (
     private val authWebClient = naverAuthClient
     private val apiWebClient = naverApiClient
 
-    override fun getToken(loginRequest: LoginRequest): OAuthTokenAttributes {
+    override fun requestOAuthToken(loginRequest: LoginRequest): OAuthTokenAttributes {
         val naverTokenRequest = NaverTokenRequest(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
@@ -70,7 +70,7 @@ class OAuth2WebClientNaverImpl (
             )
     }
 
-    override fun getUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes {
+    override fun requestOAuthUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes {
         val response = apiWebClient.get()
             .uri { uriBuilder -> uriBuilder.path(properties.userInfoUri).build() }
             .header(HttpHeaders.AUTHORIZATION, attributes.tokenType + " " + attributes.accessToken)
