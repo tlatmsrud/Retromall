@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.controller.MemberController
 import com.retro.retromall.member.dto.LoginRequest
-import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberService
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -43,11 +43,12 @@ class MemberControllerMockMvcTest {
         val tokenAttributes = TokenAttributes(grantType = "Bearer", accessToken = "access", refreshToken = "refresh")
         val loginResponse = LoginResponse("nickName", "profileImage", tokenAttributes)
 
+        val loginRequest = LoginRequest(OAuthType.KAKAO, "Password", "")
         //given
-        given(memberService.findMemberByOauth(OAuthType.KAKAO, "Password")).willReturn(loginResponse)
+        given(memberService.findMemberByOauth(loginRequest)).willReturn(loginResponse)
 
         //when
-        val loginRequest = LoginRequest(OAuthType.KAKAO, "Password")
+
         val response = mockMvc
             .perform(post("/members/login")
                 .accept(MediaType.APPLICATION_JSON)

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.controller.MemberController
 import com.retro.retromall.member.dto.LoginRequest
-import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberService
 import io.mockk.every
@@ -42,10 +42,10 @@ class MemberControllerMockMvcStandAloneTest {
     @Test
     fun canRetrieveByIdWhenExists() {
         //given
-        val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, authorizationCode = "Password")
+        val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, authorizationCode = "Password", "")
         val tokenAttributes = TokenAttributes("Bearer", "access", "refresh")
         val loginResponse = LoginResponse("nickName", "profileImage",tokenAttributes)
-        every { memberService.findMemberByOauth(OAuthType.KAKAO, "Password") } returns loginResponse
+        every { memberService.findMemberByOauth(loginRequest) } returns loginResponse
         every { memberController.login(loginRequest) } returns ResponseEntity.ok(loginResponse)
 
         //when
@@ -66,15 +66,15 @@ class MemberControllerMockMvcStandAloneTest {
     @Test
     fun canRetrieveByIdWhenDoesNotExist() {
         //given
+        var everyLoginRequest = LoginRequest(OAuthType.KAKAO, "Password","")
         every {
             memberService.findMemberByOauth(
-                OAuthType.KAKAO,
-                "Password"
+                everyLoginRequest
             )
         }.throws(EntityNotFoundException("Entity Not Found"))
 
         //when
-        val loginRequest = LoginRequest(OAuthType.KAKAO, "Password")
+        val loginRequest = LoginRequest(OAuthType.KAKAO, "Password","")
         val response = mvc.perform(
             post("/members/login")
                 .contentType(MediaType.APPLICATION_JSON)
