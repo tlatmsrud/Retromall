@@ -1,4 +1,4 @@
-package com.retro.retromall.member.dto
+package com.retro.retromall.token.dto
 
 data class TokenAttributes(
     val grantType: String,

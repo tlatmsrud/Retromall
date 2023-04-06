@@ -1,7 +1,7 @@
 package com.retro.common
 
 import com.retro.retromall.member.domain.Member
-import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenAttributes
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
