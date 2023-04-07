@@ -1,6 +1,8 @@
 package com.retro.retromall.token.service
 
 import com.retro.common.JwtTokenProvider
+import com.retro.retromall.member.domain.Member
+import com.retro.retromall.token.domain.Token
 import com.retro.retromall.token.domain.repository.TokenRepository
 import com.retro.retromall.token.dto.TokenResponse
 import org.springframework.stereotype.Service
@@ -13,6 +15,10 @@ class TokenService (
     private val tokenRepository: TokenRepository,
     private val jwtTokenProvider: JwtTokenProvider,
 ) {
+
+    fun registRefreshTokenWithMember(member : Member, refreshToken : String){
+        tokenRepository.save(Token(member, refreshToken))
+    }
 
     fun renewAccessToken(refreshToken: String): TokenResponse {
         val token = tokenRepository.findByRefreshToken(refreshToken)

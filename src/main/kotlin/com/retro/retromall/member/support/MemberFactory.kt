@@ -21,6 +21,7 @@ class MemberFactory(
                 oAuthType = attributes.oAuthType,
                 oauthId = attributes.oauthId
             )
+
         return memberRepository.save(member)
     }
 }
