@@ -1,7 +1,6 @@
 package com.retro.retromall.token.domain
 
 import com.retro.retromall.member.domain.Member
-import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -12,8 +11,9 @@ class Token (
 ){
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "token_id")
-    val id : Long? = null
+    var id : Long? = null
 
     @OneToOne
     @JoinColumn(name="member_id")
