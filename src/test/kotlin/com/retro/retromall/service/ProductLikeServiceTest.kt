@@ -25,7 +25,7 @@ class ProductLikeServiceTest(
 ) {
     @Test
     fun 좋아요추가() {
-        val product = Product(content = "Product", amount = 10000, category = "Xbox", authorId = 1)
+        val product = Product("Title",content = "Product", amount = 10000, category = "Xbox", authorId = 1)
         productRepository.save(product)
 
         val memberAttributes = MemberAttributes(1L)
