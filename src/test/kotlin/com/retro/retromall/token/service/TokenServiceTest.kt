@@ -50,10 +50,10 @@ class TokenServiceTest {
     }
     @Test
     fun renewAccessTokenByValidToken() {
-        val tokenResponse = tokenService.renewAccessToken(VALID_TOKEN)
+        val tokenAttributes = tokenService.renewAccessToken(VALID_TOKEN)
 
-        assertThat(tokenResponse.tokenAttributes.accessToken).isEqualTo(RENEW_ACCESS_TOKEN)
-        assertThat(tokenResponse.tokenAttributes.refreshToken).isEqualTo(RENEW_REFRESH_TOKEN)
+        assertThat(tokenAttributes.accessToken).isEqualTo(RENEW_ACCESS_TOKEN)
+        assertThat(tokenAttributes.refreshToken).isEqualTo(RENEW_REFRESH_TOKEN)
 
         verify(tokenRepository).findByRefreshToken(VALID_TOKEN)
         verify(jwtTokenProvider).generateToken(any(Member::class.java))

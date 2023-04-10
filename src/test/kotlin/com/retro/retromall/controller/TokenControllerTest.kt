@@ -3,7 +3,6 @@ package com.retro.retromall.controller
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.token.TokenController
 import com.retro.retromall.token.dto.TokenAttributes
-import com.retro.retromall.token.dto.TokenResponse
 import com.retro.retromall.token.service.TokenService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.BeforeEach
@@ -21,6 +20,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.filter.CharacterEncodingFilter
+import javax.servlet.http.Cookie
 
 @WebMvcTest(TokenController::class)
 class TokenControllerTest{
@@ -49,39 +49,50 @@ class TokenControllerTest{
 
         val tokenAttributes = TokenAttributes("Bearer","newAccessToken","newRefreshToken")
 
-        val tokenResponse = TokenResponse(tokenAttributes)
-
         given(tokenService.renewAccessToken(VALID_REFRESH_TOKEN))
-            .willReturn(tokenResponse)
+            .willReturn(tokenAttributes)
 
         given(tokenService.renewAccessToken(INVALID_REFRESH_TOKEN))
+            .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
+
+        given(tokenService.renewAccessToken(""))
             .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
     }
 
     @Test
     fun updateTokenByValidRefreshToken(){
-
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/token/renew")
-                .header("REFRESH_TOKEN",VALID_REFRESH_TOKEN)
+            MockMvcRequestBuilders.patch("/api/token")
+                .cookie(Cookie("refresh_token", VALID_REFRESH_TOKEN))
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("newAccessToken")))
 
         verify(tokenService).renewAccessToken(VALID_REFRESH_TOKEN)
-
     }
 
     @Test
     fun updateTokenByInvalidRefreshToken(){
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/token/renew")
-                .header("REFRESH_TOKEN",INVALID_REFRESH_TOKEN)
+            MockMvcRequestBuilders.patch("/api/token")
+                .cookie(Cookie("refresh_token", INVALID_REFRESH_TOKEN))
         )
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요.")))
 
         verify(tokenService).renewAccessToken(INVALID_REFRESH_TOKEN)
+    }
+
+    @Test
+    fun updateTokenByEmptyRefreshToken(){
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/api/token")
+                .cookie(Cookie("refresh_token", ""))
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().string(containsString("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요.")))
+
+        verify(tokenService).renewAccessToken("")
     }
 }
