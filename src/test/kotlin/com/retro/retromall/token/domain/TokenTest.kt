@@ -19,6 +19,5 @@ class TokenTest {
         token.updateRefreshToken(UPDATE_REFRESH_TOKEN)
 
         assertThat(token.refreshToken).isEqualTo(UPDATE_REFRESH_TOKEN)
-
     }
 }

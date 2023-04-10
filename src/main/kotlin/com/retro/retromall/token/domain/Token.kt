@@ -3,6 +3,7 @@ package com.retro.retromall.token.domain
 import com.retro.retromall.member.domain.Member
 import javax.persistence.*
 
+
 @Entity
 @Table(name="tb_token")
 class Token (
