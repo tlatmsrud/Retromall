@@ -49,8 +49,6 @@ class TokenServiceTest {
         given(jwtTokenProvider.generateToken(member))
             .willReturn(TokenAttributes(GRANT_TYPE, RENEW_ACCESS_TOKEN, RENEW_REFRESH_TOKEN))
 
-        /*given(tokenRepository.save(any(Token::class.java)))
-            .willReturn(token)*/
         given(tokenRepository.save(any(Token::class.java)))
             .will{invocation ->
                 invocation.getArgument<Token>(0)
@@ -86,12 +84,6 @@ class TokenServiceTest {
         verify(tokenRepository).save(any(Token::class.java))
     }
 
-    @Test
-    fun generateRefreshTokenCookie(){
-        val responseCookie = tokenService.generateRefreshTokenCookie(CREATE_REFRESH_TOKEN)
-
-        assertThat(responseCookie.toString().contains(CREATE_REFRESH_TOKEN))
-    }
     private fun <T> any(type: Class<T>): T = Mockito.any(type)
 
 }

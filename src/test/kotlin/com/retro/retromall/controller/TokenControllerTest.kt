@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseCookie
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -24,6 +24,7 @@ import org.springframework.web.filter.CharacterEncodingFilter
 import javax.servlet.http.Cookie
 
 @WebMvcTest(TokenController::class)
+@ActiveProfiles("local")
 class TokenControllerTest{
 
     @MockBean
@@ -63,16 +64,6 @@ class TokenControllerTest{
         given(tokenService.renewAccessToken(""))
             .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
 
-
-        given(tokenService.generateRefreshTokenCookie(NEW_REFRESH_TOKEN))
-            .willReturn(
-                ResponseCookie.from("refresh_token", NEW_REFRESH_TOKEN)
-                    .path("/api/token")
-                    .secure(true)
-                    .httpOnly(true)
-                    .maxAge(60 * 60 * 24 * 30)  // 30 Day
-                    .build()
-            )
     }
 
     @Test
@@ -86,7 +77,6 @@ class TokenControllerTest{
             .andExpect(content().string(containsString(NEW_ACCESS_TOKEN)))
 
         verify(tokenService).renewAccessToken(VALID_REFRESH_TOKEN)
-        verify(tokenService).generateRefreshTokenCookie(NEW_REFRESH_TOKEN)
     }
 
     @Test

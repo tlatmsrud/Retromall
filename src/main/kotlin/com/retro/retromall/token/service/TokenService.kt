@@ -5,7 +5,6 @@ import com.retro.retromall.member.domain.Member
 import com.retro.retromall.token.domain.Token
 import com.retro.retromall.token.domain.repository.TokenRepository
 import com.retro.retromall.token.dto.TokenAttributes
-import org.springframework.http.ResponseCookie
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -31,16 +30,6 @@ class TokenService (
         token.updateRefreshToken(tokenAttributes.refreshToken)
 
         return tokenAttributes
-    }
-
-    fun generateRefreshTokenCookie(refreshToken : String) : ResponseCookie {
-
-        return ResponseCookie.from("refresh_token", refreshToken)
-            .path("/api/token")
-            .secure(true)
-            .httpOnly(true)
-            .maxAge(60 * 60 * 24 * 30)  // 30 Day
-            .build()
     }
 
 }
