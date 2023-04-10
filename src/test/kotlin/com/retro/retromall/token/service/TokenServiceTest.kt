@@ -6,10 +6,9 @@ import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.token.domain.Token
 import com.retro.retromall.token.domain.repository.TokenRepository
 import com.retro.retromall.token.dto.TokenAttributes
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.BeforeEach
 import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
@@ -31,6 +30,8 @@ class TokenServiceTest {
 
     private val RENEW_REFRESH_TOKEN = "RENEW_ACCESS_TOKEN"
 
+    private val CREATE_REFRESH_TOKEN = "CREATE_ACCESS_TOKEN"
+
     private val GRANT_TYPE = "Bearer"
     @BeforeEach
     fun setUp(){
@@ -47,6 +48,13 @@ class TokenServiceTest {
 
         given(jwtTokenProvider.generateToken(member))
             .willReturn(TokenAttributes(GRANT_TYPE, RENEW_ACCESS_TOKEN, RENEW_REFRESH_TOKEN))
+
+        /*given(tokenRepository.save(any(Token::class.java)))
+            .willReturn(token)*/
+        given(tokenRepository.save(any(Token::class.java)))
+            .will{invocation ->
+                invocation.getArgument<Token>(0)
+            }
     }
     @Test
     fun renewAccessTokenByValidToken() {
@@ -67,6 +75,15 @@ class TokenServiceTest {
 
         verify(tokenRepository).findByRefreshToken(INVALID_TOKEN)
 
+    }
+
+    @Test
+    fun registRefreshTokenWithMember(){
+        val createMember = Member(OAuthType.NAVER, "3","newUser@naver.com","신규유저","신규유저닉네임","imgUrl")
+
+        tokenService.registRefreshTokenWithMember(createMember, CREATE_REFRESH_TOKEN)
+
+        verify(tokenRepository).save(any(Token::class.java))
     }
     private fun <T> any(type: Class<T>): T = Mockito.any(type)
 
