@@ -19,10 +19,11 @@ class TokenController(
     fun tokenRenew( @CookieValue("refresh_token", required = true) refreshToken : String)
     : ResponseEntity<TokenAttributes> {
 
-        var tokenAttributes = tokenService.renewAccessToken(refreshToken)
+        val tokenAttributes = tokenService.renewAccessToken(refreshToken)
 
         return ResponseEntity.ok()
-            .header(SET_COOKIE, tokenAttributes.generateRefreshTokenCookie().toString())
+            .header(SET_COOKIE,
+                tokenService.generateRefreshTokenCookie(tokenAttributes.refreshToken).toString())
             .body(tokenAttributes)
 
     }

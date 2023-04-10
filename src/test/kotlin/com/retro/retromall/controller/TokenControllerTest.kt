@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseCookie
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -40,6 +41,10 @@ class TokenControllerTest{
 
     private var INVALID_REFRESH_TOKEN : String = "INVALID_REFRESH_TOKEN"
 
+    private var NEW_REFRESH_TOKEN = "NEW_REFRESH_TOKEN"
+
+    private var NEW_ACCESS_TOKEN = "NEW_ACCESS_TOKEN"
+
     @BeforeEach
     fun setup() {
         val filter = CharacterEncodingFilter("UTF-8",true)
@@ -47,7 +52,7 @@ class TokenControllerTest{
             .addFilter<DefaultMockMvcBuilder>(filter)
             .build()
 
-        val tokenAttributes = TokenAttributes("Bearer","newAccessToken","newRefreshToken")
+        val tokenAttributes = TokenAttributes("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN)
 
         given(tokenService.renewAccessToken(VALID_REFRESH_TOKEN))
             .willReturn(tokenAttributes)
@@ -57,6 +62,17 @@ class TokenControllerTest{
 
         given(tokenService.renewAccessToken(""))
             .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
+
+
+        given(tokenService.generateRefreshTokenCookie(NEW_REFRESH_TOKEN))
+            .willReturn(
+                ResponseCookie.from("refresh_token", NEW_REFRESH_TOKEN)
+                    .path("/api/token")
+                    .secure(true)
+                    .httpOnly(true)
+                    .maxAge(60 * 60 * 24 * 30)  // 30 Day
+                    .build()
+            )
     }
 
     @Test
@@ -67,9 +83,10 @@ class TokenControllerTest{
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(content().string(containsString("newAccessToken")))
+            .andExpect(content().string(containsString(NEW_ACCESS_TOKEN)))
 
         verify(tokenService).renewAccessToken(VALID_REFRESH_TOKEN)
+        verify(tokenService).generateRefreshTokenCookie(NEW_REFRESH_TOKEN)
     }
 
     @Test
@@ -95,4 +112,5 @@ class TokenControllerTest{
 
         verify(tokenService).renewAccessToken("")
     }
+
 }
