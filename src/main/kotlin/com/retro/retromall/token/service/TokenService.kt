@@ -53,6 +53,5 @@ class TokenService (
         return tokenAttributes
     }
 
-
 }
 
