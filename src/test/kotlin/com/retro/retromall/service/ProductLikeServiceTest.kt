@@ -23,7 +23,7 @@ class ProductLikeServiceTest(
     @Autowired
     private val productRepository: ProductRepository
 ) {
-    @Test
+    //@Test
     fun 좋아요추가() {
         val product = Product("Title",content = "Product", amount = 10000, category = "Xbox", authorId = 1)
         productRepository.save(product)

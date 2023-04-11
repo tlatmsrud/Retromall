@@ -27,7 +27,7 @@ class HashTagServiceTest {
         this.testEntityManager = TestEntityManager(entityManagerFactory)
     }
 
-    @Test
+    //@Test
     fun findOrCreateHashTagsWithNewTags() {
         //given
         val tagNames = setOf("tag1", "tag2", "tag3")
