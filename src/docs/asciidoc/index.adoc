@@ -1,0 +1,9 @@
+= Retromall API 명세서
+
+== 토큰 API
+
+=== 액세스 토큰 갱신
+==== HttpRequest
+include::{snippets}/updateToken/http-request.adoc[]
+==== HttpResponse
+include::{snippets}/updateToken/http-response.adoc[]
