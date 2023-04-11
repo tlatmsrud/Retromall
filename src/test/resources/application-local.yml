@@ -25,3 +25,7 @@ logging:
 
 jwt:
   secret: ffn32k132901f13j09hkeR2TWQQV456156GDQGLKJVIof456
+
+refresh-token-cookie:
+  name: refresh-token
+  day: 30

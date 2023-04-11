@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -23,6 +24,7 @@ import org.springframework.web.filter.CharacterEncodingFilter
 import javax.servlet.http.Cookie
 
 @WebMvcTest(TokenController::class)
+@ActiveProfiles("local")
 class TokenControllerTest{
 
     @MockBean
@@ -40,6 +42,10 @@ class TokenControllerTest{
 
     private var INVALID_REFRESH_TOKEN : String = "INVALID_REFRESH_TOKEN"
 
+    private var NEW_REFRESH_TOKEN = "NEW_REFRESH_TOKEN"
+
+    private var NEW_ACCESS_TOKEN = "NEW_ACCESS_TOKEN"
+
     @BeforeEach
     fun setup() {
         val filter = CharacterEncodingFilter("UTF-8",true)
@@ -47,7 +53,7 @@ class TokenControllerTest{
             .addFilter<DefaultMockMvcBuilder>(filter)
             .build()
 
-        val tokenAttributes = TokenAttributes("Bearer","newAccessToken","newRefreshToken")
+        val tokenAttributes = TokenAttributes("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN)
 
         given(tokenService.renewAccessToken(VALID_REFRESH_TOKEN))
             .willReturn(tokenAttributes)
@@ -57,6 +63,7 @@ class TokenControllerTest{
 
         given(tokenService.renewAccessToken(""))
             .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
+
     }
 
     @Test
@@ -67,7 +74,7 @@ class TokenControllerTest{
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andExpect(content().string(containsString("newAccessToken")))
+            .andExpect(content().string(containsString(NEW_ACCESS_TOKEN)))
 
         verify(tokenService).renewAccessToken(VALID_REFRESH_TOKEN)
     }
@@ -95,4 +102,5 @@ class TokenControllerTest{
 
         verify(tokenService).renewAccessToken("")
     }
+
 }
