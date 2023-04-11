@@ -3,6 +3,10 @@ package com.retro.retromall.token.domain
 import com.retro.retromall.member.domain.Member
 import javax.persistence.*
 
+/**
+ * Domain For Token
+ * @author sim
+ */
 @Entity
 @Table(name="tb_token")
 class Token (
@@ -22,6 +26,11 @@ class Token (
     @Column(name = "refresh_token")
     var refreshToken :String = refreshToken
 
+    /**
+     * 리프레시 토큰 수정
+     * @author sim
+     * @param refreshToken - 리프레시 토큰
+     */
     fun updateRefreshToken(refreshToken: String){
         this.refreshToken = refreshToken
     }
