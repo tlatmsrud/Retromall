@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.spring") version "1.6.21"
     kotlin("plugin.jpa") version "1.6.21"
     kotlin("kapt") version "1.7.10"
+    id ("org.jetbrains.dokka") version "1.8.10"
 }
 
 noArg {
@@ -38,7 +39,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("org.springframework.boot:spring-boot-starter-cache")
 //    implementation("org.springframework.boot:spring-boot-starter-websocket")
-
+    implementation("org.jetbrains.dokka:kotlin-analysis-intellij:1.8.10")
+    implementation("org.jetbrains.dokka:kotlin-analysis-compiler:1.8.10")
 
     // db
     runtimeOnly("com.h2database:h2")
