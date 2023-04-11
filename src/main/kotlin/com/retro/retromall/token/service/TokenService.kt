@@ -8,7 +8,6 @@ import com.retro.retromall.token.dto.TokenAttributes
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-
 /**
  * Service For Token
  *

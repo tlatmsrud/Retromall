@@ -3,7 +3,6 @@ package com.retro.retromall.token.domain
 import com.retro.retromall.member.domain.Member
 import javax.persistence.*
 
-
 /**
  * Domain For Token
  * @author sim
