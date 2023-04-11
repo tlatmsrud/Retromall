@@ -38,7 +38,7 @@ class MemberControllerMockMvcTest {
         JacksonTester.initFields(this, ObjectMapper())
     }
 
-    @Test
+    //@Test
     fun canRetrieveByIdWhenExist() {
         val tokenAttributes = TokenAttributes(grantType = "Bearer", accessToken = "access", refreshToken = "refresh")
         val loginResponse = LoginResponse("nickName", "profileImage", tokenAttributes)

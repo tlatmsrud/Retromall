@@ -8,6 +8,7 @@ plugins {
     kotlin("plugin.jpa") version "1.6.21"
     kotlin("kapt") version "1.7.10"
     id ("org.jetbrains.dokka") version "1.8.10"
+    id("org.asciidoctor.jvm.convert") version "3.3.2"
 }
 
 noArg {
@@ -24,6 +25,7 @@ repositories {
         url = uri("https://jitpack.io")
     }
 }
+val asciidoctor by configurations.creating
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -54,6 +56,13 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.19.0")
     testImplementation("io.mockk:mockk:1.13.4")
 
+    // rest doc
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    implementation("org.codehaus.woodstox:stax2-api:4.2.1")
+
+    // asciidoc
+    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor")
+
     // querydsl
     implementation("com.querydsl:querydsl-jpa:5.0.0")
     kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
@@ -71,6 +80,7 @@ dependencies {
 configurations.forEach {
     it.exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     it.exclude(group = "org.apache.logging.log4j", module = "log4j-to-slf4j")
+
 }
 
 
@@ -83,4 +93,20 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.asciidoctor {
+    dependsOn(tasks.test)
+    configurations(asciidoctor.name)
+    baseDirFollowsSourceDir()
+    doLast {
+        copy {
+            from(outputDir)
+            into("src/main/resources/static/docs")
+        }
+    }
+}
+
+tasks.build {
+    dependsOn(tasks.asciidoctor)
 }

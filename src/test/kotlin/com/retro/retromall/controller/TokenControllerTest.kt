@@ -7,12 +7,18 @@ import com.retro.retromall.token.service.TokenService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.restdocs.RestDocumentationContextProvider
+import org.springframework.restdocs.RestDocumentationExtension
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -25,15 +31,13 @@ import javax.servlet.http.Cookie
 
 @WebMvcTest(TokenController::class)
 @ActiveProfiles("local")
+@ExtendWith(RestDocumentationExtension::class)
 class TokenControllerTest{
 
     @MockBean
     private lateinit var tokenService : TokenService
 
     @Autowired lateinit var mockMvc: MockMvc
-
-    @Autowired
-    private lateinit var ctx: WebApplicationContext
 
     @MockBean
     private lateinit var jwtTokenProvider : JwtTokenProvider
@@ -47,9 +51,12 @@ class TokenControllerTest{
     private var NEW_ACCESS_TOKEN = "NEW_ACCESS_TOKEN"
 
     @BeforeEach
-    fun setup() {
+    fun setup(webApplicationContext : WebApplicationContext
+              , restDocumentationContextProvider : RestDocumentationContextProvider) {
+
         val filter = CharacterEncodingFilter("UTF-8",true)
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply<DefaultMockMvcBuilder>(documentationConfiguration(restDocumentationContextProvider))
             .addFilter<DefaultMockMvcBuilder>(filter)
             .build()
 
@@ -75,6 +82,7 @@ class TokenControllerTest{
         )
             .andExpect(status().isOk)
             .andExpect(content().string(containsString(NEW_ACCESS_TOKEN)))
+            .andDo(document("updateToken"));
 
         verify(tokenService).renewAccessToken(VALID_REFRESH_TOKEN)
     }

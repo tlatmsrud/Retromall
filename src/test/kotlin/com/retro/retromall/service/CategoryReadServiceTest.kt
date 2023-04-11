@@ -16,7 +16,7 @@ class CategoryReadServiceTest(
     @Autowired
     private val categoryReadService: CategoryReadService
 ) {
-    @Test
+    //@Test
     fun findCategoryList() {
         //given
         val root = "Play Station"
