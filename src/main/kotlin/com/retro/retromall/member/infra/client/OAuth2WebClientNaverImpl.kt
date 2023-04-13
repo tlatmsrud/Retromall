@@ -10,6 +10,7 @@ import com.retro.retromall.member.infra.client.naver.NaverTokenResponse
 import com.retro.retromall.member.infra.client.naver.NaverUserInfoResponse
 import com.retro.retromall.member.infra.client.properties.NaverProperties
 import com.retro.retromall.member.support.OAuthMemberAttributesProvider
+import com.retro.retromall.member.support.OAuthTokenAttributesProvider
 import com.retro.util.WebClientUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -23,21 +24,19 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 
 @Component
-class OAuth2WebClientNaverImpl (
-    @Qualifier("OAuthNaverMemberAttributesProvider")
-    private val oAuthMemberAttributesProvider: OAuthMemberAttributesProvider,
+class OAuth2WebClientNaverImpl(
+    private val memberAttributesProvider: OAuthMemberAttributesProvider<NaverUserInfoResponse>,
+    private val tokenAttributesProvider: OAuthTokenAttributesProvider<NaverTokenResponse>,
     private val objectMapper: ObjectMapper,
-    naverProperties: NaverProperties,
-    naverAuthClient: WebClient,
-    naverApiClient: WebClient,
+    private val properties: NaverProperties,
+    @Qualifier("naverAuthClient")
+    private val authWebClient: WebClient,
+    @Qualifier("naverApiClient")
+    private val apiWebClient: WebClient,
 ) : OAuth2WebClient {
-
     private val logger: Logger = LoggerFactory.getLogger(OAuth2WebClientNaverImpl::class.java)
-    private val properties = naverProperties
-    private val authWebClient = naverAuthClient
-    private val apiWebClient = naverApiClient
 
-    override fun requestOAuthToken(loginRequest: LoginRequest): OAuthTokenAttributes {
+    override fun getAccessToken(loginRequest: LoginRequest): OAuthTokenAttributes {
         val naverTokenRequest = NaverTokenRequest(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
@@ -60,30 +59,23 @@ class OAuth2WebClientNaverImpl (
             })
             .bodyToMono(NaverTokenResponse::class.java)
             .block()
-        return OAuthTokenAttributes(
-            tokenType = response!!.tokenType,
-            accessToken = response.accessToken,
-            refreshToken = response.refreshToken,
-            accessTokenExpiresIn = response.expires_in,
-            refreshTokenExpiresIn = 0,
-            scope = null
-            )
+        return tokenAttributesProvider.createOAuthTokenAttributes(response!!)
     }
 
-    override fun requestOAuthUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes {
+    override fun getUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes {
         val response = apiWebClient.get()
             .uri { uriBuilder -> uriBuilder.path(properties.userInfoUri).build() }
             .header(HttpHeaders.AUTHORIZATION, attributes.tokenType + " " + attributes.accessToken)
             .retrieve().onStatus({ it != HttpStatus.OK },
                 {
                     it.createException().flatMap { err ->
-                        throw IllegalStateException(err.responseBodyAsString)
+                        return@flatMap Mono.error(IllegalStateException(err.responseBodyAsString))
                     }
                 })
             .bodyToMono(NaverUserInfoResponse::class.java)
             .block()
 
-        return oAuthMemberAttributesProvider.createOAuthMemberAttributes(response!!)
+        return memberAttributesProvider.createOAuthMemberAttributes(response!!)
     }
 
     override fun getOAuthType(): OAuthType {

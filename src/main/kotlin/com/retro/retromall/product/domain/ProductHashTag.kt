@@ -5,21 +5,19 @@ import javax.persistence.*
 @Entity
 @Table(name = "tb_product_hashtag")
 class ProductHashTag(
-    product: Product,
-    hashTag: String
-) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    val product: Product = product
+    val product: Product,
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "hashtag_name")
     @Column(name = "hashtag_name")
-    val hashTag: String = hashTag
+    val hashTag: String
+) {
+    constructor(product: Product, hashTag: String) : this(null, product, hashTag)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

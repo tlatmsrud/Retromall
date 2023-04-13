@@ -3,29 +3,30 @@ package com.retro.retromall.product.domain
 import javax.persistence.*
 
 @Entity
-@Table(name = "tb_product_like", uniqueConstraints = [UniqueConstraint(columnNames = ["product_id", "member_id"])])
+@Table(name = "tb_product_like",
+    uniqueConstraints = [UniqueConstraint(columnNames = ["product_id", "member_id"])])
 class ProductLike(
-    product: Product,
-    memberId: Long
-) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    val product: Product = product
+    val product: Product,
 
     @Column(name = "member_id")
-    val memberId: Long = memberId
+    val memberId: Long,
 
     @Column(name = "is_liked")
-    var isLiked: Boolean = true
+    var isLiked: Boolean
+) {
+    constructor(
+        product: Product,
+        memberId: Long
+    ) : this(null, product, memberId, true)
 
     fun isLiked(memberId: Long): Boolean {
-        if (this.memberId == memberId && isLiked)
-            return true
-        return false
+        return this.memberId == memberId && isLiked
     }
 
     override fun equals(other: Any?): Boolean {
@@ -35,9 +36,7 @@ class ProductLike(
         other as ProductLike
 
         if (product != other.product) return false
-        if (memberId != other.memberId) return false
-
-        return true
+        return memberId == other.memberId
     }
 
     override fun hashCode(): Int {

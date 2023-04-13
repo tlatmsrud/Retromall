@@ -20,44 +20,32 @@ class Product(
     @Column(name = "amount", nullable = false)
     var amount: Int,
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "author_id")
-
-
     @Column(name = "author_id")
     var authorId: Long,
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "category")
     @Column(name = "category", length = 50)
     var category: String,
-
-//    @ManyToMany(cascade = [CascadeType.MERGE])
-//    @JoinTable(
-//        name = "tb_product_hashtag",
-//        joinColumns = [JoinColumn(name = "product_id", referencedColumnName = "product_id")],
-//        inverseJoinColumns = [JoinColumn(name = "hashtag_name", referencedColumnName = "hashtag_name")]
-//    )
-//    var hashTags: MutableSet<HashTag> = mutableSetOf(),
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
-    var productLikes: MutableList<ProductLike> = mutableListOf(),
-
-    var likes: Long = 0L,
-
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
-    var hashTags: MutableSet<ProductHashTag> = mutableSetOf(),
 
     @Column(name = "thumbnail", length = 255)
     var thumbnail: String? = null,
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
-    var images: MutableSet<ProductImage> = mutableSetOf(),
+    @Column(name = "likes")
+    var likes: Long = 0L,
 
     @Column(name = "created_at", nullable = false, updatable = false)
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "modified_at", nullable = false)
     var modifiedAt: LocalDateTime = LocalDateTime.now(),
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    var productLikes: MutableList<ProductLike> = mutableListOf(),
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    var hashTags: MutableSet<ProductHashTag> = mutableSetOf(),
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    var images: MutableSet<ProductImage> = mutableSetOf(),
 ) {
     constructor(
         title: String,
@@ -89,9 +77,7 @@ class Product(
     }
 
     fun isAuthor(memberId: Long): Boolean {
-        if (authorId != memberId)
-            return false
-        return true
+        return authorId == memberId
     }
 
     override fun equals(other: Any?): Boolean {
@@ -100,9 +86,7 @@ class Product(
 
         other as Product
 
-        if (id != other.id) return false
-
-        return true
+        return id == other.id
     }
 
     override fun hashCode(): Int {

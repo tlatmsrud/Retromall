@@ -21,8 +21,8 @@ class MemberService(
     @Transactional
     fun findMemberByOauth(loginRequest: LoginRequest): LoginResponse {
         val webClient = oAuth2WebClientFactory.getOAuth2WebClient(loginRequest.oAuthType)
-        val oAuthAttributes = webClient.requestOAuthToken(loginRequest)
-        val memberAttributes = webClient.requestOAuthUserInfo(oAuthAttributes)
+        val oAuthAttributes = webClient.getAccessToken(loginRequest)
+        val memberAttributes = webClient.getUserInfo(oAuthAttributes)
         val member =
             memberReadService.findMemberByOAuthId(memberAttributes.oauthId) ?: memberFactory.addMemberByOAuthMemberAttributes(memberAttributes)
         val tokenAttributes = jwtTokenProvider.generateToken(member)

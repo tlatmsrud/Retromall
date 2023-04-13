@@ -6,14 +6,14 @@ import com.retro.retromall.member.infra.client.dto.kakao.KakaoUserInfoResponse
 import org.springframework.stereotype.Component
 
 @Component
-class OAuthKakaoMemberAttributesProvider : OAuthMemberAttributesProvider {
-    override fun createOAuthMemberAttributes(response: Any): OAuthMemberAttributes {
-        val kakaoResponse = response as KakaoUserInfoResponse
-        val kakaoAccount = kakaoResponse.kakaoAccount!!
+class OAuthKakaoMemberAttributesProviderImpl : OAuthMemberAttributesProvider<KakaoUserInfoResponse> {
+    override fun createOAuthMemberAttributes(data: KakaoUserInfoResponse): OAuthMemberAttributes {
+        val kakaoAccount = data.kakaoAccount!!
         val profile = kakaoAccount.profile!!
+
         return OAuthMemberAttributes(
             oAuthType = OAuthType.KAKAO,
-            oauthId = kakaoResponse.id.toString(),
+            oauthId = data.id.toString(),
             name = kakaoAccount.name,
             nickName = profile.nickName,
             image = profile.profileImageUrl,

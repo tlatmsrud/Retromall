@@ -8,6 +8,6 @@ import com.retro.retromall.member.enums.OAuthType
 interface OAuth2WebClient {
     fun getClient(): OAuth2WebClient
     fun getOAuthType(): OAuthType
-    fun requestOAuthToken(loginRequest: LoginRequest): OAuthTokenAttributes
-    fun requestOAuthUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes
+    fun getAccessToken(loginRequest: LoginRequest): OAuthTokenAttributes
+    fun getUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes
 }
