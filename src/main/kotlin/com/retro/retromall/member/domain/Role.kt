@@ -1,5 +1,7 @@
 package com.retro.retromall.member.domain
 
+import com.retro.retromall.member.enums.Role
+import com.retro.retromall.permission.domain.Permission
 import javax.persistence.*
 
 @Entity
@@ -10,7 +12,8 @@ class Role(
     var id: Long? = null,
 
     @Column(name = "name", nullable = false, unique = true)
-    val name: String,
+    @Enumerated
+    val name: Role,
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

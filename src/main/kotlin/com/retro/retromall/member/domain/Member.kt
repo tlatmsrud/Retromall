@@ -30,13 +30,8 @@ class Member(
     @Column(name = "profile_image_url", length = 255)
     var profileImageUrl: String?,
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "tb_member_role",
-        joinColumns = [JoinColumn(name = "member_id")],
-        inverseJoinColumns = [JoinColumn(name = "role_id")]
-    )
-    val roles: Set<Role>
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val roles: MutableSet<MemberRole>
 ) {
     constructor(
         oAuthType: OAuthType,
@@ -48,4 +43,8 @@ class Member(
     ) : this(
         null, oAuthType, oauthId, email, name, nickname, profileImageUrl, mutableSetOf()
     )
+
+    fun addRole(role: Role) {
+        this.roles.add(MemberRole(role, this))
+    }
 }

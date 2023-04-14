@@ -1,5 +1,6 @@
-package com.retro.retromall.member.domain
+package com.retro.retromall.permission.domain
 
+import com.retro.retromall.permission.enums.Permission
 import javax.persistence.*
 
 @Entity
@@ -10,5 +11,6 @@ class Permission(
     var id: Long? = null,
 
     @Column(name = "name", length = 20, nullable = false, unique = true)
-    val name: String
+    @Enumerated
+    val name: Permission
 )
