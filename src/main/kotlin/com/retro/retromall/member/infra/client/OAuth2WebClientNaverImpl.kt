@@ -1,13 +1,14 @@
 package com.retro.retromall.member.infra.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.retro.retromall.member.dto.LoginRequest
-import com.retro.retromall.member.dto.OAuthMemberAttributes
-import com.retro.retromall.member.dto.OAuthTokenAttributes
+import com.retro.retromall.member.infra.client.dto.OAuthMemberAttributes
+import com.retro.retromall.member.infra.client.dto.OAuthTokenAttributes
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.infra.client.naver.NaverTokenRequest
-import com.retro.retromall.member.infra.client.naver.NaverTokenResponse
-import com.retro.retromall.member.infra.client.naver.NaverUserInfoResponse
+import com.retro.retromall.member.infra.client.dto.OAuthTokenRequest
+import com.retro.retromall.member.infra.client.dto.naver.NaverCodeDto
+import com.retro.retromall.member.infra.client.dto.naver.NaverTokenRequest
+import com.retro.retromall.member.infra.client.dto.naver.NaverTokenResponse
+import com.retro.retromall.member.infra.client.dto.naver.NaverUserInfoResponse
 import com.retro.retromall.member.infra.client.properties.NaverProperties
 import com.retro.retromall.member.support.OAuthMemberAttributesProvider
 import com.retro.retromall.member.support.OAuthTokenAttributesProvider
@@ -36,13 +37,14 @@ class OAuth2WebClientNaverImpl(
 ) : OAuth2WebClient {
     private val logger: Logger = LoggerFactory.getLogger(OAuth2WebClientNaverImpl::class.java)
 
-    override fun getAccessToken(loginRequest: LoginRequest): OAuthTokenAttributes {
+    override fun getAccessToken(oAuthTokenRequest: OAuthTokenRequest): OAuthTokenAttributes {
+        if (oAuthTokenRequest !is NaverCodeDto) throw IllegalArgumentException()
         val naverTokenRequest = NaverTokenRequest(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
             clientSecret = properties.clientSecret,
-            code = loginRequest.authorizationCode,
-            state = loginRequest.state!!,
+            code = oAuthTokenRequest.code!!,
+            state = oAuthTokenRequest.state!!,
         )
         val parameters = WebClientUtils.convertParameters(naverTokenRequest, objectMapper)
 

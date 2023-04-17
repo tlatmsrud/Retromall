@@ -1,4 +1,4 @@
-package com.retro.retromall.member.dto
+package com.retro.retromall.member.infra.client.dto
 
 data class OAuthTokenAttributes(
     val tokenType: String,

@@ -1,6 +1,6 @@
 package com.retro.retromall.product.service
 
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.ProductResponse
 import com.retro.retromall.product.dto.ProductListResponse
@@ -18,9 +18,9 @@ class ProductReadService(
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ProductReadService::class.java)
     }
-    fun getProduct(memberAttributes: MemberAttributes, productId: Long): ProductResponse {
-        logger.info("{}", memberAttributes.id)
-        return productRepository.selectProduct(productId, memberAttributes.id)
+    fun getProduct(authenticationAttributes: AuthenticationAttributes, productId: Long): ProductResponse {
+        logger.info("{}", authenticationAttributes.id)
+        return productRepository.selectProduct(productId, authenticationAttributes.id)
     }
 
     fun getProductList(category: String?, pageable: Pageable): ProductListResponse? {

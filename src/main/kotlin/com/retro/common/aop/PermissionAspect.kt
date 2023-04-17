@@ -1,6 +1,6 @@
 package com.retro.common.aop
 
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
@@ -12,10 +12,10 @@ class PermissionAspect {
     @Around("@annotation(requirePermission)")
     fun checkPermission(joinPoint: ProceedingJoinPoint, requirePermission: RequirePermission) {
         val args = joinPoint.args
-        val memberAttributes = args.firstOrNull { it is MemberAttributes } as? MemberAttributes
+        val authenticationAttributes = args.firstOrNull { it is AuthenticationAttributes } as? AuthenticationAttributes
             ?: throw IllegalStateException("MemberAttributes not found in ${joinPoint.signature.name}")
         val hasPermission =
-            memberAttributes.permissions?.contains(requirePermission.value)
+            authenticationAttributes.permissions?.contains(requirePermission.value)
                 ?: throw IllegalStateException("Permissions property not initialized")
 
         if (!hasPermission)

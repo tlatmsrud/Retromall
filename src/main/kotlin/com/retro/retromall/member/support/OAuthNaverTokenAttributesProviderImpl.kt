@@ -1,8 +1,7 @@
 package com.retro.retromall.member.support
 
-import com.retro.retromall.member.dto.OAuthTokenAttributes
-import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.infra.client.naver.NaverTokenResponse
+import com.retro.retromall.member.infra.client.dto.OAuthTokenAttributes
+import com.retro.retromall.member.infra.client.dto.naver.NaverTokenResponse
 import org.springframework.stereotype.Component
 
 @Component

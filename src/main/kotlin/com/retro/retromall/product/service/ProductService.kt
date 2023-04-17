@@ -1,6 +1,6 @@
 package com.retro.retromall.product.service
 
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.dto.ProductUpdateRequest
 import com.retro.retromall.product.support.ProductFactory
@@ -14,17 +14,17 @@ class ProductService(
     private val productModifier: ProductModifier
 ) {
     @Transactional
-    fun createProduct(memberAttributes: MemberAttributes, dto: CreateProductRequest): Long {
-        return productFactory.createProduct(memberAttributes, dto)
+    fun createProduct(authenticationAttributes: AuthenticationAttributes, dto: CreateProductRequest): Long {
+        return productFactory.createProduct(authenticationAttributes, dto)
     }
 
     @Transactional
-    fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: ProductUpdateRequest): Long {
-        return productModifier.updateProduct(memberAttributes, productId, dto)
+    fun updateProduct(authenticationAttributes: AuthenticationAttributes, productId: Long, dto: ProductUpdateRequest): Long {
+        return productModifier.updateProduct(authenticationAttributes, productId, dto)
     }
 
     @Transactional
-    fun deleteProduct(memberAttributes: MemberAttributes, productId: Long) {
-        productModifier.deleteProduct(memberAttributes, productId)
+    fun deleteProduct(authenticationAttributes: AuthenticationAttributes, productId: Long) {
+        productModifier.deleteProduct(authenticationAttributes, productId)
     }
 }

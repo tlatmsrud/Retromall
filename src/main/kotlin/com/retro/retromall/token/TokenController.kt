@@ -1,6 +1,6 @@
 package com.retro.retromall.token
 
-import com.retro.retromall.token.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenDto
 import com.retro.retromall.token.service.TokenService
 import com.retro.util.HttpUtils
 import org.slf4j.Logger
@@ -41,7 +41,7 @@ class TokenController(
      */
     @PatchMapping
     fun tokenRenew( @CookieValue("refresh_token", required = true) refreshToken : String)
-    : ResponseEntity<TokenAttributes> {
+    : ResponseEntity<TokenDto> {
 
         val tokenAttributes = tokenService.renewAccessToken(refreshToken)
 

@@ -1,4 +1,4 @@
-package com.retro.retromall.member.enums
+package com.retro.retromall.role.enums
 
 enum class Role {
     USER, ADMIN, ANONYMOUS

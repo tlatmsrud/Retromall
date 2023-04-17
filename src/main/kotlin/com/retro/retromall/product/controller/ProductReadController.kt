@@ -1,7 +1,7 @@
 package com.retro.retromall.product.controller
 
 import com.retro.common.annotation.MemberAuthentication
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse
 import com.retro.retromall.product.service.ProductReadService
@@ -22,10 +22,10 @@ class ProductReadController(
 ) {
     @GetMapping("/{id}")
     fun product(
-        @MemberAuthentication(required = false) memberAttributes: MemberAttributes,
+        @MemberAuthentication(required = false) authenticationAttributes: AuthenticationAttributes,
         @PathVariable id: Long
     ): ResponseEntity<ProductResponse> {
-        return ResponseEntity.ok(productReadService.getProduct(memberAttributes, id))
+        return ResponseEntity.ok(productReadService.getProduct(authenticationAttributes, id))
     }
 
     @GetMapping

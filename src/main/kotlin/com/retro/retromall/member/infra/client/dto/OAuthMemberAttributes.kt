@@ -1,4 +1,4 @@
-package com.retro.retromall.member.dto
+package com.retro.retromall.member.infra.client.dto
 
 import com.retro.retromall.member.enums.OAuthType
 

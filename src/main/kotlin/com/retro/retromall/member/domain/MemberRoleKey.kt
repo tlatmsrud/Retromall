@@ -1,13 +1,30 @@
 package com.retro.retromall.member.domain
 
+import com.retro.retromall.role.enums.Role
 import java.io.Serializable
 import javax.persistence.*
 
 @Embeddable
 class MemberRoleKey(
-    @Column(name = "role_id", nullable = false)
-    val roleId: Long,
+    @Column(name = "role_name", nullable = false)
+    val roleName: Role,
 
     @Column(name = "member_id", nullable = false)
     val memberId: Long
-) : Serializable
+) : Serializable {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MemberRoleKey
+
+        if (roleName != other.roleName) return false
+        return memberId == other.memberId
+    }
+
+    override fun hashCode(): Int {
+        var result = roleName.hashCode()
+        result = 31 * result + memberId.hashCode()
+        return result
+    }
+}

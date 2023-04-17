@@ -1,4 +1,4 @@
-package com.retro.retromall.member.infra.client.naver
+package com.retro.retromall.member.infra.client.dto.naver
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*

@@ -1,15 +1,13 @@
 package com.retro.retromall.member.infra.client
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.retro.retromall.member.dto.LoginRequest
-import com.retro.retromall.member.dto.OAuthMemberAttributes
-import com.retro.retromall.member.dto.OAuthTokenAttributes
+import com.retro.retromall.member.infra.client.dto.kakao.KakaoCodeDto
+import com.retro.retromall.member.infra.client.dto.OAuthMemberAttributes
+import com.retro.retromall.member.infra.client.dto.OAuthTokenAttributes
 import com.retro.retromall.member.enums.OAuthType
+import com.retro.retromall.member.infra.client.dto.OAuthTokenRequest
+import com.retro.retromall.member.infra.client.dto.kakao.*
 import com.retro.retromall.member.infra.client.properties.KakaoProperties
-import com.retro.retromall.member.infra.client.dto.kakao.KakaoTokenRequest
-import com.retro.retromall.member.infra.client.dto.kakao.KakaoTokenResponse
-import com.retro.retromall.member.infra.client.dto.kakao.KakaoUserInfoRequest
-import com.retro.retromall.member.infra.client.dto.kakao.KakaoUserInfoResponse
 import com.retro.retromall.member.support.OAuthMemberAttributesProvider
 import com.retro.retromall.member.support.OAuthTokenAttributesProvider
 import com.retro.util.WebClientUtils
@@ -37,13 +35,14 @@ class OAuth2WebClientKakaoImpl(
 ) : OAuth2WebClient {
     private val logger: Logger = LoggerFactory.getLogger(OAuth2WebClientKakaoImpl::class.java)
 
-    override fun getAccessToken(loginRequest: LoginRequest): OAuthTokenAttributes {
+    override fun getAccessToken(oAuthTokenRequest: OAuthTokenRequest): OAuthTokenAttributes {
+        if (oAuthTokenRequest !is KakaoCodeDto) throw IllegalArgumentException()
         val kakaoTokenRequest = KakaoTokenRequest(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
             clientSecret = properties.clientSecret,
             redirectUri = properties.redirectUri,
-            code = loginRequest.authorizationCode
+            code = oAuthTokenRequest.code!!
         )
         val parameters = WebClientUtils.convertParameters(kakaoTokenRequest, objectMapper)
 

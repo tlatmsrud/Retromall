@@ -2,7 +2,7 @@ package com.retro.retromall.controller
 
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.token.TokenController
-import com.retro.retromall.token.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenDto
 import com.retro.retromall.token.service.TokenService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.BeforeEach
@@ -12,7 +12,6 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
@@ -60,10 +59,10 @@ class TokenControllerTest{
             .addFilter<DefaultMockMvcBuilder>(filter)
             .build()
 
-        val tokenAttributes = TokenAttributes("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN)
+        val tokenDto = TokenDto("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN)
 
         given(tokenService.renewAccessToken(VALID_REFRESH_TOKEN))
-            .willReturn(tokenAttributes)
+            .willReturn(tokenDto)
 
         given(tokenService.renewAccessToken(INVALID_REFRESH_TOKEN))
             .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))

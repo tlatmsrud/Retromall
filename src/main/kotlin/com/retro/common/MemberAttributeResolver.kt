@@ -1,7 +1,7 @@
 package com.retro.common
 
 import com.retro.common.annotation.MemberAuthentication
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import io.jsonwebtoken.Claims
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,7 +20,7 @@ class MemberAttributeResolver(
 ) : HandlerMethodArgumentResolver {
     private val logger: Logger = LoggerFactory.getLogger(MemberAttributeResolver::class.java)
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.parameterType == MemberAttributes::class.java &&
+        return parameter.parameterType == AuthenticationAttributes::class.java &&
                 parameter.hasParameterAnnotation(MemberAuthentication::class.java)
     }
 
@@ -35,40 +35,37 @@ class MemberAttributeResolver(
                 authorization
             )
         ) {
-            return MemberAttributes(id = null, role = "ANONYMOUS", permissions = null)
+            return AuthenticationAttributes(id = null, roles = "ANONYMOUS", permissions = null)
         }
 
         //Test Token
         if (authorization == "Bearer TestToken") {
-            return MemberAttributes(
+            return AuthenticationAttributes(
                 id = 1000L,
-                role = "USER",
-                permissions = setOf("CREATE_PRODUCT", "MODIFY_PRODUCT", "DELETE_PRODUCT")
+                roles = "USER",
+                permissions = "CREATE_PRODUCT, MODIFY_PRODUCT, DELETE_PRODUCT"
             )
         }
 
-        val token = resolveToken(authorization)
-        jwtTokenProvider.validateToken(token)
-        val claims = jwtTokenProvider.parseClaims(token)
-        return createMemberAttributes(claims)
+        resolveToken(authorization)?.let {
+            jwtTokenProvider.validateToken(it)
+            val claims = jwtTokenProvider.parseClaims(it)
+            return createMemberAttributes(claims)
+        } ?: throw IllegalArgumentException()
     }
 
-    private fun createMemberAttributes(claims: Claims): MemberAttributes {
+    private fun createMemberAttributes(claims: Claims): AuthenticationAttributes {
         val id: Long? = claims.get("id", Integer::class.java)?.toLong()
         val role = claims.get("role", String::class.java)
         val permissions = claims.get("permissions", String::class.java)
-        return MemberAttributes(id = id, role = role, permissions = resolvePermission(permissions))
+        return AuthenticationAttributes(id = id, roles = role, permissions = permissions)
     }
 
-    private fun resolvePermission(permissions: String): Set<String> {
-        return permissions.split(", ").toSet()
-    }
-
-    private fun resolveToken(authorization: String): String {
+    private fun resolveToken(authorization: String): String? {
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer")) {
             return authorization.substring(7)
         }
 
-        return ""
+        return null
     }
 }

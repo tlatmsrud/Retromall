@@ -1,7 +1,7 @@
 package com.retro.retromall.product.support
 
 import com.retro.retromall.category.service.CategoryReadService
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.ProductHashTag
 import com.retro.retromall.product.domain.ProductImage
@@ -20,12 +20,12 @@ class ProductFactory(
     private val productImageService: ProductImageService,
     private val productHashTagService: ProductHashTagService
 ) {
-    fun createProduct(memberAttributes: MemberAttributes, dto: CreateProductRequest): Long {
+    fun createProduct(authenticationAttributes: AuthenticationAttributes, dto: CreateProductRequest): Long {
         val product = Product(
             title = dto.title,
             content = dto.content,
             amount = dto.amount,
-            authorId = memberAttributes.id!!,
+            authorId = authenticationAttributes.id!!,
             category = categoryReadService.getCategory(dto.category).name,
             thumbnail = dto.thumbnail
         )

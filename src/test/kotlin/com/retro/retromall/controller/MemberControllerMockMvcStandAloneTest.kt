@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.controller.MemberController
 import com.retro.retromall.member.dto.LoginRequest
-import com.retro.retromall.token.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenDto
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberService
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 
@@ -43,8 +42,8 @@ class MemberControllerMockMvcStandAloneTest {
     fun canRetrieveByIdWhenExists() {
         //given
         val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, authorizationCode = "Password", "")
-        val tokenAttributes = TokenAttributes("Bearer", "access", "refresh")
-        val loginResponse = LoginResponse("nickName", "profileImage",tokenAttributes)
+        val tokenDto = TokenDto("Bearer", "access", "refresh")
+        val loginResponse = LoginResponse("nickName", "profileImage",tokenDto)
         every { memberService.findMemberByOauth(loginRequest) } returns loginResponse
         every { memberController.login(loginRequest) } returns ResponseEntity.ok(loginResponse)
 

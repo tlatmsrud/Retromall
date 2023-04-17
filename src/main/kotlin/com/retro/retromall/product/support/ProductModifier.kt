@@ -1,7 +1,7 @@
 package com.retro.retromall.product.support
 
 import com.retro.retromall.category.service.CategoryReadService
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.ProductHashTag
 import com.retro.retromall.product.domain.ProductImage
@@ -24,10 +24,10 @@ class ProductModifier(
     private val productAuthenticationService: AuthenticationService
 
 ) {
-    fun updateProduct(memberAttributes: MemberAttributes, productId: Long, dto: ProductUpdateRequest): Long {
+    fun updateProduct(authenticationAttributes: AuthenticationAttributes, productId: Long, dto: ProductUpdateRequest): Long {
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        if (!productAuthenticationService.validateUser(memberAttributes.id!!, product))
+        if (!productAuthenticationService.validateUser(authenticationAttributes.id!!, product))
             throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
 
         modifyProduct(
@@ -43,10 +43,10 @@ class ProductModifier(
         return productId
     }
 
-    fun deleteProduct(memberAttributes: MemberAttributes, productId: Long) {
+    fun deleteProduct(authenticationAttributes: AuthenticationAttributes, productId: Long) {
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        if (!productAuthenticationService.validateUser(memberAttributes.id!!, product))
+        if (!productAuthenticationService.validateUser(authenticationAttributes.id!!, product))
             throw IllegalStateException("해당 상품을 삭제할 권한이 없습니다.")
 
         productRepository.delete(product)

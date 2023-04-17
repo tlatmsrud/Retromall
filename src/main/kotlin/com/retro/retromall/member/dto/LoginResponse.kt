@@ -1,9 +1,14 @@
 package com.retro.retromall.member.dto
 
-import com.retro.retromall.token.dto.TokenAttributes
-
 data class LoginResponse(
-    val nickName: String?,
-    val profileImageUrl: String?,
-    val tokenAttributes: TokenAttributes
-)
+    val refreshToken: String,
+    val attributes: Attributes,
+) {
+    constructor(refreshToken: String, memberAttributes: MemberAttributes, tokenAttributes: TokenAttributes) :
+            this(refreshToken, Attributes(memberAttributes, tokenAttributes))
+
+    data class Attributes(
+        val memberAttributes: MemberAttributes,
+        val tokenAttributes: TokenAttributes
+    )
+}

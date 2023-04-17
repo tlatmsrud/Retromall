@@ -1,6 +1,6 @@
 package com.retro.retromall.member.support
 
-import com.retro.retromall.member.dto.OAuthTokenAttributes
+import com.retro.retromall.member.infra.client.dto.OAuthTokenAttributes
 import com.retro.retromall.member.infra.client.dto.kakao.KakaoTokenResponse
 import org.springframework.stereotype.Component
 

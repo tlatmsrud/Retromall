@@ -1,7 +1,7 @@
 package com.retro.retromall.product.controller
 
 import com.retro.common.annotation.MemberAuthentication
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.service.ProductLikeService
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,17 +16,17 @@ class ProductLikeController(
 ) {
     @PostMapping
     fun productLikeAdd(
-        @MemberAuthentication memberAttributes: MemberAttributes,
+        @MemberAuthentication authenticationAttributes: AuthenticationAttributes,
         @RequestParam("product_id") productId: Long
     ) {
-        productLikeService.addProductLike(memberAttributes, productId)
+        productLikeService.addProductLike(authenticationAttributes, productId)
     }
 
     @PatchMapping
     fun productLikeRemove(
-        @MemberAuthentication memberAttributes: MemberAttributes,
+        @MemberAuthentication authenticationAttributes: AuthenticationAttributes,
         @RequestParam("product_id") productId: Long
     ) {
-        productLikeService.removeProductLike(memberAttributes, productId)
+        productLikeService.removeProductLike(authenticationAttributes, productId)
     }
 }

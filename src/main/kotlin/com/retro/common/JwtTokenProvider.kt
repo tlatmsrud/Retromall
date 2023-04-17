@@ -1,7 +1,8 @@
 package com.retro.common
 
 import com.retro.retromall.member.domain.Member
-import com.retro.retromall.token.dto.TokenAttributes
+import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.token.dto.TokenDto
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
@@ -27,26 +28,35 @@ class JwtTokenProvider(
     private val keyBytes: ByteArray? = Decoders.BASE64.decode(secretKey)
     private val key = Keys.hmacShaKeyFor(keyBytes)
 
-    fun generateToken(member: Member): TokenAttributes {
+    fun generateToken(attributes: MemberAttributes): TokenDto {
         val now = Date()
         val accessTokenExpiresIn = Date(now.time + 8640000)
+        val refreshTokenExpiresIn = Date(now.time + 124416000)
         val accessToken = Jwts.builder()
             .setIssuer("Retromall")
             .setSubject("Retromall Jwt Token")
             .setAudience("Retroall User")
             .setIssuedAt(now)
-            .claim("id", member.id!!)
-            .claim("nickName", member.nickname)
+            .claim("id", attributes.id)
+            .claim("nickName", attributes.nickName)
+            .claim("roles", attributes.roles)
+            .claim("permissions", attributes.permissions)
             .setExpiration(accessTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 
         val refreshToken = Jwts.builder()
-            .setExpiration(Date(now.time + 8640000))
+            .setExpiration(refreshTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 
-        return TokenAttributes(grantType = "Bearer", accessToken = accessToken, refreshToken = refreshToken)
+        return TokenDto(
+            grantType = "Bearer",
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            expirationAccessToken = accessTokenExpiresIn.time,
+            expirationRefreshToken = refreshTokenExpiresIn.time
+        )
     }
 
     fun validateToken(token: String): Boolean {
@@ -69,7 +79,8 @@ class JwtTokenProvider(
 
     fun parseClaims(accessToken: String): Claims {
         return try {
-            Jwts.parserBuilder().deserializeJsonWith(JacksonDeserializer()).setSigningKey(key).build().parseClaimsJws(accessToken).body
+            Jwts.parserBuilder().deserializeJsonWith(JacksonDeserializer()).setSigningKey(key).build()
+                .parseClaimsJws(accessToken).body
         } catch (e: ExpiredJwtException) {
             e.claims
         }

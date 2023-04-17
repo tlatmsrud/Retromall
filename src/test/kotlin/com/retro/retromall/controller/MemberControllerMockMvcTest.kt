@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.controller.MemberController
 import com.retro.retromall.member.dto.LoginRequest
-import com.retro.retromall.token.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenDto
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,8 +39,8 @@ class MemberControllerMockMvcTest {
 
     //@Test
     fun canRetrieveByIdWhenExist() {
-        val tokenAttributes = TokenAttributes(grantType = "Bearer", accessToken = "access", refreshToken = "refresh")
-        val loginResponse = LoginResponse("nickName", "profileImage", tokenAttributes)
+        val tokenDto = TokenDto(grantType = "Bearer", accessToken = "access", refreshToken = "refresh")
+        val loginResponse = LoginResponse("nickName", "profileImage", tokenDto)
 
         val loginRequest = LoginRequest(OAuthType.KAKAO, "Password", "")
         //given
@@ -57,6 +56,6 @@ class MemberControllerMockMvcTest {
             .andReturn().response
 
         assertEquals(response.status, HttpStatus.OK.value())
-        assertEquals(response.contentAsString, jsonTester.write(tokenAttributes).json)
+        assertEquals(response.contentAsString, jsonTester.write(tokenDto).json)
     }
 }

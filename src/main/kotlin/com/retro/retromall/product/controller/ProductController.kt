@@ -1,7 +1,7 @@
 package com.retro.retromall.product.controller
 
 import com.retro.common.annotation.MemberAuthentication
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.dto.ProductUpdateRequest
 import com.retro.retromall.product.service.ProductService
@@ -25,29 +25,29 @@ class ProductController(
 
     @PostMapping
     fun productAdd(
-        @MemberAuthentication memberAttributes: MemberAttributes,
+        @MemberAuthentication authenticationAttributes: AuthenticationAttributes,
         @RequestBody createProductRequest: CreateProductRequest
     ): ResponseEntity<Long> {
-        val id = productService.createProduct(memberAttributes, createProductRequest)
+        val id = productService.createProduct(authenticationAttributes, createProductRequest)
         return ResponseEntity.ok(id)
     }
 
     @PatchMapping("/{id}")
     fun productUpdate(
-        @MemberAuthentication memberAttributes: MemberAttributes,
+        @MemberAuthentication authenticationAttributes: AuthenticationAttributes,
         @PathVariable id: Long,
         @RequestBody productUpdateRequest: ProductUpdateRequest
     ): ResponseEntity<Unit> {
-        productService.updateProduct(memberAttributes, id, productUpdateRequest)
+        productService.updateProduct(authenticationAttributes, id, productUpdateRequest)
         return ResponseEntity.ok().build()
     }
 
     @DeleteMapping("/{id}")
     fun productDelete(
-        @MemberAuthentication memberAttributes: MemberAttributes,
+        @MemberAuthentication authenticationAttributes: AuthenticationAttributes,
         @PathVariable id: Long
     ): ResponseEntity<Unit> {
-        productService.deleteProduct(memberAttributes, id)
+        productService.deleteProduct(authenticationAttributes, id)
         return ResponseEntity.ok().build()
     }
 }

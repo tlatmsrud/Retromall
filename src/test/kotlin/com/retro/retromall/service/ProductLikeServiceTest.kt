@@ -1,10 +1,9 @@
 package com.retro.retromall.service
 
-import com.retro.retromall.member.dto.MemberAttributes
+import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.service.ProductLikeService
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
@@ -28,12 +27,12 @@ class ProductLikeServiceTest(
         val product = Product("Title",content = "Product", amount = 10000, category = "Xbox", authorId = 1)
         productRepository.save(product)
 
-        val memberAttributes = MemberAttributes(1L)
-        productLikeService.addProductLike(memberAttributes, product.id!!)
+        val authenticationAttributes = AuthenticationAttributes(1L)
+        productLikeService.addProductLike(authenticationAttributes, product.id!!)
 
         val updatedProduct = productRepository.findById(product.id!!).orElse(null)
         assertEquals("좋아요 개수", 1, updatedProduct.productLikes.size)
-        assertEquals("좋아요 한 유저 아이디", memberAttributes.id, updatedProduct.productLikes.first().memberId)
+        assertEquals("좋아요 한 유저 아이디", authenticationAttributes.id, updatedProduct.productLikes.first().memberId)
     }
 
 }

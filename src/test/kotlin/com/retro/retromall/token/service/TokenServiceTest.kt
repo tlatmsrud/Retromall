@@ -5,18 +5,14 @@ import com.retro.retromall.member.domain.Member
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.token.domain.Token
 import com.retro.retromall.token.domain.repository.TokenRepository
-import com.retro.retromall.token.dto.TokenAttributes
+import com.retro.retromall.token.dto.TokenDto
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.springframework.restdocs.RestDocumentationContextProvider
-import org.springframework.restdocs.RestDocumentationExtension
-import org.springframework.web.context.WebApplicationContext
 import java.util.*
 
 
@@ -52,7 +48,7 @@ class TokenServiceTest {
             .willReturn(Optional.empty())
 
         given(jwtTokenProvider.generateToken(member))
-            .willReturn(TokenAttributes(GRANT_TYPE, RENEW_ACCESS_TOKEN, RENEW_REFRESH_TOKEN))
+            .willReturn(TokenDto(GRANT_TYPE, RENEW_ACCESS_TOKEN, RENEW_REFRESH_TOKEN))
 
         given(tokenRepository.save(any(Token::class.java)))
             .will{invocation ->

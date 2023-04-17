@@ -11,7 +11,8 @@ import javax.persistence.*
 @Table(name="tb_token")
 class Token (
     member : Member,
-    refreshToken : String
+    refreshToken : String,
+    expirationRefreshToken: Long
 ){
 
     @Id
@@ -25,6 +26,9 @@ class Token (
 
     @Column(name = "refresh_token")
     var refreshToken :String = refreshToken
+
+    @Column(name = "expiration_refresh_token")
+    var expirationRefreshToken: Long = expirationRefreshToken
 
     /**
      * 리프레시 토큰 수정
