@@ -9,15 +9,10 @@ class MemberRole(
     @EmbeddedId
     val id: MemberRoleKey,
 
-    @MapsId("roleName")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_name")
-    val role: Role,
-
     @MapsId("memberId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     val member: Member
 ) {
-    constructor(role: Role, member: Member) : this(MemberRoleKey(role.name, member.id!!), role, member)
+    constructor(role: Role, member: Member) : this(MemberRoleKey(role.name, member.id!!), member)
 }

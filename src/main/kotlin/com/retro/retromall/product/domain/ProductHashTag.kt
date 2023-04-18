@@ -25,9 +25,7 @@ class ProductHashTag(
         other as ProductHashTag
 
         if (product != other.product) return false
-        if (hashTag != other.hashTag) return false
-
-        return true
+        return hashTag == other.hashTag
     }
 
     override fun hashCode(): Int {

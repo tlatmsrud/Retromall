@@ -7,6 +7,7 @@ import javax.persistence.*
 @Embeddable
 class MemberRoleKey(
     @Column(name = "role_name", nullable = false)
+    @Enumerated(EnumType.STRING)
     val roleName: Role,
 
     @Column(name = "member_id", nullable = false)

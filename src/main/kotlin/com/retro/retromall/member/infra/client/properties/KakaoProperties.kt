@@ -5,35 +5,35 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 
 @Configuration
-@PropertySource("classpath:properties/\${spring.profiles.active}/kakao.properties")
+@PropertySource("classpath:properties/\${spring.profiles.active}/kakao/kakao.properties")
 class KakaoProperties(
-    @Value("\${client-id}")
+    @Value("\${kakao_client-id}")
     val clientId: String,
 
-    @Value("\${client-secret}")
+    @Value("\${kakao_client-secret}")
     val clientSecret: String,
 
-    @Value("\${authorize-url}")
+    @Value("\${kakao_authorize-url}")
     val authorizeUrl: String,
 
-    @Value("\${authorization-grant-type}")
+    @Value("\${kakao_authorization-grant-type}")
     val authorizationGrantType: String,
 
-    @Value("\${api-url}")
+    @Value("\${kakao_api-url}")
     val apiUrl: String,
 
-    @Value("\${token-uri}")
+    @Value("\${kakao_token-uri}")
     val tokenUri: String,
 
-    @Value("\${user-info-uri}")
+    @Value("\${kakao_user-info-uri}")
     val userInfoUri: String,
 
-    @Value("\${redirect-uri}")
+    @Value("\${kakao_redirect-uri}")
     val redirectUri: String,
 
-    @Value("\${scope}")
+    @Value("\${kakao_scope}")
     val scope: List<String>,
 
-    @Value("\${secure-resource}")
+    @Value("\${kakao_secure-resource}")
     val secureResource: Boolean
 )

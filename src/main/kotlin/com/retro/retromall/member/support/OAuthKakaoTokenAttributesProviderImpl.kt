@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 class OAuthKakaoTokenAttributesProviderImpl : OAuthTokenAttributesProvider<KakaoTokenResponse> {
     override fun createOAuthTokenAttributes(data: KakaoTokenResponse): OAuthTokenAttributes {
         return OAuthTokenAttributes(
-            tokenType = data.tokenType,
+            tokenType = "Bearer",
             accessToken = data.accessToken,
             accessTokenExpiresIn = data.accessTokenExpiresIn,
             refreshToken = data.refreshToken,

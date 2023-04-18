@@ -6,8 +6,10 @@ import com.retro.retromall.member.infra.repository.MemberRepository
 import com.retro.retromall.role.enums.Role
 import com.retro.retromall.role.repository.RoleRepository
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
+@Transactional
 class MemberFactory(
     private val memberRepository: MemberRepository,
     private val roleRepository: RoleRepository
@@ -22,8 +24,10 @@ class MemberFactory(
                 oAuthType = attributes.oAuthType,
                 oauthId = attributes.oauthId
             )
+
+        memberRepository.save(member)
         addUserRole(member)
-        return memberRepository.save(member)
+        return member
     }
 
     private fun addUserRole(member: Member) {

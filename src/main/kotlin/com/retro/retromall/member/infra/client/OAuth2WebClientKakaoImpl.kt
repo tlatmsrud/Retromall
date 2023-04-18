@@ -45,7 +45,6 @@ class OAuth2WebClientKakaoImpl(
             code = oAuthTokenRequest.code!!
         )
         val parameters = WebClientUtils.convertParameters(kakaoTokenRequest, objectMapper)
-
         logger.info("Request Kakao AccessToken")
         val response = authWebClient.post()
             .uri { uriBuilder -> uriBuilder.path(properties.tokenUri).build() }
@@ -64,7 +63,7 @@ class OAuth2WebClientKakaoImpl(
 
     override fun getUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes {
         val kakaoUserInfoRequest =
-            KakaoUserInfoRequest(secureResource = properties.secureResource, scope = properties.scope)
+            KakaoUserInfoRequest(secureResource = properties.secureResource)
         val parameters = WebClientUtils.convertParameters(kakaoUserInfoRequest, objectMapper)
         val response = apiWebClient.post()
             .uri { uriBuilder -> uriBuilder.path(properties.userInfoUri).build() }

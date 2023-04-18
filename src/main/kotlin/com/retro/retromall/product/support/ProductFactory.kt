@@ -29,10 +29,10 @@ class ProductFactory(
             category = categoryReadService.getCategory(dto.category).name,
             thumbnail = dto.thumbnail
         )
-        addHashTags(product, productHashTagService.createProductHashTags(product, dto.hashTags))
-        addImages(product, productImageService.createProductImages(dto.images, product))
 
         productRepository.save(product)
+        addHashTags(product, productHashTagService.createProductHashTags(product, dto.hashTags))
+        addImages(product, productImageService.createProductImages(dto.images, product))
         return product.id!!
     }
 

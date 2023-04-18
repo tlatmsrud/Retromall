@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(readOnly = true)
 class MemberReadService(
     private val oAuth2WebClientFactory: OAuth2WebClientFactory,
     private val memberRepository: MemberRepository,
     private val memberService: MemberService,
     private val tokenService: TokenService
 ) {
+    @Transactional
     fun findMemberByOAuth(oAuthType: OAuthType, oAuthTokenRequest: OAuthTokenRequest): LoginResponse {
         val webClient = oAuth2WebClientFactory.getOAuth2WebClient(oAuthType)
 
