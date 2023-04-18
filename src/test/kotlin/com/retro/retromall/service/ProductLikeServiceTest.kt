@@ -23,7 +23,7 @@ class ProductLikeServiceTest(
     private val productRepository: ProductRepository
 ) {
     //@Test
-    fun 좋아요추가() {
+/*    fun 좋아요추가() {
         val product = Product("Title",content = "Product", amount = 10000, category = "Xbox", authorId = 1)
         productRepository.save(product)
 
@@ -33,6 +33,6 @@ class ProductLikeServiceTest(
         val updatedProduct = productRepository.findById(product.id!!).orElse(null)
         assertEquals("좋아요 개수", 1, updatedProduct.productLikes.size)
         assertEquals("좋아요 한 유저 아이디", authenticationAttributes.id, updatedProduct.productLikes.first().memberId)
-    }
+    }*/
 
 }

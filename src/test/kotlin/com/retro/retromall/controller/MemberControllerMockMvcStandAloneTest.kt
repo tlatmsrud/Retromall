@@ -39,7 +39,7 @@ class MemberControllerMockMvcStandAloneTest {
     }
 
     //@Test
-    fun canRetrieveByIdWhenExists() {
+    /*fun canRetrieveByIdWhenExists() {
         //given
         val loginRequest = LoginRequest(oAuthType = OAuthType.KAKAO, authorizationCode = "Password", "")
         val tokenDto = TokenDto("Bearer", "access", "refresh")
@@ -84,5 +84,5 @@ class MemberControllerMockMvcStandAloneTest {
         //then
         assertEquals(response.status, HttpStatus.BAD_REQUEST.value())
         assertEquals(response.contentAsString, "")
-    }
+    }*/
 }
