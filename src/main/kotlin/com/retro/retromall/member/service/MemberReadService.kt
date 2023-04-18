@@ -33,7 +33,7 @@ class MemberReadService(
         tokenService.registRefreshTokenWithMember(member, tokenDto)
 
         return LoginResponse(
-            tokenDto.refreshToken, memberAttributes, TokenAttributes(tokenDto.grantType, tokenDto.accessToken)
+            tokenDto.refreshToken, memberAttributes, TokenAttributes(tokenDto.grantType, tokenDto.accessToken, tokenDto.expirationAccessToken, tokenDto.expirationRefreshToken)
         )
     }
 
