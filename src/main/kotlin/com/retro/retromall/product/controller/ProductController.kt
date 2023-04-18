@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/products")
@@ -26,7 +27,7 @@ class ProductController(
     @PostMapping
     fun productAdd(
         @MemberAuthentication authenticationAttributes: AuthenticationAttributes,
-        @RequestBody createProductRequest: CreateProductRequest
+        @RequestBody @Valid createProductRequest: CreateProductRequest
     ): ResponseEntity<Long> {
         val id = productService.createProduct(authenticationAttributes, createProductRequest)
         return ResponseEntity.ok(id)
