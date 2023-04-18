@@ -59,7 +59,7 @@ class TokenControllerTest{
             .addFilter<DefaultMockMvcBuilder>(filter)
             .build()
 
-        val tokenDto = TokenDto("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN)
+        val tokenDto = TokenDto("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN,1000L,1000L)
 
         given(tokenService.renewAccessToken(VALID_REFRESH_TOKEN))
             .willReturn(tokenDto)
@@ -81,7 +81,7 @@ class TokenControllerTest{
         )
             .andExpect(status().isOk)
             .andExpect(content().string(containsString(NEW_ACCESS_TOKEN)))
-            .andDo(document("updateToken"));
+            .andDo(document("updateToken"))
 
         verify(tokenService).renewAccessToken(VALID_REFRESH_TOKEN)
     }
