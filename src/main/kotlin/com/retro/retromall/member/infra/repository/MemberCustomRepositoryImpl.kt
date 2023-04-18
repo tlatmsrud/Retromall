@@ -28,7 +28,7 @@ class MemberCustomRepositoryImpl(
                 .joinToString(separator = ", ") { it?.name.toString() }
             val permissions = query.stream().map { it.get(rolePermission.id.permissionName) }.collect(Collectors.toSet())
                 .joinToString(separator = ", ") { it?.name.toString() }
-            return MemberAttributes(member!!.id!!, member.nickname, member.profileImageUrl, roles, permissions)
+            return MemberAttributes(member!!.id!!, member.oauthType, member.oauthId, member.nickname, member.profileImageUrl, roles, permissions)
         }
 
         return null

@@ -1,9 +1,13 @@
 package com.retro.retromall.member.dto
 
+import com.retro.retromall.member.enums.OAuthType
+
 data class MemberAttributes(
-    var id: Long? = null,
-    var nickName: String? = null,
-    var profileImageUrl: String? = null,
-    var roles: String? = null,
-    var permissions: String? = null,
+    val id: Long,
+    val oauthType: OAuthType,
+    val oauthId: String,
+    val nickName: String?,
+    val profileImageUrl: String?,
+    val roles: String?,
+    val permissions: String?,
 )
