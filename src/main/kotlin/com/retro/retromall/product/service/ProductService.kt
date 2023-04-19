@@ -7,14 +7,17 @@ import com.retro.retromall.product.support.ProductFactory
 import com.retro.retromall.product.support.ProductModifier
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.validation.annotation.Validated
+import javax.validation.Valid
 
 @Service
+@Validated
 class ProductService(
     private val productFactory: ProductFactory,
     private val productModifier: ProductModifier
 ) {
     @Transactional
-    fun createProduct(authenticationAttributes: AuthenticationAttributes, dto: CreateProductRequest): Long {
+    fun createProduct(authenticationAttributes: AuthenticationAttributes, @Valid dto: CreateProductRequest): Long {
         return productFactory.createProduct(authenticationAttributes, dto)
     }
 

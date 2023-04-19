@@ -37,25 +37,5 @@ class MemberControllerMockMvcTest {
         JacksonTester.initFields(this, ObjectMapper())
     }
 
-    //@Test
-    fun canRetrieveByIdWhenExist() {
-        val tokenDto = TokenDto(grantType = "Bearer", accessToken = "access", refreshToken = "refresh")
-        val loginResponse = LoginResponse("nickName", "profileImage", tokenDto)
 
-        val loginRequest = LoginRequest(OAuthType.KAKAO, "Password", "")
-        //given
-        given(memberService.findMemberByOauth(loginRequest)).willReturn(loginResponse)
-
-        //when
-
-        val response = mockMvc
-            .perform(post("/members/login")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonTester.write(loginRequest).json))
-            .andReturn().response
-
-        assertEquals(response.status, HttpStatus.OK.value())
-        assertEquals(response.contentAsString, jsonTester.write(tokenDto).json)
-    }
 }
