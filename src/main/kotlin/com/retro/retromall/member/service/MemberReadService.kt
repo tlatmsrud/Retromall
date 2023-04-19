@@ -30,7 +30,10 @@ class MemberReadService(
 
         val memberAttributes = memberRepository.selectPermissionsByMemberId(member.id!!)
         val tokenDto = tokenService.generateToken(memberAttributes!!)
-        tokenService.registRefreshTokenWithMember(member, tokenDto)
+
+        if(tokenService.isRegistRefreshToken(member.id!!)){
+            tokenService.registRefreshTokenWithMember(member.id!!, tokenDto)
+        }
 
         return LoginResponse(
             tokenDto.refreshToken, memberAttributes, TokenAttributes(tokenDto.grantType, tokenDto.accessToken, tokenDto.expirationAccessToken, tokenDto.expirationRefreshToken)
