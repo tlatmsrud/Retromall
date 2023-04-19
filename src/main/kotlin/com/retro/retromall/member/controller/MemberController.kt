@@ -41,7 +41,7 @@ class MemberController(
         private val logger: Logger = LoggerFactory.getLogger(MemberController::class.java)
     }
 
-    @GetMapping("/oauth/login/kakao")
+    @GetMapping("/oauth/kakao")
     fun login(@ModelAttribute kakaoCodeDto: KakaoCodeDto): ResponseEntity<LoginResponse.Attributes> {
         val result = memberReadService.findMemberByOAuth(OAuthType.KAKAO, kakaoCodeDto)
 
@@ -54,7 +54,7 @@ class MemberController(
             .body(result.attributes)
     }
 
-    @GetMapping("/oauth/login/naver")
+    @GetMapping("/oauth/naver")
     fun login(@ModelAttribute naverCodeDto: NaverCodeDto): ResponseEntity<LoginResponse.Attributes> {
         val result = memberReadService.findMemberByOAuth(OAuthType.NAVER, naverCodeDto)
 
