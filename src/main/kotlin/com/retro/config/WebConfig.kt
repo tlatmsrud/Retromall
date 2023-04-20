@@ -18,7 +18,7 @@ class WebConfig(
 
     override fun addCorsMappings(registry: CorsRegistry) {
         val activeProfiles = environment.activeProfiles
-        if (activeProfiles.contains("local")) {
+        if (activeProfiles.contains("dev")) {
             registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PATCH", "DELETE")
