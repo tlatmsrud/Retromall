@@ -38,7 +38,7 @@ class TokenService(
 
         val token = tokenRepository.findByMemberId(attributes.id)
 
-        if(isRegistAndUpdateRefreshToken(token)){
+        if(token == null || isRegistAndUpdateRefreshToken(token)){
             val refreshTokenDto = jwtTokenProvider.generateRefreshToken(attributes)
 
             val registrationToken = Token(attributes.id, refreshTokenDto.refreshToken, refreshTokenDto.expirationRefreshToken)
@@ -87,21 +87,22 @@ class TokenService(
             throw IllegalArgumentException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
         }
 
-        return tokenRepository.findByRefreshToken(refreshToken)
+        return tokenRepository.findByRefreshToken(refreshToken).orElseThrow{
+            IllegalArgumentException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
+        }
     }
 
     /**
      * 리프레시 토큰 등록/갱신 여부를 체크한다.
-     * memberId에 대한 리프레시 토큰이 없거나 만료 기간이 7일 이하로 남아있을 경우 갱신 여부를 true로 리턴한다
-
+     * 토큰 만료기간이 7일 이하로 남아있을 경우 갱신 여부를 true로 리턴한다
+     *
      * @author sim
      * @param token
      * @return 리프레시 토큰 갱신 여부
      */
-    fun isRegistAndUpdateRefreshToken(token: Token?) : Boolean{
+    fun isRegistAndUpdateRefreshToken(token: Token) : Boolean{
 
-        return token == null ||
-                token.expirationRefreshToken < Date().time + toLong(86400000 * 7)
+        return token.expirationRefreshToken < Date().time + toLong(86400000 * 7)
     }
 }
 

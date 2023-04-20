@@ -62,10 +62,10 @@ class TokenServiceTest {
         given(jwtTokenProvider.validateToken(INVALID_REFRESH_TOKEN)).willReturn(false)
         given(jwtTokenProvider.validateToken(EXPIRED_REFRESH_TOKEN)).willReturn(false)
 
-        given(tokenRepository.findByRefreshToken(VALID_REFRESH_TOKEN)).willReturn(token)
-        given(tokenRepository.findByRefreshToken(INVALID_REFRESH_TOKEN)).willReturn(null)
-        given(tokenRepository.findByRefreshToken(EXPIRED_REFRESH_TOKEN)).willReturn(expiredToken)
-        given(tokenRepository.findByRefreshToken(ONE_DAY_LEFT_REFRESH_TOKEN)).willReturn(oneDayLeftToken)
+        given(tokenRepository.findByRefreshToken(VALID_REFRESH_TOKEN)).willReturn(Optional.of(token))
+        given(tokenRepository.findByRefreshToken(INVALID_REFRESH_TOKEN)).willReturn(Optional.empty())
+        given(tokenRepository.findByRefreshToken(EXPIRED_REFRESH_TOKEN)).willReturn(Optional.of(expiredToken))
+        given(tokenRepository.findByRefreshToken(ONE_DAY_LEFT_REFRESH_TOKEN)).willReturn(Optional.of(oneDayLeftToken))
 
         given(tokenRepository.findByMemberId(1)).willReturn(token)
         given(tokenRepository.findByMemberId(2)).willReturn(null)
@@ -203,13 +203,6 @@ class TokenServiceTest {
         verify(jwtTokenProvider).validateToken(EXPIRED_REFRESH_TOKEN)
     }
 
-
-    @Test
-    @DisplayName("Null 값을 통한 리프레시 토큰 등록/갱신 여부 체크")
-    fun isRegistAndUpdateRefreshTokenWithNull(){
-        val result = tokenService.isRegistAndUpdateRefreshToken(null)
-        assertThat(result).isEqualTo(true)
-    }
 
     @Test
     @DisplayName("유효한 토큰 통한 리프레시 토큰 갱신 여부 체크")
