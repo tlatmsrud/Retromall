@@ -25,84 +25,83 @@ class TokenService(
 ) {
     /**
      * 토큰을 생성한다.
-     * @author jiho
+     * accessToken은 필수적으로 생성한다.
+     * refreshToken은 유효기간이 7일 이상 남았을 경우 갱신하지 않는다.
+     *
+     * @author sim
      * @param attributes 유저객체
      * @return 토큰 객체
      */
     fun generateToken(attributes: MemberAttributes): TokenDto {
-        return jwtTokenProvider.generateToken(attributes)
-    }
 
-    /**
-     * 유저에 대한 리프레시 토큰을 저장한다.
-     * @author sim
-     *
-     * @param member - 유저 정보
-     * @param refreshToken - 리프레시 토큰
-     */
-    fun registRefreshTokenWithMember(memberId: Long, tokenDto: TokenDto) {
+        val accessTokenDto = jwtTokenProvider.generateAcesssToken(attributes)
 
-        tokenRepository.save(Token(memberId , tokenDto.refreshToken, tokenDto.expirationRefreshToken))
+        val token = tokenRepository.findByMemberId(attributes.id)
+
+        if(isRegistAndUpdateRefreshToken(token)){
+            val refreshTokenDto = jwtTokenProvider.generateRefreshToken(attributes)
+
+            val registrationToken = Token(attributes.id, refreshTokenDto.refreshToken, refreshTokenDto.expirationRefreshToken)
+            tokenRepository.save(registrationToken)
+
+            return TokenDto(accessTokenDto.grantType, accessTokenDto.accessToken, refreshTokenDto.refreshToken
+                , accessTokenDto.expirationAccessToken, refreshTokenDto.expirationRefreshToken)
+        }
+
+        return TokenDto(
+            accessTokenDto.grantType, accessTokenDto.accessToken, token.refreshToken
+            , accessTokenDto.expirationAccessToken, token.expirationRefreshToken)
     }
 
     /**
      * 엑세스 토큰을 갱신한다.
-     * 리프레시 토큰에 매핑된 계정에 대한 액세스 토큰을 갱신한다.
-     * isRegistRefreshToken 메서드에 따라 리프레시 토큰을 갱신한다.
+     * 기본적으로 액세스 토큰을 갱신하나 설정한 리프레시 토큰의 만료 기간에 따라
+     * 리프레시 토큰도 갱신된다.
      *
      * @author sim
-     *
      * @param refreshToken - 리프레시 토큰
      * @throws IllegalArgumentException - 유효하지 않은 리프레시 토큰일 경우 발생
      * @return 토큰 객체
      */
     fun renewAccessToken(refreshToken: String): TokenDto {
 
-        val token = tokenRepository.findByRefreshToken(refreshToken)
-            .orElseThrow { throw IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요.") }
+        val token = getValidTokenByRefreshToken(refreshToken)
 
-        if(token.expirationRefreshToken < Date().time){
-            throw IllegalArgumentException("유효기간이 지난 토큰입니다. 로그인을 다시 시도해주세요.")
-        }
-
-        /** TODO
-         * 리프레시 토큰을 상황에 따라 갱신하여 Set 하기 위해서는 현재 tokenDto로는 불가능.
-         * 1. generateToken 메서드를 실행하면 refreshToken과 accessToken을 모두 갱신하고있는 문제.
-         * 2. db에 저장된 refreshToken과 쿠키에 저장하는 refreshToken이 달라지게 되는 문제
-         * 
-         * 해결방안
-         * 1. generateToken 메서드를 액세스 토큰, 리프레시 토큰 생성 메서드로 따로 분리
-         * 2. 액세스 생성 및 리프레시 토큰 갱신 여부에 따라 리프레시 토큰도 생성
-         * 3. 액세스 토큰만 갱신할 경우 refreshToken 정보는 token 엔티티에서 가져와 tokenDto 객체 생성
-         * 4. 액세스 토큰과 리프레시 토큰을 갱신할 경우 갱신된 정보로 tokenDto 객체 생성
-         */
         memberRepository.selectPermissionsByMemberId(token.memberId!!) ?.let {
-            val tokenDto = jwtTokenProvider.generateToken(it)
-
-            if(isRegistRefreshToken(token.memberId)){
-                token.updateRefreshToken(tokenDto.refreshToken)
-            }
-            return tokenDto
+            return generateToken(it)
         } ?: throw IllegalArgumentException()
     }
 
 
     /**
-     * 리프레시 토큰 갱신 여부를 체크한다.
-     * memberId에 대한 리프레시 토큰이 없거나 만료 기간이 7일 이하로 남아있을 경우 갱신 여부를 true로 리턴한다
+     * 유효한 토큰 엔티티를 리프레시 토큰으로 조회한다.
+     *
      * @author sim
-     * @param memberId
+     * @param refreshToken
+     * @return 유효한 토큰 엔티티
+     * @throws IllegalArgumentException - 기간이 만료되거나 비정상적인 토큰일 경우 예외 발생
+     */
+    fun getValidTokenByRefreshToken(refreshToken : String) : Token {
+
+        if(!jwtTokenProvider.validateToken(refreshToken)){
+            throw IllegalArgumentException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
+        }
+
+        return tokenRepository.findByRefreshToken(refreshToken)
+    }
+
+    /**
+     * 리프레시 토큰 등록/갱신 여부를 체크한다.
+     * memberId에 대한 리프레시 토큰이 없거나 만료 기간이 7일 이하로 남아있을 경우 갱신 여부를 true로 리턴한다
+
+     * @author sim
+     * @param token
      * @return 리프레시 토큰 갱신 여부
      */
-    fun isRegistRefreshToken(memberId: Long) : Boolean{
+    fun isRegistAndUpdateRefreshToken(token: Token?) : Boolean{
 
-        val token = tokenRepository.findByMemberId(memberId)
-
-        if(token.isEmpty ||
-            token.get().expirationRefreshToken < Date().time + toLong(86400000 * 7)){
-            return true
-        }
-        return false
+        return token == null ||
+                token.expirationRefreshToken < Date().time + toLong(86400000 * 7)
     }
 }
 

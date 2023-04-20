@@ -2,7 +2,6 @@ package com.retro.retromall.token.domain.repository
 
 import com.retro.retromall.token.domain.Token
 import org.springframework.data.jpa.repository.JpaRepository
-import java.util.*
 
 /**
  * Repository For Token
@@ -15,16 +14,16 @@ interface TokenRepository :JpaRepository<Token,Long> {
      * @author sim
      *
      * @param refreshToken - 리프레시 토큰
-     * @return 토큰에 대한 Optional 객체
+     * @return 토큰 객체
      */
-    fun findByRefreshToken(refreshToken: String) : Optional<Token>
+    fun findByRefreshToken(refreshToken: String) : Token
 
     /**
      * ID에 대한 토큰 엔티티를 조회한다.
      * @author sim
      *
      * @param memberId - 유저 ID
-     * @return 토큰에 대한 Optional 객체
+     * @return 토큰 객체
      */
-    fun findByMemberId(memberId : Long) : Optional<Token>
+    fun findByMemberId(memberId : Long) : Token
 }
