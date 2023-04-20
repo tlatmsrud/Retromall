@@ -1,8 +1,8 @@
 package com.retro.common
 
-import com.retro.retromall.member.domain.Member
 import com.retro.retromall.member.dto.MemberAttributes
-import com.retro.retromall.token.dto.TokenDto
+import com.retro.retromall.token.dto.AccessTokenDto
+import com.retro.retromall.token.dto.RefreshTokenDto
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
@@ -28,10 +28,9 @@ class JwtTokenProvider(
     private val keyBytes: ByteArray? = Decoders.BASE64.decode(secretKey)
     private val key = Keys.hmacShaKeyFor(keyBytes)
 
-    fun generateToken(attributes: MemberAttributes): TokenDto {
+    fun generateAcesssToken(attributes: MemberAttributes): AccessTokenDto {
         val now = Date()
         val accessTokenExpiresIn = Date(now.time + 86400000)
-        val refreshTokenExpiresIn = Date(now.time + 2592000000)
         val accessToken = Jwts.builder()
             .setIssuer("Retromall")
             .setSubject("Retromall Jwt Token")
@@ -45,16 +44,24 @@ class JwtTokenProvider(
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 
+        return AccessTokenDto(
+            grantType = "Bearer",
+            accessToken = accessToken,
+            expirationAccessToken = accessTokenExpiresIn.time
+        )
+    }
+
+    fun generateRefreshToken(attributes: MemberAttributes): RefreshTokenDto {
+        val now = Date()
+        val refreshTokenExpiresIn = Date(now.time + 2592000000)
+
         val refreshToken = Jwts.builder()
             .setExpiration(refreshTokenExpiresIn)
             .signWith(key, SignatureAlgorithm.HS256)
             .compact()
 
-        return TokenDto(
-            grantType = "Bearer",
-            accessToken = accessToken,
+        return RefreshTokenDto(
             refreshToken = refreshToken,
-            expirationAccessToken = accessTokenExpiresIn.time,
             expirationRefreshToken = refreshTokenExpiresIn.time
         )
     }
