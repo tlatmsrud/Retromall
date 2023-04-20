@@ -47,24 +47,23 @@ class MemberController(
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "http://localhost:3000/auth/kakao")
+        headers.add(LOCATION, "http://localhost:3000/auth/kakao"+"?accessToken="+result.attributes.tokenAttributes.accessToken)
         return ResponseEntity
             .status(HttpStatus.MOVED_PERMANENTLY)
-            .headers(headers)
-            .body(result.attributes)
+            .headers(headers).build()
     }
 
     @GetMapping("/oauth/naver")
-    fun login(@ModelAttribute naverCodeDto: NaverCodeDto): ResponseEntity<LoginResponse.Attributes> {
+    fun login(@ModelAttribute naverCodeDto: NaverCodeDto): ResponseEntity<Any> {
         val result = memberReadService.findMemberByOAuth(OAuthType.NAVER, naverCodeDto)
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "http://localhost:3000/auth/naver")
+        headers.add(LOCATION, "http://localhost:3000/auth/naver"+"?accessToken="+result.attributes.tokenAttributes.accessToken)
         return ResponseEntity
             .status(HttpStatus.MOVED_PERMANENTLY)
-            .headers(headers)
-            .body(result.attributes)
+            .headers(headers).build()
+
     }
 
     private fun getRefreshCookie(refreshToken: String): ResponseCookie {
