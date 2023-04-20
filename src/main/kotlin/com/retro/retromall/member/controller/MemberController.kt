@@ -47,7 +47,7 @@ class MemberController(
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "/auth/kakao")
+        headers.add(LOCATION, "http://localhost:3000/auth/kakao")
         return ResponseEntity
             .status(HttpStatus.MOVED_PERMANENTLY)
             .headers(headers)
@@ -60,7 +60,7 @@ class MemberController(
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "/auth/naver")
+        headers.add(LOCATION, "http://localhost:3000/auth/naver")
         return ResponseEntity
             .status(HttpStatus.MOVED_PERMANENTLY)
             .headers(headers)
