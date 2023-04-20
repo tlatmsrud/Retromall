@@ -30,8 +30,8 @@ class JwtTokenProvider(
 
     fun generateToken(attributes: MemberAttributes): TokenDto {
         val now = Date()
-        val accessTokenExpiresIn = Date(now.time + 8640000)
-        val refreshTokenExpiresIn = Date(now.time + 124416000)
+        val accessTokenExpiresIn = Date(now.time + 86400000)
+        val refreshTokenExpiresIn = Date(now.time + 2592000000)
         val accessToken = Jwts.builder()
             .setIssuer("Retromall")
             .setSubject("Retromall Jwt Token")

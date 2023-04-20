@@ -14,7 +14,7 @@ class TokenTest {
     @Test
     fun updateRefreshToken() {
         val member = Member(OAuthType.NAVER, "1","tlatmsrud@naver.com","심승경","심드류카네기","imgUrl")
-        val token = Token(member, REFRESH_TOKEN, 100L)
+        val token = Token(1, REFRESH_TOKEN, 1682042373534)
 
         token.updateRefreshToken(UPDATE_REFRESH_TOKEN)
 
