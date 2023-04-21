@@ -54,7 +54,7 @@ class MemberController(
     }
 
     @GetMapping("/oauth/naver")
-    fun login(@ModelAttribute naverCodeDto: NaverCodeDto): ResponseEntity<Any> {
+    fun login(@ModelAttribute naverCodeDto: NaverCodeDto): ResponseEntity<LoginResponse.Attributes> {
         val result = memberReadService.findMemberByOAuth(OAuthType.NAVER, naverCodeDto)
 
         val headers = HttpHeaders()
