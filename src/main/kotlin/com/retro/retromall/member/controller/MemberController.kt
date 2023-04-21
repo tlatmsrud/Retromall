@@ -47,11 +47,10 @@ class MemberController(
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "http://localhost:3000/auth/kakao")
+        headers.add(LOCATION, "http://localhost:3000/auth/kakao"+"?accessToken="+result.attributes.tokenAttributes.accessToken)
         return ResponseEntity
             .status(HttpStatus.MOVED_PERMANENTLY)
-            .headers(headers)
-            .body(result.attributes)
+            .headers(headers).build()
     }
 
     @GetMapping("/oauth/naver")
@@ -60,11 +59,11 @@ class MemberController(
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "http://localhost:3000/auth/naver")
+        headers.add(LOCATION, "http://localhost:3000/auth/naver"+"?accessToken="+result.attributes.tokenAttributes.accessToken)
         return ResponseEntity
             .status(HttpStatus.MOVED_PERMANENTLY)
-            .headers(headers)
-            .body(result.attributes)
+            .headers(headers).build()
+
     }
 
     private fun getRefreshCookie(refreshToken: String): ResponseCookie {
