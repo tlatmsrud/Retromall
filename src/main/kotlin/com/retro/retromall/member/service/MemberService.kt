@@ -1,17 +1,45 @@
 package com.retro.retromall.member.service
 
+import com.retro.retromall.auth.service.OAuthService
 import com.retro.retromall.member.domain.Member
-import com.retro.retromall.member.infra.client.dto.OAuthMemberAttributes
+import com.retro.retromall.member.dto.LoginResponse
+import com.retro.retromall.member.dto.TokenAttributes
+import com.retro.retromall.auth.client.dto.OAuthMemberAttributes
+import com.retro.retromall.member.enums.OAuthType
+import com.retro.retromall.auth.client.dto.OAuthAuthorizationCode
+import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.member.support.MemberFactory
+import com.retro.retromall.token.service.TokenService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class MemberService(
+    private val oAuthService: OAuthService,
+    private val memberRepository: MemberRepository,
     private val memberFactory: MemberFactory,
+    private val tokenService: TokenService
 ) {
-    fun createMember(oAuthMemberAttributes: OAuthMemberAttributes): Member {
+    @Transactional
+    fun loginMemberWithOAuth(oAuthType: OAuthType, oAuthAuthorizationCode: OAuthAuthorizationCode): LoginResponse {
+        val oAuthMemberAttributes = oAuthService.getOAuthMemberAttributes(oAuthType, oAuthAuthorizationCode)
+
+        val member = findMemberOrCreateMemberByOAuthMemberAttributes(oAuthMemberAttributes)
+
+        val memberAttributes = memberRepository.selectPermissionsByMemberId(member.id!!)
+        val tokenDto = tokenService.generateToken(memberAttributes!!)
+
+        return LoginResponse(
+            tokenDto.refreshToken, memberAttributes, TokenAttributes(tokenDto.grantType, tokenDto.accessToken, tokenDto.expirationAccessToken)
+        )
+    }
+
+    private fun findMemberOrCreateMemberByOAuthMemberAttributes(oAuthMemberAttributes: OAuthMemberAttributes): Member {
+        return memberRepository.findByOauthId(oAuthMemberAttributes.oauthId)
+            ?: createMember(oAuthMemberAttributes)
+    }
+
+    private fun createMember(oAuthMemberAttributes: OAuthMemberAttributes): Member {
         return memberFactory.addMemberByOAuthMemberAttributes(oAuthMemberAttributes)
     }
 }

@@ -3,7 +3,7 @@ package com.retro.retromall.token.service
 import com.google.common.primitives.UnsignedInts.toLong
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.member.dto.MemberAttributes
-import com.retro.retromall.member.infra.repository.MemberRepository
+import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.token.domain.Token
 import com.retro.retromall.token.domain.repository.TokenRepository
 import com.retro.retromall.token.dto.TokenDto

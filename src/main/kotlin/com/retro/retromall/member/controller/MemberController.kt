@@ -1,10 +1,9 @@
 package com.retro.retromall.member.controller
 
-import com.retro.retromall.member.infra.client.dto.kakao.KakaoCodeDto
+import com.retro.retromall.auth.client.dto.kakao.KakaoCodeDto
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.infra.client.dto.naver.NaverCodeDto
-import com.retro.retromall.member.service.MemberReadService
+import com.retro.retromall.auth.client.dto.naver.NaverCodeDto
 import com.retro.retromall.member.service.MemberService
 import com.retro.util.HttpUtils
 import org.slf4j.Logger
@@ -24,9 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/members")
 class MemberController(
-
     private val memberService: MemberService,
-    private val memberReadService: MemberReadService,
 
     @Value("\${refresh-token-cookie.name}")
     private val refreshTokenCookieName: String,
@@ -43,7 +40,7 @@ class MemberController(
 
     @GetMapping("/oauth/kakao")
     fun login(@ModelAttribute kakaoCodeDto: KakaoCodeDto): ResponseEntity<LoginResponse.Attributes> {
-        val result = memberReadService.findMemberByOAuth(OAuthType.KAKAO, kakaoCodeDto)
+        val result = memberService.loginMemberWithOAuth(OAuthType.KAKAO, kakaoCodeDto)
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
@@ -55,7 +52,7 @@ class MemberController(
 
     @GetMapping("/oauth/naver")
     fun login(@ModelAttribute naverCodeDto: NaverCodeDto): ResponseEntity<LoginResponse.Attributes> {
-        val result = memberReadService.findMemberByOAuth(OAuthType.NAVER, naverCodeDto)
+        val result = memberService.loginMemberWithOAuth(OAuthType.NAVER, naverCodeDto)
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())

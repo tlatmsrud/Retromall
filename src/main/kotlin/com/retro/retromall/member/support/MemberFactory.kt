@@ -1,8 +1,8 @@
 package com.retro.retromall.member.support
 
 import com.retro.retromall.member.domain.Member
-import com.retro.retromall.member.infra.client.dto.OAuthMemberAttributes
-import com.retro.retromall.member.infra.repository.MemberRepository
+import com.retro.retromall.auth.client.dto.OAuthMemberAttributes
+import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.role.enums.Role
 import com.retro.retromall.role.repository.RoleRepository
 import org.springframework.stereotype.Component

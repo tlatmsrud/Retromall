@@ -1,7 +1,7 @@
 package com.retro.retromall.member.support
 
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.infra.client.OAuth2WebClient
+import com.retro.retromall.auth.client.OAuth2WebClient
 import org.springframework.stereotype.Component
 import java.util.stream.Collectors
 

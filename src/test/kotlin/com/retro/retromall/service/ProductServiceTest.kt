@@ -4,7 +4,7 @@ import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.repository.CategoryRepository
 import com.retro.retromall.member.domain.Member
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.member.infra.repository.MemberRepository
+import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.service.ProductService
 import org.junit.jupiter.api.BeforeEach
