@@ -1,4 +1,8 @@
 package com.retro.retromall.auth.client.dto
 
-abstract class OAuthAuthorizationCode {
-}
+class OAuthAuthorizationCode(
+    val code: String?,
+    val state: String?,
+    val error: String?,
+    val errorDescription: String?
+)

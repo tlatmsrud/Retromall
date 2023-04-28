@@ -34,16 +34,15 @@ class OAuth2WebClientKakaoImpl(
     private val logger: Logger = LoggerFactory.getLogger(OAuth2WebClientKakaoImpl::class.java)
 
     override fun getAccessToken(oAuthAuthorizationCode: OAuthAuthorizationCode): OAuthTokenAttributes {
-        if (oAuthAuthorizationCode !is KakaoCodeDto) throw IllegalArgumentException()
-        val kakaoTokenRequest = KakaoTokenRequest(
+        val requestDto = KakaoTokenRequestDto(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
             clientSecret = properties.clientSecret,
             redirectUri = properties.redirectUri,
             code = oAuthAuthorizationCode.code!!
         )
-        val parameters = WebClientUtils.convertParameters(kakaoTokenRequest, objectMapper)
-        logger.info("Request Kakao AccessToken")
+        val parameters = WebClientUtils.convertParameters(requestDto, objectMapper)
+
         val response = WebClientUtils.handleWebClientErrors(authWebClient.post()
             .uri { uriBuilder -> uriBuilder.path(properties.tokenUri).build() }
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -56,9 +55,9 @@ class OAuth2WebClientKakaoImpl(
     }
 
     override fun getUserInfo(attributes: OAuthTokenAttributes): OAuthMemberAttributes {
-        val kakaoUserInfoRequest =
-            KakaoUserInfoRequest(secureResource = properties.secureResource)
-        val parameters = WebClientUtils.convertParameters(kakaoUserInfoRequest, objectMapper)
+        val requestDto =
+            KakaoUserInfoRequestDto(secureResource = properties.secureResource)
+        val parameters = WebClientUtils.convertParameters(requestDto, objectMapper)
         val response = WebClientUtils.handleWebClientErrors(apiWebClient.post()
             .uri { uriBuilder -> uriBuilder.path(properties.userInfoUri).build() }
             .header(HttpHeaders.AUTHORIZATION, attributes.tokenType + " " + attributes.accessToken)

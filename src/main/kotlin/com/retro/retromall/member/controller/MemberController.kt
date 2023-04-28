@@ -1,9 +1,8 @@
 package com.retro.retromall.member.controller
 
-import com.retro.retromall.auth.client.dto.kakao.KakaoCodeDto
+import com.retro.retromall.auth.client.dto.OAuthAuthorizationCode
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.auth.client.dto.naver.NaverCodeDto
 import com.retro.retromall.member.service.MemberService
 import com.retro.util.HttpUtils
 import org.slf4j.Logger
@@ -39,8 +38,8 @@ class MemberController(
     }
 
     @GetMapping("/oauth/kakao")
-    fun login(@ModelAttribute kakaoCodeDto: KakaoCodeDto): ResponseEntity<LoginResponse.Attributes> {
-        val result = memberService.loginMemberWithOAuth(OAuthType.KAKAO, kakaoCodeDto)
+    fun loginKakao(@ModelAttribute oAuthAuthorizationCode: OAuthAuthorizationCode): ResponseEntity<LoginResponse.Attributes> {
+        val result = memberService.loginMemberWithOAuth(OAuthType.KAKAO, oAuthAuthorizationCode)
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
@@ -51,8 +50,8 @@ class MemberController(
     }
 
     @GetMapping("/oauth/naver")
-    fun login(@ModelAttribute naverCodeDto: NaverCodeDto): ResponseEntity<LoginResponse.Attributes> {
-        val result = memberService.loginMemberWithOAuth(OAuthType.NAVER, naverCodeDto)
+    fun loginNaver(@ModelAttribute oAuthAuthorizationCode: OAuthAuthorizationCode): ResponseEntity<LoginResponse.Attributes> {
+        val result = memberService.loginMemberWithOAuth(OAuthType.NAVER, oAuthAuthorizationCode)
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())

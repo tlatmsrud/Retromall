@@ -2,7 +2,7 @@ package com.retro.retromall.auth.client.dto.kakao
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class KakaoUserInfoRequest(
+class KakaoUserInfoRequestDto(
     secureResource: Boolean,
 //    scope: List<String>
 ) {

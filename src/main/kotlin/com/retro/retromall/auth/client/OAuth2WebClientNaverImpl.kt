@@ -6,8 +6,7 @@ import com.retro.retromall.auth.client.dto.OAuthMemberAttributes
 import com.retro.retromall.auth.client.dto.OAuthTokenAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.auth.client.dto.OAuthAuthorizationCode
-import com.retro.retromall.auth.client.dto.naver.NaverCodeDto
-import com.retro.retromall.auth.client.dto.naver.NaverTokenRequest
+import com.retro.retromall.auth.client.dto.naver.NaverTokenRequestDto
 import com.retro.retromall.auth.client.dto.naver.NaverTokenResponse
 import com.retro.retromall.auth.client.dto.naver.NaverUserInfoResponse
 import com.retro.retromall.auth.client.properties.NaverProperties
@@ -37,17 +36,15 @@ class OAuth2WebClientNaverImpl(
     private val logger: Logger = LoggerFactory.getLogger(OAuth2WebClientNaverImpl::class.java)
 
     override fun getAccessToken(oAuthAuthorizationCode: OAuthAuthorizationCode): OAuthTokenAttributes {
-        if (oAuthAuthorizationCode !is NaverCodeDto) throw IllegalArgumentException()
-        val naverTokenRequest = NaverTokenRequest(
+        val requestDto = NaverTokenRequestDto(
             grantType = properties.authorizationGrantType,
             clientId = properties.clientId,
             clientSecret = properties.clientSecret,
             code = oAuthAuthorizationCode.code!!,
             state = oAuthAuthorizationCode.state!!,
         )
-        val parameters = WebClientUtils.convertParameters(naverTokenRequest, objectMapper)
+        val parameters = WebClientUtils.convertParameters(requestDto, objectMapper)
 
-        logger.info("Request Naver AccessToken")
         val response = WebClientUtils.handleWebClientErrors(authWebClient.post()
             .uri { uriBuilder -> uriBuilder.path(properties.tokenUri).build() }
             .contentType(MediaType.APPLICATION_JSON)
