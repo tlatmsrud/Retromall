@@ -33,31 +33,25 @@ class MemberController(
     @Value("\${refresh-token-cookie.day}")
     private val refreshTokenCookieDay: Long
 ) {
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(MemberController::class.java)
-    }
-
-    @GetMapping("/oauth/kakao")
+    @GetMapping("/oauth/login/kakao")
     fun loginKakao(@ModelAttribute oAuthAuthorizationCode: OAuthAuthorizationCode): ResponseEntity<LoginResponse.Attributes> {
         val result = memberService.loginMemberWithOAuth(OAuthType.KAKAO, oAuthAuthorizationCode)
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "http://localhost:3000/auth/kakao"+"?accessToken="+result.attributes.tokenAttributes.accessToken)
         return ResponseEntity
-            .status(HttpStatus.MOVED_PERMANENTLY)
+            .status(HttpStatus.OK)
             .headers(headers).build()
     }
 
-    @GetMapping("/oauth/naver")
+    @GetMapping("/oauth/login/naver")
     fun loginNaver(@ModelAttribute oAuthAuthorizationCode: OAuthAuthorizationCode): ResponseEntity<LoginResponse.Attributes> {
         val result = memberService.loginMemberWithOAuth(OAuthType.NAVER, oAuthAuthorizationCode)
 
         val headers = HttpHeaders()
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
-        headers.add(LOCATION, "http://localhost:3000/auth/naver"+"?accessToken="+result.attributes.tokenAttributes.accessToken)
         return ResponseEntity
-            .status(HttpStatus.MOVED_PERMANENTLY)
+            .status(HttpStatus.OK)
             .headers(headers).build()
 
     }
