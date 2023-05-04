@@ -19,6 +19,7 @@ data class ProductResponse(
     val isLiked: Boolean,
     val hashTags: Set<String>,
     val images: Set<String>,
+    val addr: String,
     val createdAt: LocalDateTime,
     val modifiedAt: LocalDateTime
 )

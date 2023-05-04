@@ -1,5 +1,6 @@
 package com.retro.retromall.product.support
 
+import com.retro.retromall.address.service.AddressService
 import com.retro.retromall.category.service.CategoryReadService
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.Product
@@ -18,7 +19,8 @@ class ProductFactory(
     private val productRepository: ProductRepository,
     private val categoryReadService: CategoryReadService,
     private val productImageService: ProductImageService,
-    private val productHashTagService: ProductHashTagService
+    private val productHashTagService: ProductHashTagService,
+    private val addressService: AddressService
 ) {
     fun createProduct(authenticationAttributes: AuthenticationAttributes, dto: CreateProductRequest): Long {
         val product = Product(
@@ -27,7 +29,8 @@ class ProductFactory(
             amount = dto.amount,
             authorId = authenticationAttributes.id!!,
             category = categoryReadService.getCategory(dto.category).name,
-            thumbnail = dto.thumbnail
+            thumbnail = dto.thumbnail,
+            address = addressService.findById(dto.addressId)
         )
 
         productRepository.save(product)

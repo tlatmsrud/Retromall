@@ -3,9 +3,11 @@ package com.retro.retromall.product.domain.repository
 import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import com.retro.retromall.address.domain.QAddress.address
 import com.retro.retromall.member.domain.QMember.member
 import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.ProductLike
+import com.retro.retromall.product.domain.QProduct
 import com.retro.retromall.product.domain.QProduct.product
 import com.retro.retromall.product.domain.QProductLike.productLike
 import com.retro.retromall.product.dto.ProductListResponse
@@ -26,14 +28,14 @@ class ProductRepositoryCustomImpl(
 //            .`when`(productLike.memberId.eq(memberId).and(productLike.isLiked.isTrue)).then(true)
 //            .otherwise(false)
         val query = memberId?.let {
-            jpaQueryFactory.select(product, member.nickname, productLike.isLiked)
+            jpaQueryFactory.select(product, member.nickname, productLike.isLiked, product.address.addr)
                 .from(product)
                 .innerJoin(member).on(product.authorId.eq(member.id))
                 .leftJoin(productLike)
                 .on(product.id.eq(productLike.product.id).and(productLike.memberId.eq(memberId)))
                 .where(product.id.eq(productId))
                 .fetchOne()
-        } ?: jpaQueryFactory.select(product, member.nickname)
+        } ?: jpaQueryFactory.select(product, member.nickname, product.address.addr)
             .from(product)
             .innerJoin(member).on(product.authorId.eq(member.id))
             .where(product.id.eq(productId))
@@ -54,6 +56,7 @@ class ProductRepositoryCustomImpl(
                 isLiked = isLiked ?: false,
                 hashTags = getHashTags(product),
                 images = getImages(product),
+                addr = product.address.addr,
                 createdAt = product.createdAt,
                 modifiedAt = product.modifiedAt
             )
@@ -70,6 +73,7 @@ class ProductRepositoryCustomImpl(
                 product.amount,
                 product.likes,
                 product.thumbnail,
+                product.address.addr,
                 product.createdAt,
                 product.modifiedAt
             )

@@ -13,6 +13,7 @@ data class ProductListResponse(
         val amount: Int,
         val likes: Long,
         val thumbnail: String?,
+        val addr: String,
         val createdAt: LocalDateTime,
         val modifiedAt: LocalDateTime
     )
