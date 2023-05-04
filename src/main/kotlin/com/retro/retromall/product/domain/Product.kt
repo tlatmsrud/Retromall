@@ -1,5 +1,6 @@
 package com.retro.retromall.product.domain
 
+import com.retro.retromall.address.domain.Address
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -26,6 +27,9 @@ class Product(
     @Column(name = "category", length = 50)
     var category: String,
 
+    @JoinColumn(name = "address_id")
+    var addressId: Long,
+
     @Column(name = "thumbnail", length = 255)
     var thumbnail: String? = null,
 
@@ -46,14 +50,16 @@ class Product(
 
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
     var images: MutableSet<ProductImage> = mutableSetOf(),
+
 ) {
     constructor(
         title: String,
         content: String?,
         amount: Int,
         authorId: Long,
-        category: String
-    ) : this(null, title, content, amount, authorId, category)
+        category: String,
+        addressId : Long
+    ) : this(null, title, content, amount, authorId, category, addressId)
 
     fun addLikes(memberId: Long, productLike: ProductLike?) {
         productLike?.let {

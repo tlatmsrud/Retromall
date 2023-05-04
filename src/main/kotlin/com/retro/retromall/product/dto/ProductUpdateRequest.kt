@@ -16,5 +16,6 @@ data class ProductUpdateRequest (
     @NotBlank(message = "카테고리가 설정되어 있지 않습니다. 카테고리를 설정해주세요.")
     val category: String,
     val images: Set<String>,
-    val hashTags: Set<String>
+    val hashTags: Set<String>,
+    val addressId : Long?
 )
