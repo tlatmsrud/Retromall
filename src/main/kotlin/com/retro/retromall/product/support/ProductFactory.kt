@@ -30,7 +30,7 @@ class ProductFactory(
             authorId = authenticationAttributes.id!!,
             category = categoryReadService.getCategory(dto.category).name,
             thumbnail = dto.thumbnail,
-            address = addressService.findById(dto.addressId)
+            addressId = dto.addressId
         )
 
         productRepository.save(product)

@@ -17,5 +17,5 @@ data class ProductUpdateRequest (
     val category: String,
     val images: Set<String>,
     val hashTags: Set<String>,
-    val addressId : Long
+    val addressId : Long?
 )

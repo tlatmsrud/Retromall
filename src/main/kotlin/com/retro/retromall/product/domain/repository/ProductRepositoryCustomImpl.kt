@@ -28,22 +28,25 @@ class ProductRepositoryCustomImpl(
 //            .`when`(productLike.memberId.eq(memberId).and(productLike.isLiked.isTrue)).then(true)
 //            .otherwise(false)
         val query = memberId?.let {
-            jpaQueryFactory.select(product, member.nickname, productLike.isLiked, product.address.addr)
+            jpaQueryFactory.select(product, member.nickname, productLike.isLiked, address.addr)
                 .from(product)
                 .innerJoin(member).on(product.authorId.eq(member.id))
+                .innerJoin(address).on(product.addressId.eq(address.id))
                 .leftJoin(productLike)
                 .on(product.id.eq(productLike.product.id).and(productLike.memberId.eq(memberId)))
                 .where(product.id.eq(productId))
                 .fetchOne()
-        } ?: jpaQueryFactory.select(product, member.nickname, product.address.addr)
+        } ?: jpaQueryFactory.select(product, member.nickname, address.addr)
             .from(product)
             .innerJoin(member).on(product.authorId.eq(member.id))
+            .innerJoin(address).on(product.addressId.eq(address.id))
             .where(product.id.eq(productId))
             .fetchOne()
 
         query?.let {
             val product = query.get(product)!!
             val isLiked = query.get(productLike.isLiked)
+            val address = query.get(address.addr)!!
             return ProductResponse(
                 isAuthor = memberId?.let { product.isAuthor(it) } ?: false,
                 productId = product.id!!,
@@ -56,7 +59,7 @@ class ProductRepositoryCustomImpl(
                 isLiked = isLiked ?: false,
                 hashTags = getHashTags(product),
                 images = getImages(product),
-                addr = product.address.addr,
+                address = address,
                 createdAt = product.createdAt,
                 modifiedAt = product.modifiedAt
             )
@@ -73,13 +76,14 @@ class ProductRepositoryCustomImpl(
                 product.amount,
                 product.likes,
                 product.thumbnail,
-                product.address.addr,
+                address.addr,
                 product.createdAt,
                 product.modifiedAt
             )
         )
             .from(product)
             .innerJoin(member).on(product.authorId.eq(member.id))
+            .innerJoin(address).on(product.addressId.eq(address.id))
             .where(eqCategory(category))
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong() + 1)

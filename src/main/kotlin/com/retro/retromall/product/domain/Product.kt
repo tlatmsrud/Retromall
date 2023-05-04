@@ -27,9 +27,8 @@ class Product(
     @Column(name = "category", length = 50)
     var category: String,
 
-    @ManyToOne
     @JoinColumn(name = "address_id")
-    var address: Address,
+    var addressId: Long,
 
     @Column(name = "thumbnail", length = 255)
     var thumbnail: String? = null,
@@ -59,8 +58,8 @@ class Product(
         amount: Int,
         authorId: Long,
         category: String,
-        address : Address
-    ) : this(null, title, content, amount, authorId, category, address)
+        addressId : Long
+    ) : this(null, title, content, amount, authorId, category, addressId)
 
     fun addLikes(memberId: Long, productLike: ProductLike?) {
         productLike?.let {

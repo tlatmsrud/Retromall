@@ -41,7 +41,7 @@ class ProductModifier(
             category = dto.category.let { categoryReadService.getCategory(it).name },
             hashTags = dto.hashTags.let { productHashTagService.createProductHashTags(product, it) },
             images = dto.images.let { productImageService.createProductImages(it, product).toMutableSet()},
-            address = dto.addressId.let{ addressService.findById(it)}
+            addressId = dto.addressId ?: product.addressId
         )
 
         return productId
@@ -64,7 +64,7 @@ class ProductModifier(
         category: String,
         hashTags: MutableSet<ProductHashTag>,
         images: MutableSet<ProductImage>,
-        address : Address
+        addressId : Long
     ) {
         product.title = title
         product.content = content
@@ -74,7 +74,7 @@ class ProductModifier(
         product.hashTags.addAll(hashTags)
         product.images.removeIf { image -> !images.contains(image) }
         product.images.addAll(images)
-        product.address = address
+        product.addressId = addressId
         product.modifiedAt = LocalDateTime.now()
     }
 }
