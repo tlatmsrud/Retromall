@@ -41,6 +41,10 @@ class OAuth2WebClientKakaoImpl(
             redirectUri = properties.redirectUri,
             code = oAuthAuthorizationCode.code!!
         )
+
+        logger.info("======================{}============================", requestDto.redirectUri)
+        logger.info("======================{}============================", requestDto.code)
+
         val parameters = WebClientUtils.convertParameters(requestDto, objectMapper)
 
         val response = WebClientUtils.handleWebClientErrors(authWebClient.post()
