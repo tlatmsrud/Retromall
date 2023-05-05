@@ -31,9 +31,6 @@ class KakaoProperties(
     @Value("\${kakao_redirect-uri}")
     val redirectUri: String,
 
-    @Value("\${kakao_scope}")
-    val scope: List<String>,
-
     @Value("\${kakao_secure-resource}")
     val secureResource: Boolean
 )
