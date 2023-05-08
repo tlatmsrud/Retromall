@@ -41,7 +41,8 @@ class MemberController(
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
         return ResponseEntity
             .status(HttpStatus.OK)
-            .headers(headers).build()
+            .headers(headers)
+            .body(result.attributes)
     }
 
     @GetMapping("/oauth/login/naver")
@@ -52,8 +53,8 @@ class MemberController(
         headers.add(SET_COOKIE, getRefreshCookie(result.refreshToken).toString())
         return ResponseEntity
             .status(HttpStatus.OK)
-            .headers(headers).build()
-
+            .headers(headers)
+            .body(result.attributes)
     }
 
     private fun getRefreshCookie(refreshToken: String): ResponseCookie {
