@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.sql.SQLIntegrityConstraintViolationException
 
-@ControllerAdvice
+//@ControllerAdvice
 class QueryExceptionHandler {
     @ExceptionHandler(SQLIntegrityConstraintViolationException::class)
     fun sqlIntegrityConstraintViolationException() {

@@ -13,15 +13,15 @@ import javax.validation.ConstraintViolationException
 
 @ControllerAdvice
 class RestControllerAdvice {
-    @ExceptionHandler(IllegalStateException::class)
-    fun illegalStateException(e: IllegalStateException): ResponseEntity<Any> {
-        return ResponseEntity.ok(ErrorResponse(e.message))
-    }
+//    @ExceptionHandler(IllegalStateException::class)
+//    fun illegalStateException(e: IllegalStateException): ResponseEntity<Any> {
+//        return ResponseEntity.ok(ErrorResponse(e.message))
+//    }
 
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun illegalArgumentException(e: IllegalArgumentException): ResponseEntity<Any> {
-        return ResponseEntity.ok(ErrorResponse(e.message))
-    }
+//    @ExceptionHandler(IllegalArgumentException::class)
+//    fun illegalArgumentException(e: IllegalArgumentException): ResponseEntity<Any> {
+//        return ResponseEntity.ok(ErrorResponse(e.message))
+//    }
 
     @ExceptionHandler(SecurityException::class)
     fun securityException(e: SecurityException): ResponseEntity<Any> {

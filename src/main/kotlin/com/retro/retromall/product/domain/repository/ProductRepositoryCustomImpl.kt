@@ -25,22 +25,47 @@ class ProductRepositoryCustomImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : ProductRepositoryCustom {
     override fun selectProduct(productId: Long, memberId: Long?): ProductResponse {
-        val tuples = memberId?.let {
+        return getProductByMultipleRequest(memberId, productId)
+    }
+
+    private fun getProductByMultipleRequest(memberId: Long?, productId: Long): ProductResponse {
+        val tuple = memberId?.let {
             jpaQueryFactory.select(product, member.nickname, productLike.isLiked, address.addr)
                 .from(product)
                 .innerJoin(member).on(product.authorId.eq(member.id))
                 .innerJoin(address).on(product.addressId.eq(address.id))
-                .leftJoin(productLike)
-                .on(product.id.eq(productLike.product.id).and(productLike.memberId.eq(memberId)))
+                .leftJoin(productLike).on(product.id.eq(productLike.product.id).and(productLike.memberId.eq(it)))
+                .where(product.id.eq(productId))
+                .fetchOne()
+        } ?: jpaQueryFactory.select(product, member.nickname, address.addr)
+            .from(product)
+            .innerJoin(member).on(product.authorId.eq(member.id))
+            .innerJoin(address).on(product.addressId.eq(address.id))
+            .where(product.id.eq(productId))
+            .fetchOne()
+
+        return tuple?.let {
+            createProductResponse(
+                memberId, tuple.get(product)!!, tuple.get(member.nickname)!!, tuple.get(productLike.isLiked),
+                getHashTags(tuple.get(product)!!), getImages(tuple.get(product)!!), tuple.get(address.addr)!!
+            )
+        } ?: throw IllegalStateException("요청하신 결과가 없습니다.")
+
+    }
+
+    private fun getProductByOncePerRequest(memberId: Long?, productId: Long): ProductResponse {
+        val tuples = memberId?.let {
+            jpaQueryFactory.select(
+                product, member.nickname, productLike.isLiked, address.addr, productHashTag.id.hashTagName, productImage.id.url)
+                .from(product)
+                .innerJoin(member).on(product.authorId.eq(member.id))
+                .innerJoin(address).on(product.addressId.eq(address.id))
+                .innerJoin(productHashTag).on(product.eq(productHashTag.product))
+                .innerJoin(productImage).on(product.eq(productImage.product))
+                .leftJoin(productLike).on(product.id.eq(productLike.product.id).and(productLike.memberId.eq(it)))
                 .where(product.id.eq(productId))
                 .fetch()
-        } ?: jpaQueryFactory.select(
-            product,
-            member.nickname,
-            address.addr,
-            productHashTag.id.hashTagName,
-            productImage.id.url
-        )
+        } ?: jpaQueryFactory.select(product, member.nickname, address.addr, productHashTag.id.hashTagName, productImage.id.url)
             .from(product)
             .innerJoin(member).on(product.authorId.eq(member.id))
             .innerJoin(productHashTag).on(product.eq(productHashTag.product))
@@ -50,30 +75,43 @@ class ProductRepositoryCustomImpl(
             .fetch()
 
         if (tuples.isNotEmpty()) {
-            val product = tuples[0].get(product)
+            val product = tuples[0].get(product)!!
+            val author = tuples[0].get(member.nickname)!!
             val isLiked = tuples[0].get(productLike.isLiked)
-            val address = tuples[0].get(address.addr)
+            val address = tuples[0].get(address.addr)!!
             val hashTags = tuples.mapNotNull { it.get(productHashTag.id.hashTagName) }.toSet()
             val images = tuples.mapNotNull { it.get(productImage.id.url) }.toSet()
-            return ProductResponse(
-                isAuthor = memberId?.let { product!!.isAuthor(it) } ?: false,
-                productId = product!!.id!!,
-                title = product.title,
-                content = product.content,
-                amount = product.amount,
-                author = tuples[0].get(member.nickname)!!,
-                category = product.category,
-                likes = product.likes,
-                isLiked = isLiked ?: false,
-                hashTags = hashTags,
-                images = images,
-                address = address!!,
-                createdAt = product.createdAt,
-                modifiedAt = product.modifiedAt
-            )
+            return createProductResponse(memberId, product, author, isLiked, hashTags, images, address)
         }
 
-        throw IllegalArgumentException("요청하신 결과가 없습니다.")
+        throw IllegalStateException("요청하신 결과가 없습니다.")
+    }
+
+    private fun createProductResponse(
+        memberId: Long?,
+        product: Product,
+        author: String,
+        isLiked: Boolean?,
+        hashTags: Set<String>,
+        images: Set<String>,
+        address: String
+    ): ProductResponse {
+        return ProductResponse(
+            isAuthor = memberId?.let { product.isAuthor(it) } ?: false,
+            productId = product.id!!,
+            title = product.title,
+            content = product.content,
+            amount = product.amount,
+            author = author,
+            category = product.category,
+            likes = product.likes,
+            isLiked = isLiked ?: false,
+            hashTags = hashTags,
+            images = images,
+            address = address,
+            createdAt = product.createdAt,
+            modifiedAt = product.modifiedAt
+        )
     }
 
     override fun selectProductList(category: String?, pageable: Pageable): ProductListResponse {
