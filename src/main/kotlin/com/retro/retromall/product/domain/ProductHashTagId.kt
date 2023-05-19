@@ -6,18 +6,15 @@ import javax.persistence.Embeddable
 
 @Embeddable
 class ProductHashTagId(
-    productId: Long,
-    tag: String
-) : Serializable{
+    @Column(name = "product_id", nullable = false)
+    val productId: Long,
+
+    @Column(name = "hashtag_name", nullable = false)
+    val hashTagName: String
+) : Serializable {
     companion object {
         const val serialVersionUID = -421954266432L
     }
-
-    @Column(name = "product_id", nullable = false)
-    val productId: Long = productId
-
-    @Column(name = "hashtag_name", nullable = false)
-    val hashTagName: String = tag
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

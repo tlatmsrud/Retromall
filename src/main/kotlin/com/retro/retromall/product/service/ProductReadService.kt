@@ -19,7 +19,6 @@ class ProductReadService(
         private val logger: Logger = LoggerFactory.getLogger(ProductReadService::class.java)
     }
     fun getProduct(authenticationAttributes: AuthenticationAttributes, productId: Long): ProductResponse {
-        logger.info("{}", authenticationAttributes.id)
         return productRepository.selectProduct(productId, authenticationAttributes.id)
     }
 

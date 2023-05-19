@@ -1,7 +1,5 @@
 package com.retro.retromall.product.support
 
-import com.retro.retromall.address.domain.Address
-import com.retro.retromall.address.service.AddressService
 import com.retro.retromall.category.service.CategoryReadService
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.Product
@@ -24,8 +22,6 @@ class ProductModifier(
     private val productImageService: ProductImageService,
     private val productHashTagService: ProductHashTagService,
     private val productAuthenticationService: AuthenticationService,
-    private val addressService: AddressService
-
 ) {
     fun updateProduct(authenticationAttributes: AuthenticationAttributes, productId: Long, dto: ProductUpdateRequest): Long {
         val product =

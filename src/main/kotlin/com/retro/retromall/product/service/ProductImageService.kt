@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service
 class ProductImageService(
 ) {
     fun createProductImages(images: Set<String>, product: Product): List<ProductImage> {
-        return images.map { ProductImage(imageUrl = it, product = product) }
+        return images.map { ProductImage(image = it, product = product) }
     }
 }

@@ -5,20 +5,15 @@ import javax.persistence.*
 
 @Embeddable
 class ProductImageId(
-    productId: Long,
-    url: String,
+    @Column(name = "product_id", updatable = false, nullable = false)
+    val productId: Long,
+
+    @Column(name = "image_url", updatable = true, nullable = false)
+    val url: String,
 ): Serializable {
     companion object {
         const val serialVersionUID = -2414832548258431L
     }
-
-    @Column(name = "product_id", updatable = false, nullable = false)
-    val productId: Long = productId
-
-    @Column(name = "url", updatable = true, nullable = false)
-    var url: String = url
-        private set
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -26,9 +21,7 @@ class ProductImageId(
         other as ProductImageId
 
         if (productId != other.productId) return false
-        if (url != other.url) return false
-
-        return true
+        return url == other.url
     }
 
     override fun hashCode(): Int {
