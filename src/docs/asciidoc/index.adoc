@@ -1,8 +1,41 @@
 = Retromall API 명세서
 
-== 토큰 API
+== 1. 제품 API
 
-=== 액세스 토큰 갱신
+=== 1.1. 제품 조회
+==== Request
+include::{snippets}/readProductByValidId/http-request.adoc[]
+==== Response
+include::{snippets}/readProductByValidId/http-response.adoc[]
+
+=== 1.2. 제품 등록
+==== Request
+include::{snippets}/createProductByValidRequest/http-request.adoc[]
+==== Response
+include::{snippets}/createProductByValidRequest/http-response.adoc[]
+
+=== 1.3. 제품 수정
+==== Request
+include::{snippets}/updateProductByValidRequest/http-request.adoc[]
+==== Response
+include::{snippets}/updateProductByValidRequest/http-response.adoc[]
+
+=== 1.4. 제품 삭제
+==== Request
+include::{snippets}/deleteProductByValidId/http-request.adoc[]
+==== Response
+include::{snippets}/deleteProductByValidId/http-response.adoc[]
+
+== 2. 주소 API
+===  2.1. 주소 검색
+==== Request
+include::{snippets}/searchAddressByValidSearchWord/http-request.adoc[]
+==== Response
+include::{snippets}/searchAddressByValidSearchWord/http-response.adoc[]
+
+== 3. 토큰 API
+
+=== 3.1. 액세스 토큰 갱신
 ==== HttpRequest
 include::{snippets}/updateToken/http-request.adoc[]
 ==== HttpResponse

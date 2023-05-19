@@ -40,6 +40,7 @@ class ProductModifier(
             amount = dto.amount,
             category = dto.category.let { categoryReadService.getCategory(it).name },
             hashTags = dto.hashTags.let { productHashTagService.createProductHashTags(product, it) },
+            thumbnail = dto.thumbnail,
             images = dto.images.let { productImageService.createProductImages(it, product).toMutableSet()},
             addressId = dto.addressId ?: product.addressId
         )
@@ -63,6 +64,7 @@ class ProductModifier(
         amount: Int,
         category: String,
         hashTags: MutableSet<ProductHashTag>,
+        thumbnail : String,
         images: MutableSet<ProductImage>,
         addressId : Long
     ) {
@@ -74,6 +76,7 @@ class ProductModifier(
         product.hashTags.addAll(hashTags)
         product.images.removeIf { image -> !images.contains(image) }
         product.images.addAll(images)
+        product.thumbnail = thumbnail
         product.addressId = addressId
         product.modifiedAt = LocalDateTime.now()
     }
