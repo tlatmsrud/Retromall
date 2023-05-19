@@ -43,15 +43,16 @@ class ProductControllerTest {
 
     private lateinit var mockMvc: MockMvc
 
+
     private fun getValidCreateRequest() : CreateProductRequest {
         return CreateProductRequest(
-            "title", "content", 1, "category", "thumbnail", setOf("image"), setOf("hashTag")
+            "title", "content", 1, "category", "thumbnail", setOf("image"), setOf("hashTag"),1111000000
         )
     }
 
     private fun getInvalidCreateRequest() : CreateProductRequest {
         return CreateProductRequest(
-            "", "content", 1, "category", "thumbnail", setOf("image"), setOf("hashTag")
+            "", "content", 1, "category", "thumbnail", setOf("image"), setOf("hashTag"), 1111000000
         )
     }
 
