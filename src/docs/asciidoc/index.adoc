@@ -1,5 +1,12 @@
 = Retromall API 명세서
 
+== 1. 주소 API
+=== 1.1 주소 검색
+==== Request
+include::{snippets}/searchAddressByValidSearchWord/http-request.adoc[]
+==== Response
+include::{snippets}/searchAddressByValidSearchWord/http-response.adoc[]
+
 == 토큰 API
 
 === 액세스 토큰 갱신
