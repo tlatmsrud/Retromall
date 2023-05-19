@@ -9,6 +9,7 @@ import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.ProductLike
 import com.retro.retromall.product.domain.QProduct
 import com.retro.retromall.product.domain.QProduct.product
+import com.retro.retromall.product.domain.QProductHashTag.productHashTag
 import com.retro.retromall.product.domain.QProductLike.productLike
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse
@@ -24,9 +25,6 @@ class ProductRepositoryCustomImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : ProductRepositoryCustom {
     override fun selectProduct(productId: Long, memberId: Long?): ProductResponse {
-//        val likeExpression = CaseBuilder()
-//            .`when`(productLike.memberId.eq(memberId).and(productLike.isLiked.isTrue)).then(true)
-//            .otherwise(false)
         val query = memberId?.let {
             jpaQueryFactory.select(product, member.nickname, productLike.isLiked, address.addr)
                 .from(product)
@@ -39,6 +37,7 @@ class ProductRepositoryCustomImpl(
         } ?: jpaQueryFactory.select(product, member.nickname, address.addr)
             .from(product)
             .innerJoin(member).on(product.authorId.eq(member.id))
+            .innerJoin(productHashTag).on(product.eq(productHashTag.product))
             .innerJoin(address).on(product.addressId.eq(address.id))
             .where(product.id.eq(productId))
             .fetchOne()
@@ -113,7 +112,7 @@ class ProductRepositoryCustomImpl(
     }
 
     private fun getHashTags(product: Product): Set<String> {
-        return product.hashTags.stream().map { it.hashTag }.collect(Collectors.toSet())
+        return product.hashTags.stream().map { it.id.hashTagName }.collect(Collectors.toSet())
     }
 
     private fun getImages(product: Product): Set<String> {

@@ -62,7 +62,7 @@ class MemberAttributeResolver(
     }
 
     private fun resolveToken(authorization: String): String? {
-        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer")) {
+        if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer") && 7 < authorization.length) {
             return authorization.substring(7)
         }
 

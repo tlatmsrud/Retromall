@@ -16,8 +16,8 @@ class ProductHashTagId(
     @Column(name = "product_id", nullable = false)
     val productId: Long = productId
 
-    @Column(name = "hashtag_id", nullable = false)
-    val tag: String = tag
+    @Column(name = "hashtag_name", nullable = false)
+    val hashTagName: String = tag
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -26,14 +26,12 @@ class ProductHashTagId(
         other as ProductHashTagId
 
         if (productId != other.productId) return false
-        if (tag != other.tag) return false
-
-        return true
+        return hashTagName == other.hashTagName
     }
 
     override fun hashCode(): Int {
         var result = productId.hashCode()
-        result = 31 * result + tag.hashCode()
+        result = 31 * result + hashTagName.hashCode()
         return result
     }
 }
