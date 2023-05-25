@@ -23,6 +23,7 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.SliceImpl
 import org.springframework.data.domain.Sort
@@ -72,21 +73,20 @@ class ProductReadControllerTest{
         )
     }
 
-    private fun generateProductResponseList() : ProductListResponse {
-        return ProductListResponse(
-            data = SliceImpl(listOf(
-                    ProductListResponse.Data( 1, "테스터", "제품1", 100000, 0, null, "서울특별시",
-                        LocalDateTime.now(), LocalDateTime.now()),
-                    ProductListResponse.Data( 2, "테스터", "제품2", 1000, 1, null, "서울특별시 중랑구",
-                        LocalDateTime.now(), LocalDateTime.now())
-                    )
-                , Pageable.ofSize(20)
-                , false)
+    private fun generateProductListResponse() : ProductListResponse{
+        val content = listOf(
+            ProductListResponse.Data( 2, "테스터", "수정제품", 100000, 0, null,
+                "서울특별시", LocalDateTime.now(), LocalDateTime.now()),
+            ProductListResponse.Data( 1, "테스터1", "수정제품1", 10000, 0, null,
+                "서울특별시", LocalDateTime.now(), LocalDateTime.now())
         )
+
+        return ProductListResponse(data = SliceImpl(content, generatePageable(), true))
+
     }
 
-    private fun generatePageable(@PageableDefault(page = 0, sort = ["createdAt"], direction = Sort.Direction.DESC) pageable: Pageable) : Pageable{
-        return pageable
+    private fun generatePageable() : Pageable {
+        return PageRequest.of(0,20, Sort.Direction.DESC, "createdAt")
     }
 
     @BeforeEach
@@ -113,6 +113,10 @@ class ProductReadControllerTest{
 
         given(productReadService.getProduct(authenticationAttributes,100)).willThrow(
             IllegalArgumentException("요청하신 결과가 없습니다.")
+        )
+
+        given(productReadService.getProductList("PS2", generatePageable())).willReturn(
+            generateProductListResponse()
         )
 
     }
@@ -147,19 +151,23 @@ class ProductReadControllerTest{
             any(AuthenticationAttributes::class.java), eq(100L))
     }
 
- /*   @Test
+    @Test
     @DisplayName("유효 카테고리에 대한 제품 리스트 조회")
     fun getProductListByValidCategory(){
         mockMvc.perform(
-            MockMvcRequestBuilders.patch("/api/products/{id}",1)
+            MockMvcRequestBuilders.get("/api/products")
                 .header("Authorization","Bearer TestToken")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("category", "PS2")
         )
             .andExpect(status().isOk)
+            .andExpect(content().string(containsString("수정제품")))
+            .andExpect(content().string(containsString("pageable")))
+            .andExpect(content().string(containsString("content")))
+
             .andDo(MockMvcRestDocumentation.document("getProductListByValidCategory"))
     }
-    */
+
 
     private fun <T> any(type: Class<T>): T = Mockito.any(type)
 
