@@ -4,14 +4,14 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "tb_product_image")
-class ProductImage(
+class ProductImageEntity(
     @EmbeddedId
-    val id: ProductImageId,
+    val id: ProductImageEntityId,
 
     @MapsId("productId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    var product: Product,
+    var productEntity: ProductEntity,
 ) {
-    constructor(product: Product, image: String) : this(ProductImageId(product.id!!, image), product)
+    constructor(productEntity: ProductEntity, image: String) : this(ProductImageEntityId(productEntity.id!!, image), productEntity)
 }

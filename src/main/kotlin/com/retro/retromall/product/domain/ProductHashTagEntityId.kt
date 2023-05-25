@@ -5,7 +5,7 @@ import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class ProductHashTagId(
+class ProductHashTagEntityId(
     @Column(name = "product_id", nullable = false)
     val productId: Long,
 
@@ -20,7 +20,7 @@ class ProductHashTagId(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ProductHashTagId
+        other as ProductHashTagEntityId
 
         if (productId != other.productId) return false
         return hashTagName == other.hashTagName

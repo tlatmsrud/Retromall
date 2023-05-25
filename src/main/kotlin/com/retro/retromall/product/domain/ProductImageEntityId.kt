@@ -4,7 +4,7 @@ import java.io.Serializable
 import javax.persistence.*
 
 @Embeddable
-class ProductImageId(
+class ProductImageEntityId(
     @Column(name = "product_id", updatable = false, nullable = false)
     val productId: Long,
 
@@ -18,7 +18,7 @@ class ProductImageId(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ProductImageId
+        other as ProductImageEntityId
 
         if (productId != other.productId) return false
         return url == other.url

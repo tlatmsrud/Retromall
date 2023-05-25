@@ -1,10 +1,9 @@
 package com.retro.retromall.service
 
-import com.retro.retromall.hashtag.domain.HashTag
+import com.retro.retromall.hashtag.domain.HashTagEntity
 import com.retro.retromall.hashtag.service.HashTagService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.boot.test.context.SpringBootTest
@@ -31,7 +30,7 @@ class HashTagServiceTest {
     fun findOrCreateHashTagsWithNewTags() {
         //given
         val tagNames = setOf("tag1", "tag2", "tag3")
-        val tags = tagNames.map { HashTag(it) }
+        val tags = tagNames.map { HashTagEntity(it) }
         testEntityManager.persistAndFlush(tags)
 
         //when

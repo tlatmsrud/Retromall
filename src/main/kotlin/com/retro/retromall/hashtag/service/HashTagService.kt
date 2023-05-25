@@ -1,6 +1,6 @@
 package com.retro.retromall.hashtag.service
 
-import com.retro.retromall.hashtag.domain.HashTag
+import com.retro.retromall.hashtag.domain.HashTagEntity
 import com.retro.retromall.hashtag.domain.repository.HashTagRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,15 +16,15 @@ class HashTagService(
         val existingHashTags = hashTagRepository.findAllByNameIn(hashtagNames)
         val existingHashTagNames = existingHashTags.map { it.name }.toSet()
 
-        val newHashTags = hashtagNames.stream().filter { !existingHashTagNames.contains(it) }
-            .map { HashTag(it) }.toList()
+        val newHashTagEntities = hashtagNames.stream().filter { !existingHashTagNames.contains(it) }
+            .map { HashTagEntity(it) }.toList()
 
         val allHashTags = mutableSetOf<String>()
         allHashTags.addAll(existingHashTags.stream().map { it.name }.toList())
-        allHashTags.addAll(newHashTags.stream().map { it.name }.toList())
+        allHashTags.addAll(newHashTagEntities.stream().map { it.name }.toList())
 
-        if (newHashTags.isNotEmpty())
-            hashTagRepository.saveAll(newHashTags)
+        if (newHashTagEntities.isNotEmpty())
+            hashTagRepository.saveAll(newHashTagEntities)
 
         return allHashTags
     }

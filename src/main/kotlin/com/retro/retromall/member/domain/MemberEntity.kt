@@ -1,12 +1,12 @@
 package com.retro.retromall.member.domain
 
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.role.domain.Role
+import com.retro.retromall.authorization.domain.RoleEntity
 import javax.persistence.*
 
 @Entity
 @Table(name = "tb_member")
-class Member(
+class MemberEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false, updatable = false)
@@ -31,8 +31,8 @@ class Member(
     @Column(name = "profile_image_url", length = 255)
     var profileImageUrl: String?,
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val roles: MutableSet<MemberRole>
+    @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val roles: MutableSet<MemberRoleEntity>
 ) {
     constructor(
         oAuthType: OAuthType,
@@ -45,7 +45,7 @@ class Member(
         null, oAuthType, oauthId, email, name, nickname, profileImageUrl, mutableSetOf()
     )
 
-    fun addRole(role: Role) {
-        this.roles.add(MemberRole(role, this))
+    fun addRole(roleEntity: RoleEntity) {
+        this.roles.add(MemberRoleEntity(roleEntity, this))
     }
 }

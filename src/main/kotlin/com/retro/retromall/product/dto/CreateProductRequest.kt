@@ -1,6 +1,5 @@
 package com.retro.retromall.product.dto
 
-import com.retro.retromall.address.domain.Address
 import javax.validation.constraints.NotBlank
 
 data class CreateProductRequest(

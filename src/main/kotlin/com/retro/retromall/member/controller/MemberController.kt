@@ -5,11 +5,8 @@ import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberService
 import com.retro.util.HttpUtils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpHeaders.LOCATION
 import org.springframework.http.HttpHeaders.SET_COOKIE
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie

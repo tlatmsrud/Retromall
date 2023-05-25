@@ -1,6 +1,6 @@
 package com.retro.retromall.service
 
-import com.retro.retromall.hashtag.domain.HashTag
+import com.retro.retromall.hashtag.domain.HashTagEntity
 import com.retro.retromall.hashtag.domain.repository.HashTagRepository
 import com.retro.retromall.hashtag.service.HashTagService
 import org.junit.jupiter.api.Test
@@ -26,7 +26,7 @@ class HashTagServiceMockTest {
     fun findOrCreateHashTagsWithNewTags() {
         //given
         val tagNames = setOf("tag1", "tag2", "tag3", "tag4")
-        val existingTags = setOf(HashTag("tag1"), HashTag("tag2"))
+        val existingTags = setOf(HashTagEntity("tag1"), HashTagEntity("tag2"))
         Mockito.`when`(hashTagRepository.findAllByNameIn(tagNames)).thenReturn(existingTags)
 
         //when
@@ -44,7 +44,7 @@ class HashTagServiceMockTest {
     fun findOrCreateHashTagsExistingTags() {
         //given
         val tagNames = setOf("tag1", "tag2", "tag3", "tag4")
-        val existingTags = setOf(HashTag("tag1"), HashTag("tag2"), HashTag("tag3"), HashTag("tag4"))
+        val existingTags = setOf(HashTagEntity("tag1"), HashTagEntity("tag2"), HashTagEntity("tag3"), HashTagEntity("tag4"))
         Mockito.`when`(hashTagRepository.findAllByNameIn(tagNames)).thenReturn(existingTags)
 
         //when

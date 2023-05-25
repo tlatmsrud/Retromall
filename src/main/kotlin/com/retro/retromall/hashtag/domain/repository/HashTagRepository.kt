@@ -1,8 +1,8 @@
 package com.retro.retromall.hashtag.domain.repository
 
-import com.retro.retromall.hashtag.domain.HashTag
+import com.retro.retromall.hashtag.domain.HashTagEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface HashTagRepository : JpaRepository<HashTag, String> {
-    fun findAllByNameIn(hashtags: Set<String>): Set<HashTag>
+interface HashTagRepository : JpaRepository<HashTagEntity, String> {
+    fun findAllByNameIn(hashtags: Set<String>): Set<HashTagEntity>
 }

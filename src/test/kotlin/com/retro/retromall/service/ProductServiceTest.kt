@@ -1,8 +1,8 @@
 package com.retro.retromall.service
 
-import com.retro.retromall.category.domain.Category
+import com.retro.retromall.category.domain.CategoryEntity
 import com.retro.retromall.category.domain.repository.CategoryRepository
-import com.retro.retromall.member.domain.Member
+import com.retro.retromall.member.domain.MemberEntity
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.product.domain.repository.ProductRepository
@@ -33,7 +33,7 @@ class ProductServiceTest(
     @BeforeEach
     @Transactional
     fun init() {
-        memberRepository.save(Member(OAuthType.KAKAO, "testestest", "", "", "", ""))
-        categoryRepository.save(Category(parent = null, name = "PC", id = ""))
+        memberRepository.save(MemberEntity(OAuthType.KAKAO, "testestest", "", "", "", ""))
+        categoryRepository.save(CategoryEntity(parent = null, name = "PC", id = ""))
     }
 }

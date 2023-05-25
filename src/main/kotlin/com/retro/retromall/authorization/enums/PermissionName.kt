@@ -1,4 +1,4 @@
-package com.retro.retromall.role.enums
+package com.retro.retromall.authorization.enums
 
 enum class PermissionName {
     CREATE_PRODUCT,

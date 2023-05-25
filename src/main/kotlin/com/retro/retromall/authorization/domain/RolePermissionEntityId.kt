@@ -1,7 +1,7 @@
-package com.retro.retromall.role.domain
+package com.retro.retromall.authorization.domain
 
-import com.retro.retromall.role.enums.PermissionName
-import com.retro.retromall.role.enums.Role
+import com.retro.retromall.authorization.enums.PermissionName
+import com.retro.retromall.authorization.enums.Role
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable
@@ -9,7 +9,7 @@ import javax.persistence.EnumType
 import javax.persistence.Enumerated
 
 @Embeddable
-class RolePermissionKey(
+class RolePermissionEntityId(
     @Column(name = "role_name", nullable = false)
     @Enumerated(EnumType.STRING)
     val roleName: Role,
@@ -22,7 +22,7 @@ class RolePermissionKey(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as RolePermissionKey
+        other as RolePermissionEntityId
 
         if (roleName != other.roleName) return false
         return permissionName == other.permissionName

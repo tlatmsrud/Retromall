@@ -1,14 +1,11 @@
 package com.retro.retromall.service
 
-import com.retro.retromall.member.dto.AuthenticationAttributes
-import com.retro.retromall.product.domain.Product
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.service.ProductLikeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
-import org.springframework.test.util.AssertionErrors.assertEquals
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest(properties = ["spring.profiles.active=local"])

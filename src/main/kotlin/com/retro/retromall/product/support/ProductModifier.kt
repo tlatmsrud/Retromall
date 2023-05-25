@@ -2,9 +2,9 @@ package com.retro.retromall.product.support
 
 import com.retro.retromall.category.service.CategoryReadService
 import com.retro.retromall.member.dto.AuthenticationAttributes
-import com.retro.retromall.product.domain.Product
-import com.retro.retromall.product.domain.ProductHashTag
-import com.retro.retromall.product.domain.ProductImage
+import com.retro.retromall.product.domain.ProductEntity
+import com.retro.retromall.product.domain.ProductHashTagEntity
+import com.retro.retromall.product.domain.ProductImageEntity
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.ProductUpdateRequest
 import com.retro.retromall.product.service.ProductHashTagService
@@ -30,7 +30,7 @@ class ProductModifier(
             throw IllegalStateException("해당 상품을 수정할 권한이 없습니다.")
 
         modifyProduct(
-            product = product,
+            productEntity = product,
             title = dto.title ?: product.title,
             content = dto.content ?: product.content,
             amount = dto.amount,
@@ -54,26 +54,26 @@ class ProductModifier(
     }
 
     private fun modifyProduct(
-        product: Product,
+        productEntity: ProductEntity,
         title: String,
         content: String?,
         amount: Int,
         category: String,
-        hashTags: MutableSet<ProductHashTag>,
+        hashTags: MutableSet<ProductHashTagEntity>,
         thumbnail : String,
-        images: MutableSet<ProductImage>,
+        images: MutableSet<ProductImageEntity>,
         addressId : Long
     ) {
-        product.title = title
-        product.content = content
-        product.amount = amount
-        product.category = category
-        product.hashTags.removeIf { hashTag -> !hashTags.contains(hashTag) }
-        product.hashTags.addAll(hashTags)
-        product.images.removeIf { image -> !images.contains(image) }
-        product.images.addAll(images)
-        product.thumbnail = thumbnail
-        product.addressId = addressId
-        product.modifiedAt = LocalDateTime.now()
+        productEntity.title = title
+        productEntity.content = content
+        productEntity.amount = amount
+        productEntity.category = category
+        productEntity.hashTags.removeIf { hashTag -> !hashTags.contains(hashTag) }
+        productEntity.hashTags.addAll(hashTags)
+        productEntity.images.removeIf { image -> !images.contains(image) }
+        productEntity.images.addAll(images)
+        productEntity.thumbnail = thumbnail
+        productEntity.addressId = addressId
+        productEntity.modifiedAt = LocalDateTime.now()
     }
 }

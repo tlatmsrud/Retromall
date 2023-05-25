@@ -1,12 +1,11 @@
 package com.retro.retromall.product.domain
 
-import com.retro.retromall.address.domain.Address
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "tb_product")
-class Product(
+class ProductEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -42,16 +41,16 @@ class Product(
     @Column(name = "modified_at", nullable = false)
     var modifiedAt: LocalDateTime = LocalDateTime.now(),
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
-    var productLikes: MutableList<ProductLike> = mutableListOf(),
+    @OneToMany(mappedBy = "productEntity", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    var productLikeEntities: MutableList<ProductLikeEntity> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
-    var hashTags: MutableSet<ProductHashTag> = mutableSetOf(),
+    @OneToMany(mappedBy = "productEntity", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    var hashTags: MutableSet<ProductHashTagEntity> = mutableSetOf(),
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
-    var images: MutableSet<ProductImage> = mutableSetOf(),
+    @OneToMany(mappedBy = "productEntity", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    var images: MutableSet<ProductImageEntity> = mutableSetOf(),
 
-) {
+    ) {
     constructor(
         title: String,
         content: String?,
@@ -61,20 +60,20 @@ class Product(
         addressId : Long
     ) : this(null, title, content, amount, authorId, category, addressId)
 
-    fun addLikes(memberId: Long, productLike: ProductLike?) {
-        productLike?.let {
+    fun addLikes(memberId: Long, productLikeEntity: ProductLikeEntity?) {
+        productLikeEntity?.let {
             if (!it.isLiked) {
                 it.isLiked = true
                 this.likes++
             }
         } ?: run {
-            this.productLikes.add(ProductLike(this, memberId))
+            this.productLikeEntities.add(ProductLikeEntity(this, memberId))
             this.likes++
         }
     }
 
-    fun removeLikes(productLike: ProductLike?) {
-        productLike?.let {
+    fun removeLikes(productLikeEntity: ProductLikeEntity?) {
+        productLikeEntity?.let {
             if (it.isLiked) {
                 it.isLiked = false
                 this.likes--
@@ -90,7 +89,7 @@ class Product(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Product
+        other as ProductEntity
 
         return id == other.id
     }

@@ -1,6 +1,6 @@
 package com.retro.retromall.repository
 
-import com.retro.retromall.hashtag.domain.HashTag
+import com.retro.retromall.hashtag.domain.HashTagEntity
 import com.retro.retromall.hashtag.domain.repository.HashTagRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +13,7 @@ class HashTagRepositoryTest(
 ) {
     @BeforeEach
     fun init() {
-        val hashtag = HashTag(name = "PS")
+        val hashtag = HashTagEntity(name = "PS")
         hashTagRepository.save(hashtag)
     }
 }

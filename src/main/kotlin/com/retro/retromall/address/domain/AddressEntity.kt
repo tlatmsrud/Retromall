@@ -7,7 +7,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name="tb_address")
-class Address(
+class AddressEntity(
 
     @Id
     @Column(name = "id")

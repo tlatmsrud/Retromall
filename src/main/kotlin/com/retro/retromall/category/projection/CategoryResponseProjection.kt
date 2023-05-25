@@ -1,8 +1,8 @@
 package com.retro.retromall.category.projection
 
-import com.retro.retromall.category.domain.Category
+import com.retro.retromall.category.domain.CategoryEntity
 
 interface CategoryResponseProjection {
     val name: String
-    val lowerCategoryList: MutableList<Category>
+    val lowerCategoryListEntity: MutableList<CategoryEntity>
 }

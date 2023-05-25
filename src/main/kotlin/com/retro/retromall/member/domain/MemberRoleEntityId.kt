@@ -1,11 +1,11 @@
 package com.retro.retromall.member.domain
 
-import com.retro.retromall.role.enums.Role
+import com.retro.retromall.authorization.enums.Role
 import java.io.Serializable
 import javax.persistence.*
 
 @Embeddable
-class MemberRoleKey(
+class MemberRoleEntityId(
     @Column(name = "role_name", nullable = false)
     @Enumerated(EnumType.STRING)
     val roleName: Role,
@@ -17,7 +17,7 @@ class MemberRoleKey(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as MemberRoleKey
+        other as MemberRoleEntityId
 
         if (roleName != other.roleName) return false
         return memberId == other.memberId

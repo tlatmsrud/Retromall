@@ -1,6 +1,6 @@
 package com.retro.retromall.product.domain.repository
 
-import com.retro.retromall.product.domain.ProductLike
+import com.retro.retromall.product.domain.ProductLikeEntity
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse
 import org.springframework.data.domain.Pageable
@@ -8,5 +8,5 @@ import org.springframework.data.domain.Pageable
 interface ProductRepositoryCustom {
     fun selectProduct(productId: Long, memberId: Long?): ProductResponse
     fun selectProductList(category: String?, pageable: Pageable): ProductListResponse
-    fun selectProductLike(productId: Long, memberId: Long): ProductLike?
+    fun selectProductLike(productId: Long, memberId: Long): ProductLikeEntity?
 }

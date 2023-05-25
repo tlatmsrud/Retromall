@@ -1,10 +1,10 @@
 package com.retro.retromall.member.support
 
-import com.retro.retromall.member.domain.Member
+import com.retro.retromall.member.domain.MemberEntity
 import com.retro.retromall.auth.client.dto.OAuthMemberAttributes
 import com.retro.retromall.member.repository.MemberRepository
-import com.retro.retromall.role.enums.Role
-import com.retro.retromall.role.repository.RoleRepository
+import com.retro.retromall.authorization.enums.Role
+import com.retro.retromall.authorization.repository.RoleRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -14,9 +14,9 @@ class MemberFactory(
     private val memberRepository: MemberRepository,
     private val roleRepository: RoleRepository
 ) {
-    fun addMemberByOAuthMemberAttributes(attributes: OAuthMemberAttributes): Member {
-        val member =
-            Member(
+    fun addMemberByOAuthMemberAttributes(attributes: OAuthMemberAttributes): MemberEntity {
+        val memberEntity =
+            MemberEntity(
                 name = attributes.name,
                 profileImageUrl = attributes.image,
                 nickname = attributes.nickName,
@@ -25,13 +25,13 @@ class MemberFactory(
                 oauthId = attributes.oauthId
             )
 
-        memberRepository.save(member)
-        addUserRole(member)
-        return member
+        memberRepository.save(memberEntity)
+        addUserRole(memberEntity)
+        return memberEntity
     }
 
-    private fun addUserRole(member: Member) {
+    private fun addUserRole(memberEntity: MemberEntity) {
         val role = roleRepository.findByName(Role.USER) ?: throw IllegalStateException("User Role을 찾을 수 없습니다.")
-        member.addRole(role)
+        memberEntity.addRole(role)
     }
 }

@@ -1,6 +1,6 @@
 package com.retro.retromall.category.service
 
-import com.retro.retromall.category.domain.Category
+import com.retro.retromall.category.domain.CategoryEntity
 import com.retro.retromall.category.domain.repository.CategoryRepository
 import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.dto.CategoryResponse
@@ -15,7 +15,7 @@ class CategoryReadService(
     private val categoryRepository: CategoryRepository,
     private val redisTemplate: RedisTemplate<String, Any>
 ) {
-    fun getCategory(name: String): Category {
+    fun getCategory(name: String): CategoryEntity {
         return categoryRepository.findById(name)
             .orElseThrow { IllegalArgumentException("존재하지 않는 카테고리입니다.") }
     }
