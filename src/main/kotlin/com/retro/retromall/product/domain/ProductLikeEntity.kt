@@ -5,14 +5,14 @@ import javax.persistence.*
 @Entity
 @Table(name = "tb_product_like",
     uniqueConstraints = [UniqueConstraint(columnNames = ["product_id", "member_id"])])
-class ProductLike(
+class ProductLikeEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    val product: Product,
+    val productEntity: ProductEntity,
 
     @Column(name = "member_id")
     val memberId: Long,
@@ -21,9 +21,9 @@ class ProductLike(
     var isLiked: Boolean
 ) {
     constructor(
-        product: Product,
+        productEntity: ProductEntity,
         memberId: Long
-    ) : this(null, product, memberId, true)
+    ) : this(null, productEntity, memberId, true)
 
     fun isLiked(memberId: Long): Boolean {
         return this.memberId == memberId && isLiked
@@ -33,14 +33,14 @@ class ProductLike(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ProductLike
+        other as ProductLikeEntity
 
-        if (product != other.product) return false
+        if (productEntity != other.productEntity) return false
         return memberId == other.memberId
     }
 
     override fun hashCode(): Int {
-        var result = product.hashCode()
+        var result = productEntity.hashCode()
         result = 31 * result + memberId.hashCode()
         return result
     }

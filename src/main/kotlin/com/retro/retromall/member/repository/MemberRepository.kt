@@ -1,8 +1,8 @@
 package com.retro.retromall.member.repository
 
-import com.retro.retromall.member.domain.Member
+import com.retro.retromall.member.domain.MemberEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface MemberRepository : JpaRepository<Member, Long>, MemberCustomRepository {
-    fun findByOauthId(oauthId: String): Member?
+interface MemberRepository : JpaRepository<MemberEntity, Long>, MemberCustomRepository {
+    fun findByOauthId(oauthId: String): MemberEntity?
 }

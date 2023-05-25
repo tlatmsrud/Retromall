@@ -4,14 +4,14 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "tb_hashtag")
-class HashTag(
+class HashTagEntity(
     @Id
     @Column(name = "hashtag_name", nullable = false)
     val name: String
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is HashTag) return false
+        if (other !is HashTagEntity) return false
 
         return name == other.name
     }

@@ -1,15 +1,15 @@
-package com.retro.retromall.role.domain
+package com.retro.retromall.authorization.domain
 
 import javax.persistence.*
 
 @Entity
 @Table(name = "tb_role_permission")
-class RolePermission(
+class RolePermissionEntity(
     @EmbeddedId
-    val id: RolePermissionKey,
+    val id: RolePermissionEntityId,
 
     @MapsId("roleName")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_name")
-    val role: Role,
+    val roleEntity: RoleEntity,
 )

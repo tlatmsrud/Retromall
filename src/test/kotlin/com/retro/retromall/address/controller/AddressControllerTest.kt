@@ -2,12 +2,8 @@ package com.retro.retromall.address.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.common.JwtTokenProvider
-import com.retro.retromall.address.domain.Address
+import com.retro.retromall.address.domain.AddressEntity
 import com.retro.retromall.address.service.AddressService
-import com.retro.retromall.member.dto.AuthenticationAttributes
-import com.retro.retromall.product.controller.ProductController
-import com.retro.retromall.product.dto.CreateProductRequest
-import com.retro.retromall.product.service.ProductService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -16,10 +12,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito
 import org.mockito.Mockito
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
@@ -27,7 +21,6 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -71,9 +64,9 @@ class AddressControllerTest{
 
         BDDMockito.given(addressService.searchAddress(VALID_SEARCH_WORK))
             .willReturn(listOf(
-                Address(1120005200,"서울특별시 성동구 면목동")
-                ,Address(1123000100,"서울특별시 동대문구 면목동")
-                ,Address(1126010100,"서울특별시 중랑구 면목동")))
+                AddressEntity(1120005200,"서울특별시 성동구 면목동")
+                ,AddressEntity(1123000100,"서울특별시 동대문구 면목동")
+                ,AddressEntity(1126010100,"서울특별시 중랑구 면목동")))
 
         BDDMockito.given(addressService.searchAddress(INVALID_SEARCH_WORK))
             .willReturn(emptyList())

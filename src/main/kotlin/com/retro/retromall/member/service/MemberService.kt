@@ -1,7 +1,7 @@
 package com.retro.retromall.member.service
 
 import com.retro.retromall.auth.service.OAuthService
-import com.retro.retromall.member.domain.Member
+import com.retro.retromall.member.domain.MemberEntity
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.dto.TokenAttributes
 import com.retro.retromall.auth.client.dto.OAuthMemberAttributes
@@ -34,12 +34,12 @@ class MemberService(
         )
     }
 
-    private fun findMemberOrCreateMemberByOAuthMemberAttributes(oAuthMemberAttributes: OAuthMemberAttributes): Member {
+    private fun findMemberOrCreateMemberByOAuthMemberAttributes(oAuthMemberAttributes: OAuthMemberAttributes): MemberEntity {
         return memberRepository.findByOauthId(oAuthMemberAttributes.oauthId)
             ?: createMember(oAuthMemberAttributes)
     }
 
-    private fun createMember(oAuthMemberAttributes: OAuthMemberAttributes): Member {
+    private fun createMember(oAuthMemberAttributes: OAuthMemberAttributes): MemberEntity {
         return memberFactory.addMemberByOAuthMemberAttributes(oAuthMemberAttributes)
     }
 }

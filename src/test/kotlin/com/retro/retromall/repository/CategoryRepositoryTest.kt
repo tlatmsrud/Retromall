@@ -1,13 +1,8 @@
 package com.retro.retromall.repository
 
-import com.retro.retromall.category.domain.Category
 import com.retro.retromall.category.domain.repository.CategoryRepository
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.transaction.annotation.Transactional
 
 @DataJpaTest
 class CategoryRepositoryTest(

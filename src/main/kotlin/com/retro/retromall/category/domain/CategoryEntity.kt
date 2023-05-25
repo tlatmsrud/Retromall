@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "tb_category")
-class Category(
+class CategoryEntity(
     @Id
     @Column(name = "category_name", nullable = false)
     val name: String,
@@ -13,14 +13,14 @@ class Category(
     val id: String,
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "parent", fetch = FetchType.LAZY)
-    val lowerCategoryList: MutableList<Category> = mutableListOf(),
+    val lowerCategoryListEntity: MutableList<CategoryEntity> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent")
-    var parent: Category?
+    var parent: CategoryEntity?
 ) {
-    fun addLowerCategory(category: Category) {
-        this.lowerCategoryList.add(category)
-        category.parent = this
+    fun addLowerCategory(categoryEntity: CategoryEntity) {
+        this.lowerCategoryListEntity.add(categoryEntity)
+        categoryEntity.parent = this
     }
 }

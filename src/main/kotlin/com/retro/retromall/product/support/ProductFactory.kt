@@ -2,9 +2,9 @@ package com.retro.retromall.product.support
 
 import com.retro.retromall.category.service.CategoryReadService
 import com.retro.retromall.member.dto.AuthenticationAttributes
-import com.retro.retromall.product.domain.Product
-import com.retro.retromall.product.domain.ProductHashTag
-import com.retro.retromall.product.domain.ProductImage
+import com.retro.retromall.product.domain.ProductEntity
+import com.retro.retromall.product.domain.ProductHashTagEntity
+import com.retro.retromall.product.domain.ProductImageEntity
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.service.ProductHashTagService
@@ -21,7 +21,7 @@ class ProductFactory(
     private val productHashTagService: ProductHashTagService,
 ) {
     fun createProduct(authenticationAttributes: AuthenticationAttributes, dto: CreateProductRequest): Long {
-        val product = Product(
+        val productEntity = ProductEntity(
             title = dto.title,
             content = dto.content,
             amount = dto.amount,
@@ -31,18 +31,18 @@ class ProductFactory(
             addressId = dto.addressId
         )
 
-        productRepository.save(product)
-        addHashTags(product, productHashTagService.createProductHashTags(product, dto.hashTags))
-        addImages(product, productImageService.createProductImages(dto.images, product))
-        return product.id!!
+        productRepository.save(productEntity)
+        addHashTags(productEntity, productHashTagService.createProductHashTags(productEntity, dto.hashTags))
+        addImages(productEntity, productImageService.createProductImages(dto.images, productEntity))
+        return productEntity.id!!
     }
 
-    private fun addHashTags(product: Product, hashtags: Set<ProductHashTag>) {
-        product.hashTags.addAll(hashtags)
+    private fun addHashTags(productEntity: ProductEntity, hashtags: Set<ProductHashTagEntity>) {
+        productEntity.hashTags.addAll(hashtags)
     }
 
-    private fun addImages(product: Product, images: List<ProductImage>) {
-        product.images.addAll(images)
-        images.forEach { it.product = product }
+    private fun addImages(productEntity: ProductEntity, images: List<ProductImageEntity>) {
+        productEntity.images.addAll(images)
+        images.forEach { it.productEntity = productEntity }
     }
 }

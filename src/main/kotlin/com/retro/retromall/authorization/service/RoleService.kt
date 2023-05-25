@@ -1,6 +1,6 @@
-package com.retro.retromall.role.service
+package com.retro.retromall.authorization.service
 
-import com.retro.retromall.role.repository.RoleRepository
+import com.retro.retromall.authorization.repository.RoleRepository
 import org.springframework.stereotype.Service
 
 @Service
