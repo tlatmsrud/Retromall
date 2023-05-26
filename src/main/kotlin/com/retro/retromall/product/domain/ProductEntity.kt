@@ -57,11 +57,12 @@ class ProductEntity(
         amount: Int,
         authorId: Long,
         category: String,
-        addressId : Long
+        addressId: Long
     ) : this(null, title, content, amount, authorId, category, addressId)
 
-    fun addLikes(memberId: Long, productLikeEntity: ProductLikeEntity?) {
-        productLikeEntity?.let {
+    fun addLikes(memberId: Long) {
+        val productLike = this.productLikeEntities.find { it.memberId == memberId }
+        productLike?.let {
             if (!it.isLiked) {
                 it.isLiked = true
                 this.likes++
@@ -72,8 +73,9 @@ class ProductEntity(
         }
     }
 
-    fun removeLikes(productLikeEntity: ProductLikeEntity?) {
-        productLikeEntity?.let {
+    fun removeLikes(memberId: Long) {
+        val productLike = this.productLikeEntities.find { it.memberId == memberId }
+        productLike?.let {
             if (it.isLiked) {
                 it.isLiked = false
                 this.likes--

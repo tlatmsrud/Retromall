@@ -13,14 +13,12 @@ class ProductLikeService(
     fun addProductLike(authenticationAttributes: AuthenticationAttributes, productId: Long) {
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        val productLike = productRepository.selectProductLike(productId, authenticationAttributes.id!!)
-        product.addLikes(authenticationAttributes.id, productLike)
+        product.addLikes(authenticationAttributes.id!!)
     }
 
     fun removeProductLike(authenticationAttributes: AuthenticationAttributes, productId: Long) {
         val product =
             productRepository.findById(productId).orElseThrow { throw IllegalArgumentException("해당 상품을 찾을 수 없습니다.") }
-        val productLike = productRepository.selectProductLike(productId, authenticationAttributes.id!!)
-        product.removeLikes(productLike)
+        product.removeLikes(authenticationAttributes.id!!)
     }
 }

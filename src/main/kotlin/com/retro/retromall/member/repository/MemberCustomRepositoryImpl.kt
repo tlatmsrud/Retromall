@@ -14,7 +14,7 @@ class MemberCustomRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory
 ) : MemberCustomRepository {
     override fun selectPermissionsByMemberId(id: Long): MemberAttributes? {
-        val query = jpaQueryFactory.select(memberEntity, memberRoleEntity.id.roleName, rolePermissionEntity.id.permissionName)
+        val query = jpaQueryFactory.select(memberEntity, memberRoleEntity.id.roleName, rolePermissionEntity.id.permission)
             .from(memberEntity)
             .innerJoin(memberRoleEntity).on(memberEntity.id.eq(memberRoleEntity.id.memberId))
             .innerJoin(roleEntity).on(memberRoleEntity.id.roleName.eq(roleEntity.name))
@@ -26,7 +26,7 @@ class MemberCustomRepositoryImpl(
             val member = query[0].get(memberEntity)
             val roles = query.stream().map { it.get(memberRoleEntity.id.roleName) }.collect(Collectors.toSet())
                 .joinToString(separator = ", ") { it?.name.toString() }
-            val permissions = query.stream().map { it.get(rolePermissionEntity.id.permissionName) }.collect(Collectors.toSet())
+            val permissions = query.stream().map { it.get(rolePermissionEntity.id.permission) }.collect(Collectors.toSet())
                 .joinToString(separator = ", ") { it?.name.toString() }
             return MemberAttributes(member!!.id!!, member.oauthType, member.oauthId, member.nickname, member.profileImageUrl, roles, permissions)
         }
