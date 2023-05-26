@@ -1,6 +1,6 @@
 package com.retro.retromall.authorization.domain
 
-import com.retro.retromall.authorization.enums.PermissionName
+import com.retro.retromall.authorization.enums.Permission
 import javax.persistence.*
 
 @Entity
@@ -9,5 +9,5 @@ class PermissionEntity(
     @Id
     @Column(name = "name", length = 20, nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
-    val name: PermissionName
+    val name: Permission
 )
