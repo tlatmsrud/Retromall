@@ -1,36 +1,92 @@
 = Retromall API 명세서
 
-== 1. 제품 API
+== API 명세 작업 현황
 
-=== 1.1. 제품 조회
-==== Request
+* [x] 1. 상품
+** [x] 상품 조회
+** [x] 상품 리스트 조회
+** [x] 상품 등록
+** [x] 상품 수정
+** [x] 상품 삭제
+** [x] 상품 좋아요
+** [x] 상품 좋아요 취소
+
+* [x] 2. 주소
+** [x] 주소 검색
+
+* [x] 3. 토큰
+** [x] 액세스 토큰 갱신
+
+== 1. 상품 API
+
+
+
+=== 1.1. 상품 조회
+==== 1.1.1. HTTP Request
 include::{snippets}/readProductByValidId/http-request.adoc[]
-==== Response
+==== 1.1.2. Path Parameter
+include::{snippets}/readProductByValidId/path-parameters.adoc[]
+
+==== 1.1.3. HTTP Response
 include::{snippets}/readProductByValidId/http-response.adoc[]
+==== 1.1.4. Response Body
+include::{snippets}/readProductByValidId/response-fields.adoc[]
 
-=== 1.1. 제품 리스트 조회
-==== Request
+=== 1.2. 상품 리스트 조회
+==== 1.2.1. HTTP Request
 include::{snippets}/getProductListByValidCategory/http-request.adoc[]
-==== Response
+==== 1.2.2. Request Parameter
+include::{snippets}/getProductListByValidCategory/request-parameters.adoc[]
+==== 1.2.3. HTTP Response
 include::{snippets}/getProductListByValidCategory/http-response.adoc[]
+==== 1.2.4. Response Body
+include::{snippets}/getProductListByValidCategory/response-fields.adoc[]
 
-=== 1.3. 제품 등록
-==== Request
+=== 1.3. 상품 등록
+==== 1.3.1. HTTP Request
 include::{snippets}/createProductByValidRequest/http-request.adoc[]
-==== Response
+==== 1.3.2. Request Parameter
+include::{snippets}/createProductByValidRequest/request-fields.adoc[]
+==== 1.3.3. HTTP Response
 include::{snippets}/createProductByValidRequest/http-response.adoc[]
+==== 1.3.4. Response Body
+include::{snippets}/createProductByValidRequest/response-body.adoc[]
+- 등록된 제품의 ID 값이 리턴됩니다.
 
-=== 1.4. 제품 수정
-==== Request
+=== 1.4. 상품 수정
+==== 1.4.1. HTTP Request
 include::{snippets}/updateProductByValidRequest/http-request.adoc[]
-==== Response
+==== 1.4.2. Request Parameter
+include::{snippets}/updateProductByValidRequest/path-parameters.adoc[]
+include::{snippets}/updateProductByValidRequest/request-fields.adoc[]
+==== 1.4.3. HTTP Response
 include::{snippets}/updateProductByValidRequest/http-response.adoc[]
+==== 1.4.4. Response Body
+include::{snippets}/updateProductByValidRequest/response-body.adoc[]
 
-=== 1.5. 제품 삭제
-==== Request
+=== 1.5. 상품 삭제
+==== 1.5.1. HTTP Request
 include::{snippets}/deleteProductByValidId/http-request.adoc[]
-==== Response
+==== 1.5.2. Request Parameter
+include::{snippets}/deleteProductByValidId/path-parameters.adoc[]
+==== 1.5.3. HTTP Response
 include::{snippets}/deleteProductByValidId/http-response.adoc[]
+==== 1.5.4. Response Body
+include::{snippets}/deleteProductByValidId/response-body.adoc[]
+
+=== 1.5. 상품 좋아요 추가
+==== Request
+include::{snippets}/productLikeAddWithValidProductId/http-request.adoc[]
+==== Response
+include::{snippets}/productLikeAddWithValidProductId/http-response.adoc[]
+
+=== 1.5. 상품 좋아요 삭제
+==== Request
+include::{snippets}/productLikeRemoveWithValidProductId/http-request.adoc[]
+include::{snippets}/productLikeRemoveWithValidProductId/request-parameters.adoc[]
+
+==== Response
+include::{snippets}/productLikeRemoveWithValidProductId/http-response.adoc[]
 
 == 2. 주소 API
 ===  2.1. 주소 검색
