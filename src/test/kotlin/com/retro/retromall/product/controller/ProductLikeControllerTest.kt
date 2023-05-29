@@ -80,9 +80,11 @@ class ProductLikeControllerTest {
             .addFilter<DefaultMockMvcBuilder?>(filter)
             .build()
 
-        willDoNothing().given(productLikeService).addProductLike(authenticationAttributes, VALID_PRODUCT_ID)
 
         given(productLikeService.addProductLike(authenticationAttributes, INVALID_PRODUCT_ID)).willThrow(
+            IllegalArgumentException("해당 상품을 찾을 수 없습니다.")
+        )
+        given(productLikeService.removeProductLike(authenticationAttributes, INVALID_PRODUCT_ID)).willThrow(
             IllegalArgumentException("해당 상품을 찾을 수 없습니다.")
         )
     }
@@ -118,7 +120,34 @@ class ProductLikeControllerTest {
     }
 
     @Test
-    fun productLikeRemove() {
+    @DisplayName("유효한 상품 ID에 대한 좋아요 삭제")
+    fun productLikeRemoveWithValidProductId() {
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/api/products/like")
+                .headers(headerBuild())
+                .param("product_id", VALID_PRODUCT_ID.toString())
+        )
+            .andExpect(status().isOk)
+            .andDo(document("productLikeRemoveWithValidProductId"))
+
+        verify(productLikeService).removeProductLike(any(AuthenticationAttributes::class.java), eq(VALID_PRODUCT_ID))
+    }
+
+    @Test
+    @DisplayName("유효하지 않은 상품 ID에 대한 좋아요 삭제")
+    fun productLikeRemoveWithInvalidProductId() {
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/api/products/like")
+                .headers(headerBuild())
+                .param("product_id", INVALID_PRODUCT_ID.toString())
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().string("{\"message\":\"해당 상품을 찾을 수 없습니다.\"}"))
+            .andDo(document("productLikeRemoveWithInvalidProductId"))
+
+        verify(productLikeService).removeProductLike(any(AuthenticationAttributes::class.java), eq(INVALID_PRODUCT_ID))
     }
 
     private fun <T> any(type: Class<T>): T = Mockito.any(type)
