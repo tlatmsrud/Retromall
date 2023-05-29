@@ -1,24 +1,19 @@
 package com.retro.retromall.product.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.retro.ApiDocumentUtils
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.member.dto.AuthenticationAttributes
-import com.retro.retromall.product.dto.CreateProductRequest
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse
-import com.retro.retromall.product.dto.ProductUpdateRequest
 import com.retro.retromall.product.service.ProductReadService
-import com.retro.retromall.product.service.ProductService
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.BDDMockito
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -27,22 +22,24 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.SliceImpl
 import org.springframework.data.domain.Sort
-import org.springframework.data.web.PageableDefault
 import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
+import org.springframework.restdocs.payload.JsonFieldType
+import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation.*
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.filter.CharacterEncodingFilter
 import java.time.LocalDateTime
-import java.util.Date
 
 @WebMvcTest(ProductReadController::class)
 @ActiveProfiles("local")
@@ -75,9 +72,9 @@ class ProductReadControllerTest{
 
     private fun generateProductListResponse() : ProductListResponse{
         val content = listOf(
-            ProductListResponse.Data( 2, "테스터", "수정제품", 100000, 0, null,
+            ProductListResponse.Data( 2, "테스터", "수정제품", 100000, 0, "썸네일 이미지 URL",
                 "서울특별시", LocalDateTime.now(), LocalDateTime.now()),
-            ProductListResponse.Data( 1, "테스터1", "수정제품1", 10000, 0, null,
+            ProductListResponse.Data( 1, "테스터1", "수정제품1", 10000, 0, "썸네일 이미지 URL",
                 "서울특별시", LocalDateTime.now(), LocalDateTime.now())
         )
 
@@ -125,12 +122,36 @@ class ProductReadControllerTest{
     @DisplayName("유효 ID에 대한 상품조회")
     fun readProductByValidRequest(){
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/products/{id}",1)
+            RestDocumentationRequestBuilders.get("/api/products/{id}",1)
                 .header("Authorization","Bearer TestToken")
         )
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("제품명")))
-            .andDo(MockMvcRestDocumentation.document("readProductByValidId"))
+            .andDo(
+                document("readProductByValidId"
+                    ,ApiDocumentUtils.getDocumentRequest()
+                    ,ApiDocumentUtils.getDocumentResponse()
+                    ,pathParameters(
+                        parameterWithName("id").description("제품 ID")
+                    )
+                    , responseFields(
+                        fieldWithPath("isAuthor").type(JsonFieldType.BOOLEAN).description("자신이 작성자인지 여부"),
+                        fieldWithPath("productId").type(JsonFieldType.NUMBER).description("제품ID"),
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("내용"),
+                        fieldWithPath("amount").type(JsonFieldType.NUMBER).description("가격"),
+                        fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리 ID"),
+                        fieldWithPath("likes").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                        fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("자신의 좋아요 여부"),
+                        fieldWithPath("hashTags").type(JsonFieldType.ARRAY).description("해시태크 리스트"),
+                        fieldWithPath("images").type(JsonFieldType.ARRAY).description("이미지 리스트"),
+                        fieldWithPath("address").type(JsonFieldType.STRING).description("주소"),
+                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("생성날짜"),
+                        fieldWithPath("modifiedAt").type(JsonFieldType.STRING).description("수정날짜"),
+                        fieldWithPath("author").type(JsonFieldType.STRING).description("작성자 ID"),
+                    )
+                )
+            )
 
         Mockito.verify(productReadService).getProduct(
             any(AuthenticationAttributes::class.java), eq(1L))
@@ -140,12 +161,18 @@ class ProductReadControllerTest{
     @DisplayName("유효하지 않는 ID에 대한 상품조회")
     fun readProductByInvalidRequest(){
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/products/{id}",100)
+            RestDocumentationRequestBuilders.get("/api/products/{id}",100)
                 .header("Authorization","Bearer TestToken")
         )
             .andExpect(status().isOk)
             .andExpect(content().string("{\"message\":\"요청하신 결과가 없습니다.\"}"))
-            .andDo(MockMvcRestDocumentation.document("readProductByInvalidId"))
+            .andDo(
+                document("readProductByInvalidId"
+                    ,pathParameters(
+                        parameterWithName("id").description("제품 ID")
+                    )
+                )
+            )
 
         Mockito.verify(productReadService).getProduct(
             any(AuthenticationAttributes::class.java), eq(100L))
@@ -161,11 +188,52 @@ class ProductReadControllerTest{
                 .param("category", "PS2")
         )
             .andExpect(status().isOk)
-            .andExpect(content().string(containsString("수정제품")))
+            .andExpect(content().string(containsString("테스터")))
             .andExpect(content().string(containsString("pageable")))
             .andExpect(content().string(containsString("content")))
 
-            .andDo(MockMvcRestDocumentation.document("getProductListByValidCategory"))
+            .andDo(
+                document("getProductListByValidCategory"
+                    ,ApiDocumentUtils.getDocumentRequest()
+                    ,ApiDocumentUtils.getDocumentResponse()
+                    , requestParameters(
+                        parameterWithName("category").description("카테고리 ID")
+                    )
+                    , responseFields(
+                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("응답 데이터"),
+                        fieldWithPath("data.content").type(JsonFieldType.ARRAY).description("상품정보 리스트"),
+                        fieldWithPath("data.content[].productId").type(JsonFieldType.NUMBER).description("상품 ID"),
+                        fieldWithPath("data.content[].author").type(JsonFieldType.STRING).description("작성자 ID"),
+                        fieldWithPath("data.content[].title").type(JsonFieldType.STRING).description("제목"),
+                        fieldWithPath("data.content[].amount").type(JsonFieldType.NUMBER).description("가격"),
+                        fieldWithPath("data.content[].likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                        fieldWithPath("data.content[].thumbnail").type(JsonFieldType.STRING).description("썸네일 이미지 URL"),
+                        fieldWithPath("data.content[].addr").type(JsonFieldType.STRING).description("주소"),
+                        fieldWithPath("data.content[].createdAt").type(JsonFieldType.STRING).description("작성일자"),
+                        fieldWithPath("data.content[].modifiedAt").type(JsonFieldType.STRING).description("수정일자"),
+                        fieldWithPath("data.pageable").type(JsonFieldType.OBJECT).description("페이지 정보"),
+                        fieldWithPath("data.pageable.sort").type(JsonFieldType.OBJECT).description("정렬 정보"),
+                        fieldWithPath("data.pageable.sort.empty").type(JsonFieldType.BOOLEAN).description("empty"),
+                        fieldWithPath("data.pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬 여부"),
+                        fieldWithPath("data.pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description("비정렬 여부"),
+                        fieldWithPath("data.pageable.offset").type(JsonFieldType.NUMBER).description("오프셋"),
+                        fieldWithPath("data.pageable.pageSize").type(JsonFieldType.NUMBER).description("페이지당 사이즈"),
+                        fieldWithPath("data.pageable.pageNumber").type(JsonFieldType.NUMBER).description("페이지 번호"),
+                        fieldWithPath("data.pageable.paged").type(JsonFieldType.BOOLEAN).description("paged"),
+                        fieldWithPath("data.pageable.unpaged").type(JsonFieldType.BOOLEAN).description("unpaged"),
+                        fieldWithPath("data.size").type(JsonFieldType.NUMBER).description("페이지당 사이즈"),
+                        fieldWithPath("data.number").type(JsonFieldType.NUMBER).description("페이지 번호"),
+                        fieldWithPath("data.sort").type(JsonFieldType.OBJECT).description("sortInfo"),
+                        fieldWithPath("data.sort.empty").type(JsonFieldType.BOOLEAN).description("empty"),
+                        fieldWithPath("data.sort.sorted").type(JsonFieldType.BOOLEAN).description("sorted"),
+                        fieldWithPath("data.sort.unsorted").type(JsonFieldType.BOOLEAN).description("unsorted"),
+                        fieldWithPath("data.first").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부"),
+                        fieldWithPath("data.last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+                        fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER).description("조회된 데이터 수"),
+                        fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN).description("empty")
+                    )
+                )
+            )
     }
 
 

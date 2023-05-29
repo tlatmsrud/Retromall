@@ -16,10 +16,14 @@ import org.mockito.Mockito
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
+import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.requestParameters
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -129,7 +133,13 @@ class ProductLikeControllerTest {
                 .param("product_id", VALID_PRODUCT_ID.toString())
         )
             .andExpect(status().isOk)
-            .andDo(document("productLikeRemoveWithValidProductId"))
+            .andDo(
+                document("productLikeRemoveWithValidProductId"
+                    ,requestParameters(
+                        parameterWithName("product_id").description("상품 ID")
+                    )
+                )
+            )
 
         verify(productLikeService).removeProductLike(any(AuthenticationAttributes::class.java), eq(VALID_PRODUCT_ID))
     }
