@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.SliceImpl
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
@@ -86,6 +87,12 @@ class ProductReadControllerTest{
         return PageRequest.of(0,20, Sort.Direction.DESC, "createdAt")
     }
 
+    private fun headerBuild(): HttpHeaders {
+        val header = HttpHeaders()
+        header.set("Authorization","Bearer TestToken")
+        return header
+    }
+
     @BeforeEach
     fun setUp(webApplicationContext : WebApplicationContext,
               restDocumentationContextProvider : RestDocumentationContextProvider
@@ -123,7 +130,7 @@ class ProductReadControllerTest{
     fun readProductByValidRequest(){
         mockMvc.perform(
             RestDocumentationRequestBuilders.get("/api/products/{id}",1)
-                .header("Authorization","Bearer TestToken")
+                .headers(headerBuild())
         )
             .andExpect(status().isOk)
             .andExpect(content().string(containsString("제품명")))
@@ -162,7 +169,7 @@ class ProductReadControllerTest{
     fun readProductByInvalidRequest(){
         mockMvc.perform(
             RestDocumentationRequestBuilders.get("/api/products/{id}",100)
-                .header("Authorization","Bearer TestToken")
+                .headers(headerBuild())
         )
             .andExpect(status().isOk)
             .andExpect(content().string("{\"message\":\"요청하신 결과가 없습니다.\"}"))
@@ -183,7 +190,7 @@ class ProductReadControllerTest{
     fun getProductListByValidCategory(){
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/products")
-                .header("Authorization","Bearer TestToken")
+                .headers(headerBuild())
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("category", "PS2")
         )
