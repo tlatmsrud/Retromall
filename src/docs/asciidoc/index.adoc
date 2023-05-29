@@ -1,25 +1,7 @@
 = Retromall API 명세서
 
-== API 명세 작업 현황
-
-* [x] 1. 상품
-** [x] 상품 조회
-** [x] 상품 리스트 조회
-** [x] 상품 등록
-** [x] 상품 수정
-** [x] 상품 삭제
-** [x] 상품 좋아요
-** [x] 상품 좋아요 취소
-
-* [x] 2. 주소
-** [x] 주소 검색
-
-* [x] 3. 토큰
-** [x] 액세스 토큰 갱신
 
 == 1. 상품 API
-
-
 
 === 1.1. 상품 조회
 ==== 1.1.1. HTTP Request
@@ -74,31 +56,53 @@ include::{snippets}/deleteProductByValidId/http-response.adoc[]
 ==== 1.5.4. Response Body
 include::{snippets}/deleteProductByValidId/response-body.adoc[]
 
-=== 1.5. 상품 좋아요 추가
-==== Request
+=== 1.6. 상품 좋아요 추가
+==== 1.6.1. HTTP Request
 include::{snippets}/productLikeAddWithValidProductId/http-request.adoc[]
-==== Response
+==== 1.6.2. Request Parameter
+include::{snippets}/productLikeAddWithValidProductId/request-parameters.adoc[]
+==== 1.6.3. HTTP Response
 include::{snippets}/productLikeAddWithValidProductId/http-response.adoc[]
+==== 1.6.3. Response Body
+include::{snippets}/productLikeAddWithValidProductId/response-body.adoc[]
 
-=== 1.5. 상품 좋아요 삭제
-==== Request
+=== 1.7 상품 좋아요 삭제
+==== 1.7.1. HTTP Request
 include::{snippets}/productLikeRemoveWithValidProductId/http-request.adoc[]
+
+==== 1.7.2. Request Parameter
 include::{snippets}/productLikeRemoveWithValidProductId/request-parameters.adoc[]
 
-==== Response
+==== 1.7.3. HTTP Response
 include::{snippets}/productLikeRemoveWithValidProductId/http-response.adoc[]
+
+==== 1.7.4. Response Body
+include::{snippets}/productLikeRemoveWithValidProductId/response-body.adoc[]
 
 == 2. 주소 API
 ===  2.1. 주소 검색
-==== Request
+==== 2.1.1. HTTP Request
 include::{snippets}/searchAddressByValidSearchWord/http-request.adoc[]
-==== Response
+
+==== 2.1.2. Request Parameter
+include::{snippets}/searchAddressByValidSearchWord/request-parameters.adoc[]
+
+==== 2.1.3. HTTP Response
 include::{snippets}/searchAddressByValidSearchWord/http-response.adoc[]
 
-== 3. 토큰 API
+==== 2.1.4. Response Body
+include::{snippets}/searchAddressByValidSearchWord/response-fields.adoc[]
 
+== 3. 토큰 API
 === 3.1. 액세스 토큰 갱신
-==== HttpRequest
+==== 3.1.1. Http Request
 include::{snippets}/updateToken/http-request.adoc[]
-==== HttpResponse
+
+==== 3.1.2. Request Parameter
+include::{snippets}/updateToken/request-body.adoc[]
+
+==== 3.1.3. Http Response
 include::{snippets}/updateToken/http-response.adoc[]
+
+==== 3.1.4. Response Body
+include::{snippets}/updateToken/response-fields.adoc[]
