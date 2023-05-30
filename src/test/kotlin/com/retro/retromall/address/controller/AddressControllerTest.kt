@@ -1,6 +1,9 @@
 package com.retro.retromall.address.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.retro.ApiDocumentUtils
+import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
+import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.address.domain.AddressEntity
 import com.retro.retromall.address.service.AddressService
@@ -18,6 +21,12 @@ import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
+import org.springframework.restdocs.payload.JsonFieldType
+import org.springframework.restdocs.payload.PayloadDocumentation
+import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.requestParameters
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -82,7 +91,18 @@ class AddressControllerTest{
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$[0].addr", containsString("면목동")))
-            .andDo(document("searchAddressByValidSearchWord"))
+            .andDo(
+                document("searchAddressByValidSearchWord"
+                    , getDocumentRequest()
+                    , getDocumentResponse()
+                    , requestParameters(
+                            parameterWithName("searchWord").description("검색어")
+                    )
+                    , responseFields(
+                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("주소 ID"),
+                        fieldWithPath("[].addr").type(JsonFieldType.STRING).description("주소명")
+                )
+            ))
 
         Mockito.verify(addressService).searchAddress(VALID_SEARCH_WORK)
     }

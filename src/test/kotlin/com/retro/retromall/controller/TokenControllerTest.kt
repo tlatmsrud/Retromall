@@ -1,11 +1,14 @@
 package com.retro.retromall.controller
 
+import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
+import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.token.TokenController
 import com.retro.retromall.token.dto.TokenDto
 import com.retro.retromall.token.service.TokenService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -18,6 +21,9 @@ import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
+import org.springframework.restdocs.payload.JsonFieldType
+import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -59,7 +65,7 @@ class TokenControllerTest{
             .addFilter<DefaultMockMvcBuilder>(filter)
             .build()
 
-        val tokenDto = TokenDto("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN,1000L,1000L)
+        val tokenDto = TokenDto("Bearer",NEW_ACCESS_TOKEN,NEW_REFRESH_TOKEN,1684565900922L,1684585900922L)
 
         given(tokenService.renewAccessToken(VALID_REFRESH_TOKEN))
             .willReturn(tokenDto)
@@ -73,6 +79,7 @@ class TokenControllerTest{
     }
 
     @Test
+    @DisplayName("유효한 리프레시 토큰을 통한 토큰 갱신")
     fun updateTokenByValidRefreshToken(){
         mockMvc.perform(
             MockMvcRequestBuilders.patch("/api/token")
@@ -81,12 +88,25 @@ class TokenControllerTest{
         )
             .andExpect(status().isOk)
             .andExpect(content().string(containsString(NEW_ACCESS_TOKEN)))
-            .andDo(document("updateToken"))
+            .andDo(
+                document("updateToken"
+                , getDocumentRequest()
+                , getDocumentResponse()
+                , responseFields(
+                        fieldWithPath("grantType").type(JsonFieldType.STRING).description("grant type(Bearer 고정)"),
+                        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("액세스 토큰"),
+                        fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("리프레시 토큰"),
+                        fieldWithPath("expirationAccessToken").type(JsonFieldType.NUMBER).description("액세스 토큰 만료기간(Number 타입)"),
+                        fieldWithPath("expirationRefreshToken").type(JsonFieldType.NUMBER).description("리프레시 토큰 만료기간(Number 타입)")
+                    )
+                )
+            )
 
         verify(tokenService).renewAccessToken(VALID_REFRESH_TOKEN)
     }
 
     @Test
+    @DisplayName("유요하지 않은 리프레시 토큰을 통한 토큰 갱신")
     fun updateTokenByInvalidRefreshToken(){
         mockMvc.perform(
             MockMvcRequestBuilders.patch("/api/token")
@@ -99,6 +119,7 @@ class TokenControllerTest{
     }
 
     @Test
+    @DisplayName("빈 리프레시 토큰을 통한 토큰 갱신")
     fun updateTokenByEmptyRefreshToken(){
         mockMvc.perform(
             MockMvcRequestBuilders.patch("/api/token")
