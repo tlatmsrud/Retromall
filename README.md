@@ -26,8 +26,14 @@ Retromall 서비스는 소수의 게임 리커머스 서비스로써 현세대 �
 
 ## 이미지
 실제 배포된 이미지는 아니며, 개발 진행중인 프로젝트로 피그마 이미지로 대체하였습니다.
-
+<img src="https://user-images.githubusercontent.com/52519728/241888299-f3cabb6e-7bd9-41b6-90cf-36ccd9b82a72.png">
+<img src="https://user-images.githubusercontent.com/52519728/241888723-887f466d-6aab-4067-a28c-c6a2f02db87a.png">
+<img src="https://user-images.githubusercontent.com/52519728/241888758-d3d7987a-581e-4052-a6ce-db2abed44db8.png">
+<img src="https://user-images.githubusercontent.com/52519728/241888776-4592cd8e-385b-4b60-b210-d10b794f9f9b.png">
 ## ER 다이어그램
 <img src="https://user-images.githubusercontent.com/52519728/241885626-85a652d0-3809-4869-a851-db249f3145ff.svg" alt="Retromall ER Diagram">
+
 ## 시퀀스 다이어그램
+- 로그인
+<img src="https://user-images.githubusercontent.com/52519728/241889276-1a3f5c51-2add-4de5-92d4-cdcd8f7e362d.svg">
 ## 클래스 다이어그램
