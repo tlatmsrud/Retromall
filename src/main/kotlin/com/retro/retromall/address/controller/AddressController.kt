@@ -19,9 +19,10 @@ class AddressController (
     @GetMapping("/search")
     fun searchAddress(@MemberAuthentication authenticationAttributes: AuthenticationAttributes
                       , @RequestParam("searchWord") searchWord : String) : ResponseEntity<List<AddressResponse>> {
-        val list = addressService.searchAddress(searchWord)
+        val allAddressList = addressService.searchAllAddress()
+        val findAddressList = addressService.searchAddress(allAddressList, searchWord)
 
-        return ResponseEntity.ok(list)
+        return ResponseEntity.ok(findAddressList)
     }
 
 }
