@@ -5,7 +5,6 @@ import com.retro.retromall.category.domain.repository.CategoryRepository
 import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.dto.CategoryResponse
 import org.springframework.cache.annotation.Cacheable
-import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class CategoryReadService(
     private val categoryRepository: CategoryRepository,
-    private val redisTemplate: RedisTemplate<String, Any>
 ) {
     fun getCategory(name: String): CategoryEntity {
         return categoryRepository.findById(name)
