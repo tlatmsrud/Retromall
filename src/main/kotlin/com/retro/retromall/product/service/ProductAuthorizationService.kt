@@ -8,20 +8,21 @@ import org.springframework.stereotype.Service
 
 @Service
 class ProductAuthorizationService {
-    fun checkReadPermission(product: ProductEntity, authenticationAttributes: AuthenticationAttributes) {
-
+    fun checkPermission(targetProduct: ProductEntity, authenticationAttributes: AuthenticationAttributes, type: Permission) {
+        if (targetProduct.authorId == authenticationAttributes.id!!) {
+            validPermission(authenticationAttributes.permissions!!, type)
+        } else {
+            throw RetromallException("${type.getMessage()} 권한이 없습니다.")
+        }
     }
 
-    fun checkUpdatePermission(product: ProductEntity, authenticationAttributes: AuthenticationAttributes) {
-
-    }
-
-    fun checkDeletePermission(product: ProductEntity, authenticationAttributes: AuthenticationAttributes) {
-
-    }
-
-    private fun validPermission(userPermissions: String, type: Permission) {
-        if (!userPermissions.contains(type.name))
-            throw RetromallException(type.getKorName() + " 권한이 없습니다.")
+    private fun validPermission(permissions: String?, type: Permission) {
+        permissions?.run {
+            val permissionList = split(", ")
+            if (type.name in permissionList) {
+                return
+            }
+        }
+        throw RetromallException("${type.getMessage()} 권한이 없습니다.")
     }
 }
