@@ -1,6 +1,6 @@
 package com.retro.retromall.product.service
 
-import com.retro.exception.RetromallException
+import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.authorization.enums.Permission
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.ProductEntity
@@ -42,7 +42,7 @@ class ProductAuthorizationServiceTest {
             AuthenticationAttributes(2L, "USER", "UPDATE_PRODUCT, DELETE_PRODUCT, CREATE_PRODUCT")
         val permissionType = Permission.UPDATE_PRODUCT
 
-        val exception = assertThrows<RetromallException> { productAuthorizationService.checkPermission(product, authenticationAttributes, permissionType) }
+        val exception = assertThrows<UnauthorizedAccessException> { productAuthorizationService.checkPermission(product, authenticationAttributes, permissionType) }
 
         assertEquals("${permissionType.getMessage()} 권한이 없습니다.", exception.message)
     }
@@ -53,7 +53,7 @@ class ProductAuthorizationServiceTest {
             AuthenticationAttributes(1L, "USER", "DELETE_PRODUCT, CREATE_PRODUCT")
         val permissionType = Permission.UPDATE_PRODUCT
 
-        val exception = assertThrows<RetromallException> { productAuthorizationService.checkPermission(product, authenticationAttributes, permissionType) }
+        val exception = assertThrows<UnauthorizedAccessException> { productAuthorizationService.checkPermission(product, authenticationAttributes, permissionType) }
 
         assertEquals("${permissionType.getMessage()} 권한이 없습니다.", exception.message)
     }

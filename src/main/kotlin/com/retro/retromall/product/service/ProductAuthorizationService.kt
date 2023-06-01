@@ -8,11 +8,15 @@ import org.springframework.stereotype.Service
 
 @Service
 class ProductAuthorizationService {
-    fun checkPermission(targetProduct: ProductEntity, authenticationAttributes: AuthenticationAttributes, type: Permission) {
+    fun checkPermission(
+        targetProduct: ProductEntity,
+        authenticationAttributes: AuthenticationAttributes,
+        type: Permission
+    ) {
         val userId = authenticationAttributes.id
         val permissions = authenticationAttributes.permissions
 
-        if (userId == null || permissions == null) {
+        if (userId == null || targetProduct.authorId != userId || permissions == null) {
             throw UnauthorizedAccessException("${type.getMessage()} 권한이 없습니다.")
         }
 
@@ -20,8 +24,8 @@ class ProductAuthorizationService {
     }
 
     private fun validatePermission(permissions: String, type: Permission) {
-        val permissionList = permissions.split(", ")
-        if (type.name !in permissionList) {
+        val permissionList = permissions.split(", ").mapNotNull { Permission.fromValue(it) }
+        if (type !in permissionList) {
             throw UnauthorizedAccessException("${type.getMessage()} 권한이 없습니다.")
         }
     }
