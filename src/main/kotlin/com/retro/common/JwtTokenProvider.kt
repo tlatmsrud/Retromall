@@ -66,7 +66,7 @@ class JwtTokenProvider(
         )
     }
 
-    fun validateToken(token: String): Boolean {
+        fun validateToken(token: String): Boolean {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
             return true

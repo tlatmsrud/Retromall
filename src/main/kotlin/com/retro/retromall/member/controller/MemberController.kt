@@ -1,6 +1,6 @@
 package com.retro.retromall.member.controller
 
-import com.retro.retromall.auth.client.dto.OAuthAuthorizationCode
+import com.retro.retromall.oauth.client.dto.OAuthAuthorizationCode
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.service.MemberService
