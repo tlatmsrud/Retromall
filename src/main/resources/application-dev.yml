@@ -16,7 +16,11 @@ spring:
     username: ENC(869OCI47yhuVlUk8ITjnfA==)
     password: ENC(5ozwKMwiSAffkh2+NG++ptjDxBesCFsVp1m91Wa/1cw=)
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  cache:
+    type: redis
+  redis:
+    port: 6379
+    host: ENC(NaLc63TtijboI5t9wYpk2g==)
 logging:
   level:
     org:
