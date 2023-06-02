@@ -20,13 +20,13 @@ import org.mockito.Mockito.verify
 import java.util.*
 
 
-class TokenServiceTest {
+class DBTokenServiceTest {
 
     private val tokenRepository = mock(TokenRepository::class.java)
     private val jwtTokenProvider = mock(JwtTokenProvider::class.java)
     private val memberRepository = mock(MemberRepository::class.java)
 
-    private lateinit var tokenService : TokenService
+    private lateinit var tokenService : DBTokenService
 
     private val VALID_REFRESH_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODA3OTUwNjB9._c66OVOh0x6VUaHBm3Y4Fyh44oNNsFSGnSFxLM8o3O8"
 
@@ -44,7 +44,7 @@ class TokenServiceTest {
 
     @BeforeEach
     fun setUp(){
-        tokenService = TokenService(tokenRepository, memberRepository, jwtTokenProvider)
+        tokenService = DBTokenService(tokenRepository, memberRepository, jwtTokenProvider)
 
         val token = Token(1, VALID_REFRESH_TOKEN, Date().time + 2592000000)
         val expiredToken = Token(2, EXPIRED_REFRESH_TOKEN,Date().time - toLong(86400000))
@@ -180,15 +180,15 @@ class TokenServiceTest {
     @Test
     @DisplayName("유효한 리프레시 토큰을 통한 토큰 엔티티 조회")
     fun getValidTokenByValidfreshToken(){
-        val token = tokenService.getValidTokenByRefreshToken(VALID_REFRESH_TOKEN)
-        assertThat(token).isNotNull
+        val memberId = tokenService.getMemberIdByValidRefreshToken(VALID_REFRESH_TOKEN)
+        assertThat(memberId).isNotNull
         verify(jwtTokenProvider).validateToken(VALID_REFRESH_TOKEN)
     }
 
     @Test
     @DisplayName("유효하지 않은 리프레시 토큰을 통한 토큰 엔티티 조회")
     fun getValidTokenByInvalidfreshToken(){
-        assertThatThrownBy { tokenService.getValidTokenByRefreshToken(INVALID_REFRESH_TOKEN) }
+        assertThatThrownBy { tokenService.getMemberIdByValidRefreshToken(INVALID_REFRESH_TOKEN) }
             .isInstanceOf(IllegalArgumentException::class.java)
 
         verify(jwtTokenProvider).validateToken(INVALID_REFRESH_TOKEN)
@@ -197,7 +197,7 @@ class TokenServiceTest {
     @Test
     @DisplayName("유효기간이 만료된 리프레시 토큰을 통한 토큰 엔티티 조회")
     fun getValidTokenByExpiredRefreshToken(){
-        assertThatThrownBy { tokenService.getValidTokenByRefreshToken(EXPIRED_REFRESH_TOKEN) }
+        assertThatThrownBy { tokenService.getMemberIdByValidRefreshToken(EXPIRED_REFRESH_TOKEN) }
             .isInstanceOf(IllegalArgumentException::class.java)
 
         verify(jwtTokenProvider).validateToken(EXPIRED_REFRESH_TOKEN)

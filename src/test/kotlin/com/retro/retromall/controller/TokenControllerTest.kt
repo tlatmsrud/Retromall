@@ -5,7 +5,7 @@ import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.token.TokenController
 import com.retro.retromall.token.dto.TokenDto
-import com.retro.retromall.token.service.TokenService
+import com.retro.retromall.token.service.RedisTokenService
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -40,7 +40,7 @@ import javax.servlet.http.Cookie
 class TokenControllerTest{
 
     @MockBean
-    private lateinit var tokenService : TokenService
+    private lateinit var tokenService : RedisTokenService
 
     @Autowired lateinit var mockMvc: MockMvc
 
