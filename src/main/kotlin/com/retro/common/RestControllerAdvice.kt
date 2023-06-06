@@ -1,5 +1,6 @@
 package com.retro.common
 
+import com.retro.exception.ProductNotFoundException
 import com.retro.exception.UnauthorizedAccessException
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
@@ -15,6 +16,14 @@ import javax.validation.ConstraintViolationException
 
 @ControllerAdvice
 class RestControllerAdvice {
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun illegalArgumentException(e : IllegalArgumentException): ResponseEntity<Any>{
+        return ResponseEntity.ok(ErrorResponse(e.message))
+    }
+    @ExceptionHandler(ProductNotFoundException::class)
+    fun productNotFoundException(e : ProductNotFoundException): ResponseEntity<Any>{
+        return ResponseEntity.ok(ErrorResponse(e.message))
+    }
     @ExceptionHandler(SecurityException::class)
     fun securityException(e: SecurityException): ResponseEntity<Any> {
         return ResponseEntity.ok(ErrorResponse(e.message))
