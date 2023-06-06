@@ -133,3 +133,17 @@ include::{snippets}/loginKakaoWithValidRequest/http-response.adoc[]
 
 ==== 4.2.4. Response Body
 include::{snippets}/loginKakaoWithValidRequest/response-fields.adoc[]
+
+== 5. 카테고리 API
+=== 5.1. 카테고리 조회
+==== 5.1.1. Http Request
+include::{snippets}/getCategoryList/http-request.adoc[]
+
+==== 5.1.2. Request Parameter
+include::{snippets}/getCategoryList/request-body.adoc[]
+
+==== 5.1.3. Http Response
+include::{snippets}/getCategoryList/http-response.adoc[]
+
+==== 5.1.4. Response Body
+include::{snippets}/getCategoryList/response-fields.adoc[]
