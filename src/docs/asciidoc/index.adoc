@@ -106,3 +106,30 @@ include::{snippets}/updateToken/http-response.adoc[]
 
 ==== 3.1.4. Response Body
 include::{snippets}/updateToken/response-fields.adoc[]
+
+== 4. 로그인 API
+=== 4.1. 네이버 OAuth 로그인
+==== 4.1.1. Http Request
+include::{snippets}/loginNaverWithValidRequest/http-request.adoc[]
+
+==== 4.1.2. Request Parameter
+include::{snippets}/loginNaverWithValidRequest/request-parameters.adoc[]
+
+==== 4.1.3. Http Response
+include::{snippets}/loginNaverWithValidRequest/http-response.adoc[]
+
+==== 4.1.4. Response Body
+include::{snippets}/loginNaverWithValidRequest/response-fields.adoc[]
+
+=== 4.2. 카카오 OAuth 로그인
+==== 4.2.1. Http Request
+include::{snippets}/loginKakaoWithValidRequest/http-request.adoc[]
+
+==== 4.2.2. Request Parameter
+include::{snippets}/loginKakaoWithValidRequest/request-parameters.adoc[]
+
+==== 4.2.3. Http Response
+include::{snippets}/loginKakaoWithValidRequest/http-response.adoc[]
+
+==== 4.2.4. Response Body
+include::{snippets}/loginKakaoWithValidRequest/response-fields.adoc[]
