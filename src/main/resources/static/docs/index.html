@@ -504,8 +504,8 @@ Content-Length: 383
   "hashTags" : [ ],
   "images" : [ ],
   "address" : "서울특별시 종로구",
-  "createdAt" : "2023-05-29T23:55:56.7424795",
-  "modifiedAt" : "2023-05-29T23:55:56.7424795",
+  "createdAt" : "2023-06-07T02:01:04.9610467",
+  "modifiedAt" : "2023-06-07T02:01:04.9610467",
   "author" : "author"
 }</code></pre>
 </div>
@@ -656,8 +656,8 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-05-29T23:55:56.6004839",
-      "modifiedAt" : "2023-05-29T23:55:56.6004839"
+      "createdAt" : "2023-06-07T02:01:04.7740521",
+      "modifiedAt" : "2023-06-07T02:01:04.7740521"
     }, {
       "productId" : 1,
       "author" : "테스터1",
@@ -666,8 +666,8 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-05-29T23:55:56.6004839",
-      "modifiedAt" : "2023-05-29T23:55:56.6004839"
+      "createdAt" : "2023-06-07T02:01:04.7740521",
+      "modifiedAt" : "2023-06-07T02:01:04.7740521"
     } ],
     "pageable" : {
       "sort" : {
@@ -676,10 +676,10 @@ Content-Length: 1188
         "unsorted" : false
       },
       "offset" : 0,
-      "pageNumber" : 0,
       "pageSize" : 20,
-      "unpaged" : false,
-      "paged" : true
+      "pageNumber" : 0,
+      "paged" : true,
+      "unpaged" : false
     },
     "size" : 20,
     "number" : 0,
@@ -688,8 +688,8 @@ Content-Length: 1188
       "sorted" : true,
       "unsorted" : false
     },
-    "last" : false,
     "first" : true,
+    "last" : false,
     "numberOfElements" : 2,
     "empty" : false
   }
@@ -1325,13 +1325,13 @@ Content-Length: 239
 
 [ {
   "id" : 1120005200,
-  "addr" : "서울특별시 성동구 면목동"
+  "name" : "서울특별시 성동구 면목동"
 }, {
   "id" : 1123000100,
-  "addr" : "서울특별시 동대문구 면목동"
+  "name" : "서울특별시 동대문구 면목동"
 }, {
   "id" : 1126010100,
-  "addr" : "서울특별시 중랑구 면목동"
+  "name" : "서울특별시 중랑구 면목동"
 } ]</code></pre>
 </div>
 </div>
@@ -1358,7 +1358,7 @@ Content-Length: 239
 <td class="tableblock halign-left valign-top"><p class="tableblock">주소 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].addr</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">주소명</p></td>
 </tr>
@@ -1400,7 +1400,7 @@ Cookie: refresh_token=VALID_REFRESH_TOKEN</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Wed, 28 Jun 2023 14:55:54 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 17:00:59 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 199
 
@@ -1461,11 +1461,306 @@ Content-Length: 199
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_4_로그인_api">4. 로그인 API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_4_1_네이버_oauth_로그인">4.1. 네이버 OAuth 로그인</h3>
+<div class="sect3">
+<h4 id="_4_1_1_http_request">4.1.1. Http Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/members/oauth/login/naver?code=valid-authorization-code&amp;state=state HTTP/1.1
+Host: localhost:12376</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4_1_2_request_parameter">4.1.2. Request Parameter</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">발급받은 authorizationCode</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>state</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorizationCode 발급 시 사용했던 state 값</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_4_1_3_http_response">4.1.3. Http Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 17:01:01 GMT; Secure; HttpOnly
+Content-Type: application/json;charset=UTF-8
+Content-Length: 500
+
+{
+  "memberAttributes" : {
+    "id" : 1,
+    "oauthType" : "NAVER",
+    "oauthId" : "FXsYTEv0EWgPr8cJIJa6vkjmC-OT_fNqdd89cwWczdM",
+    "nickName" : "테스트닉네임",
+    "profileImageUrl" : "https://ssl.pstatic.net/static/pwe/address/img_profile.png",
+    "roles" : "USER",
+    "permissions" : "DELETE_PRODUCT, UPDATE_PRODUCT, CREATE_PRODUCT"
+  },
+  "tokenAttributes" : {
+    "grantType" : "Bearer",
+    "accessToken" : "accessToken",
+    "expiredAccessToken" : 1686149842378
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4_1_4_response_body">4.1.4. Response Body</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인 유저 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저 ID (DB에 저장된 키값)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth 타입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.roles</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역할</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.permissions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">권한</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.grantType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grantType</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accessToken</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.expiredAccessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 만료기간(UTC)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_4_2_카카오_oauth_로그인">4.2. 카카오 OAuth 로그인</h3>
+<div class="sect3">
+<h4 id="_4_2_1_http_request">4.2.1. Http Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/members/oauth/login/kakao?code=valid-authorization-code HTTP/1.1
+Host: localhost:12376</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4_2_2_request_parameter">4.2.2. Request Parameter</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">발급받은 authorizationCode</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_4_2_3_http_response">4.2.3. Http Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 17:01:01 GMT; Secure; HttpOnly
+Content-Type: application/json;charset=UTF-8
+Content-Length: 500
+
+{
+  "memberAttributes" : {
+    "id" : 1,
+    "oauthType" : "NAVER",
+    "oauthId" : "FXsYTEv0EWgPr8cJIJa6vkjmC-OT_fNqdd89cwWczdM",
+    "nickName" : "테스트닉네임",
+    "profileImageUrl" : "https://ssl.pstatic.net/static/pwe/address/img_profile.png",
+    "roles" : "USER",
+    "permissions" : "DELETE_PRODUCT, UPDATE_PRODUCT, CREATE_PRODUCT"
+  },
+  "tokenAttributes" : {
+    "grantType" : "Bearer",
+    "accessToken" : "accessToken",
+    "expiredAccessToken" : 1686149842378
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4_2_4_response_body">4.2.4. Response Body</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인 유저 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저 ID (DB에 저장된 키값)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth 타입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.roles</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역할</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.permissions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">권한</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.grantType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grantType</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accessToken</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.expiredAccessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 만료기간(UTC)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.5<br>
-Last updated 2023-05-29 23:53:01 +0900
+Last updated 2023-06-07 02:00:15 +0900
 </div>
 </div>
 </body>
