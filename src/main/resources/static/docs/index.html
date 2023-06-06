@@ -504,8 +504,8 @@ Content-Length: 383
   "hashTags" : [ ],
   "images" : [ ],
   "address" : "서울특별시 종로구",
-  "createdAt" : "2023-06-07T02:01:04.9610467",
-  "modifiedAt" : "2023-06-07T02:01:04.9610467",
+  "createdAt" : "2023-06-07T03:23:54.4384104",
+  "modifiedAt" : "2023-06-07T03:23:54.4384104",
   "author" : "author"
 }</code></pre>
 </div>
@@ -656,8 +656,8 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-06-07T02:01:04.7740521",
-      "modifiedAt" : "2023-06-07T02:01:04.7740521"
+      "createdAt" : "2023-06-07T03:23:54.2684161",
+      "modifiedAt" : "2023-06-07T03:23:54.2684161"
     }, {
       "productId" : 1,
       "author" : "테스터1",
@@ -666,8 +666,8 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-06-07T02:01:04.7740521",
-      "modifiedAt" : "2023-06-07T02:01:04.7740521"
+      "createdAt" : "2023-06-07T03:23:54.2684161",
+      "modifiedAt" : "2023-06-07T03:23:54.2684161"
     } ],
     "pageable" : {
       "sort" : {
@@ -676,10 +676,10 @@ Content-Length: 1188
         "unsorted" : false
       },
       "offset" : 0,
-      "pageSize" : 20,
       "pageNumber" : 0,
-      "paged" : true,
-      "unpaged" : false
+      "pageSize" : 20,
+      "unpaged" : false,
+      "paged" : true
     },
     "size" : 20,
     "number" : 0,
@@ -688,9 +688,9 @@ Content-Length: 1188
       "sorted" : true,
       "unsorted" : false
     },
+    "numberOfElements" : 2,
     "first" : true,
     "last" : false,
-    "numberOfElements" : 2,
     "empty" : false
   }
 }</code></pre>
@@ -1400,7 +1400,7 @@ Cookie: refresh_token=VALID_REFRESH_TOKEN</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 17:00:59 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:23:49 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 199
 
@@ -1508,7 +1508,7 @@ Host: localhost:12376</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 17:01:01 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:23:51 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 500
 
@@ -1651,7 +1651,7 @@ Host: localhost:12376</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 17:01:01 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:23:51 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 500
 
@@ -1756,11 +1756,139 @@ Content-Length: 500
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_5_카테고리_api">5. 카테고리 API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_5_1_카테고리_조회">5.1. 카테고리 조회</h3>
+<div class="sect3">
+<h4 id="_5_1_1_http_request">5.1.1. Http Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/categories HTTP/1.1
+Host: localhost:12376</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_1_2_request_parameter">5.1.2. Request Parameter</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_1_3_http_response">5.1.3. Http Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 779
+
+{
+  "data" : [ {
+    "id" : "CT_PS",
+    "category" : "Play Station",
+    "lowerCategories" : [ {
+      "id" : "CT_PS2",
+      "category" : "PS2",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_PS3",
+      "category" : "PS3",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_PS4",
+      "category" : "PS4",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_PS5",
+      "category" : "PS5",
+      "lowerCategories" : [ ]
+    } ]
+  }, {
+    "id" : "CT_XBOX",
+    "category" : "Xbox",
+    "lowerCategories" : [ {
+      "id" : "CT_XBOX360",
+      "category" : "Xbox 360 Series",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_XBOXOne",
+      "category" : "Xbox One Series",
+      "lowerCategories" : [ ]
+    } ]
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_1_4_response_body">5.1.4. Response Body</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories[].category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories[].lowerCategories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.5<br>
-Last updated 2023-06-07 02:00:15 +0900
+Last updated 2023-06-07 03:23:08 +0900
 </div>
 </div>
 </body>
