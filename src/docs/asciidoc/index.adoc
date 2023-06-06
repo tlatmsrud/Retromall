@@ -5,11 +5,9 @@
 :toc-title: 목차
 :source-highlighter: prettify
 
-sksim <tlatmsrud@naver.com>
+Creater : sksim <tlatmsrud@naver.com> , jhlee <email>
 
-jhlee <email>
-
-v1.0.0, 2023.06.07
+LastUpdateDate : 2023-06-07
 
 == 로그인 API
 
@@ -26,6 +24,9 @@ include::{snippets}/loginNaverWithValidRequest/http-response.adoc[]
 
 ==== Response Body
 include::{snippets}/loginNaverWithValidRequest/response-fields.adoc[]
+
+:hardbreaks:
+:hardbreaks:
 
 === 카카오 OAuth 로그인
 
