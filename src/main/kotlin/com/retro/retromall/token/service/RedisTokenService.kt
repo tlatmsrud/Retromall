@@ -1,9 +1,11 @@
 package com.retro.retromall.token.service
 
 import com.retro.common.JwtTokenProvider
+import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.token.dto.TokenDto
+import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Primary
 import org.springframework.data.redis.core.RedisTemplate
@@ -66,12 +68,12 @@ class RedisTokenService(
 
         memberRepository.selectPermissionsByMemberId(memberId) ?.let {
             return generateToken(it)
-        } ?: throw IllegalArgumentException()
+        } ?: throw UnauthorizedAccessException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
     }
 
 
     /**
-     * 유효 리프레시 토큰에 대한 memberId를 조회한다.
+     * 리프레시 토큰에 대한 memberId를 조회한다.
      *
      * @author sim
      * @param refreshToken
@@ -81,13 +83,12 @@ class RedisTokenService(
     override fun getMemberIdByValidRefreshToken(refreshToken : String) : Long {
 
         if(!jwtTokenProvider.validateToken(refreshToken)){
-            throw IllegalArgumentException("위변조된 리프레시 토큰입니다. 다시 로그인해주세요.")
+            throw UnauthorizedAccessException("위변조된 리프레시 토큰입니다. 다시 로그인해주세요.")
         }
 
         val memberId = redisTemplate.opsForValue().get(refreshToken) ?:{
-            throw IllegalArgumentException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
+            throw UnauthorizedAccessException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
         }
-        redisTemplate.delete(refreshToken)
 
         return memberId as Long
     }

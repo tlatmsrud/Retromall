@@ -2,6 +2,7 @@ package com.retro.retromall.token.service
 
 import com.google.common.primitives.UnsignedInts.toLong
 import com.retro.common.JwtTokenProvider
+import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.token.domain.Token
@@ -69,7 +70,7 @@ class DBTokenService(
 
         memberRepository.selectPermissionsByMemberId(memberId) ?.let {
             return generateToken(it)
-        } ?: throw IllegalArgumentException()
+        } ?: throw UnauthorizedAccessException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
     }
 
 
@@ -79,16 +80,16 @@ class DBTokenService(
      * @author sim
      * @param refreshToken
      * @return MemberId
-     * @throws IllegalArgumentException - 기간이 만료되거나 비정상적인 토큰일 경우 예외 발생
+     * @throws UnauthorizedAccessException - 기간이 만료되거나 비정상적인 토큰일 경우 예외 발생
      */
     override fun getMemberIdByValidRefreshToken(refreshToken : String) : Long {
 
         if(!jwtTokenProvider.validateToken(refreshToken)){
-            throw IllegalArgumentException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
+            throw UnauthorizedAccessException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
         }
 
         val token = tokenRepository.findByRefreshToken(refreshToken).orElseThrow{
-            IllegalArgumentException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
+            UnauthorizedAccessException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
         }
 
         return token.memberId

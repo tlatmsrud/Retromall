@@ -1,6 +1,7 @@
 package com.retro.retromall.product.support
 
 import com.retro.exception.RetromallException
+import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.authorization.enums.Permission
 import com.retro.retromall.category.domain.CategoryEntity
 import com.retro.retromall.category.service.CategoryReadService
@@ -67,7 +68,7 @@ class ProductModifierTest {
         `when`(productRepository.findById(productId)).thenReturn(Optional.of(product))
         `when`(categoryReadService.getCategory(dto.category)).thenReturn(CategoryEntity("새 카테고리", "새 카테고리 아이디"))
         `when`(productAuthorizationService.checkPermission(product, authenticationAttributes, Permission.UPDATE_PRODUCT)).thenCallRealMethod()
-        assertThrows<RetromallException> {
+        assertThrows<UnauthorizedAccessException> {
             productModifier.updateProduct(authenticationAttributes, productId, dto)
         }
     }

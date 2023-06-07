@@ -16,7 +16,7 @@ noArg {
 }
 
 group = "com.retro"
-version = "0.5"
+version = "0.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {

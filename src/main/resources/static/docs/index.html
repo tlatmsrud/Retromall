@@ -436,31 +436,385 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
 <h1>Retromall API 명세서</h1>
 <div class="details">
-<span id="revnumber">version 0.5</span>
+<span id="revnumber">version 0.1</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">목차</div>
+<ul class="sectlevel1">
+<li><a href="#_로그인_api">1. 로그인 API</a>
+<ul class="sectlevel2">
+<li><a href="#_네이버_oauth_로그인">1.1. 네이버 OAuth 로그인</a></li>
+<li><a href="#_카카오_oauth_로그인">1.2. 카카오 OAuth 로그인</a></li>
+</ul>
+</li>
+<li><a href="#_상품_api">2. 상품 API</a>
+<ul class="sectlevel2">
+<li><a href="#_상품_조회">2.1. 상품 조회</a></li>
+<li><a href="#_상품_리스트_조회">2.2. 상품 리스트 조회</a></li>
+<li><a href="#_상품_등록">2.3. 상품 등록</a></li>
+<li><a href="#_상품_수정">2.4. 상품 수정</a></li>
+<li><a href="#_상품_삭제">2.5. 상품 삭제</a></li>
+<li><a href="#_상품_좋아요_추가">2.6. 상품 좋아요 추가</a></li>
+<li><a href="#_상품_좋아요_삭제">2.7. 상품 좋아요 삭제</a></li>
+</ul>
+</li>
+<li><a href="#_주소_api">3. 주소 API</a>
+<ul class="sectlevel2">
+<li><a href="#_주소_검색">3.1. 주소 검색</a></li>
+</ul>
+</li>
+<li><a href="#_토큰_api">4. 토큰 API</a>
+<ul class="sectlevel2">
+<li><a href="#_액세스_토큰_갱신">4.1. 액세스 토큰 갱신</a></li>
+</ul>
+</li>
+<li><a href="#_카테고리_api">5. 카테고리 API</a>
+<ul class="sectlevel2">
+<li><a href="#_카테고리_조회">5.1. 카테고리 조회</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Creater : sksim &lt;<a href="mailto:tlatmsrud@naver.com">tlatmsrud@naver.com</a>&gt; , jhlee &lt;email&gt;</p>
+</div>
+<div class="paragraph">
+<p>LastUpdateDate : 2023-06-07</p>
+</div>
+</div>
+</div>
 <div class="sect1">
-<h2 id="_1_상품_api">1. 상품 API</h2>
+<h2 id="_로그인_api">1. 로그인 API</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_1_1_상품_조회">1.1. 상품 조회</h3>
+<h3 id="_네이버_oauth_로그인">1.1. 네이버 OAuth 로그인</h3>
 <div class="sect3">
-<h4 id="_1_1_1_http_request">1.1.1. HTTP Request</h4>
+<h4 id="_http_request">1.1.1. Http Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/products/1 HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /api/members/oauth/login/naver?code=valid-authorization-code&amp;state=state HTTP/1.1
+Host: localhost:12376</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_parameter">1.1.2. Request Parameter</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">발급받은 authorizationCode</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>state</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorizationCode 발급 시 사용했던 state 값</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response">1.1.3. Http Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:53:58 GMT; Secure; HttpOnly
+Content-Type: application/json;charset=UTF-8
+Content-Length: 500
+
+{
+  "memberAttributes" : {
+    "id" : 1,
+    "oauthType" : "NAVER",
+    "oauthId" : "FXsYTEv0EWgPr8cJIJa6vkjmC-OT_fNqdd89cwWczdM",
+    "nickName" : "테스트닉네임",
+    "profileImageUrl" : "https://ssl.pstatic.net/static/pwe/address/img_profile.png",
+    "roles" : "USER",
+    "permissions" : "DELETE_PRODUCT, UPDATE_PRODUCT, CREATE_PRODUCT"
+  },
+  "tokenAttributes" : {
+    "grantType" : "Bearer",
+    "accessToken" : "accessToken",
+    "expiredAccessToken" : 1686149842378
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_body">1.1.4. Response Body</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인 유저 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저 ID (DB에 저장된 키값)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth 타입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.roles</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역할</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.permissions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">권한</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.grantType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grantType</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accessToken</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.expiredAccessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 만료기간(UTC)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_카카오_oauth_로그인">1.2. 카카오 OAuth 로그인</h3>
+<div class="sect3">
+<h4 id="_http_request_2">1.2.1. Http Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /api/members/oauth/login/kakao?code=valid-authorization-code HTTP/1.1
+Host: localhost:12376</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_parameter_2">1.2.2. Request Parameter</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">발급받은 authorizationCode</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response_2">1.2.3. Http Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:53:57 GMT; Secure; HttpOnly
+Content-Type: application/json;charset=UTF-8
+Content-Length: 500
+
+{
+  "memberAttributes" : {
+    "id" : 1,
+    "oauthType" : "NAVER",
+    "oauthId" : "FXsYTEv0EWgPr8cJIJa6vkjmC-OT_fNqdd89cwWczdM",
+    "nickName" : "테스트닉네임",
+    "profileImageUrl" : "https://ssl.pstatic.net/static/pwe/address/img_profile.png",
+    "roles" : "USER",
+    "permissions" : "DELETE_PRODUCT, UPDATE_PRODUCT, CREATE_PRODUCT"
+  },
+  "tokenAttributes" : {
+    "grantType" : "Bearer",
+    "accessToken" : "accessToken",
+    "expiredAccessToken" : 1686149842378
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+oauthType 인 NAVER는 단순 예시입니다. 카카오의 경우 KAKAO로 응답받습니다.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_body_2">1.2.4. Response Body</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인 유저 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저 ID (DB에 저장된 키값)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth 타입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.oauthId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OAuth ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.roles</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">역할</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberAttributes.permissions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">권한</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.grantType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grantType</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accessToken</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tokenAttributes.expiredAccessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">토큰 만료기간(UTC)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_상품_api">2. 상품 API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_상품_조회">2.1. 상품 조회</h3>
+<div class="sect3">
+<h4 id="_http_request_3">2.1.1. HTTP Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /api/products/1 HTTP/1.1
 Authorization: Bearer TestToken
 Host: localhost:12376</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_1_2_path_parameter">1.1.2. Path Parameter</h4>
+<h4 id="_path_parameter">2.1.2. Path Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/products/{id}</caption>
 <colgroup>
@@ -482,10 +836,10 @@ Host: localhost:12376</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_1_1_3_http_response">1.1.3. HTTP Response</h4>
+<h4 id="_http_response_3">2.1.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -504,15 +858,15 @@ Content-Length: 383
   "hashTags" : [ ],
   "images" : [ ],
   "address" : "서울특별시 종로구",
-  "createdAt" : "2023-05-29T23:55:56.7424795",
-  "modifiedAt" : "2023-05-29T23:55:56.7424795",
+  "createdAt" : "2023-06-07T03:54:00.9980582",
+  "modifiedAt" : "2023-06-07T03:54:00.9980582",
   "author" : "author"
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_1_4_response_body">1.1.4. Response Body</h4>
+<h4 id="_response_body_3">2.1.4. Response Body</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -602,12 +956,12 @@ Content-Length: 383
 </div>
 </div>
 <div class="sect2">
-<h3 id="_1_2_상품_리스트_조회">1.2. 상품 리스트 조회</h3>
+<h3 id="_상품_리스트_조회">2.2. 상품 리스트 조회</h3>
 <div class="sect3">
-<h4 id="_1_2_1_http_request">1.2.1. HTTP Request</h4>
+<h4 id="_http_request_4">2.2.1. HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/products?category=PS2 HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /api/products?category=PS2 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer TestToken
 Host: localhost:12376</code></pre>
@@ -615,7 +969,7 @@ Host: localhost:12376</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_2_2_request_parameter">1.2.2. Request Parameter</h4>
+<h4 id="_request_parameter_3">2.2.2. Request Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -636,10 +990,10 @@ Host: localhost:12376</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_1_2_3_http_response">1.2.3. HTTP Response</h4>
+<h4 id="_http_response_4">2.2.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -656,8 +1010,8 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-05-29T23:55:56.6004839",
-      "modifiedAt" : "2023-05-29T23:55:56.6004839"
+      "createdAt" : "2023-06-07T03:54:00.8380567",
+      "modifiedAt" : "2023-06-07T03:54:00.8380567"
     }, {
       "productId" : 1,
       "author" : "테스터1",
@@ -666,8 +1020,8 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-05-29T23:55:56.6004839",
-      "modifiedAt" : "2023-05-29T23:55:56.6004839"
+      "createdAt" : "2023-06-07T03:54:00.8380567",
+      "modifiedAt" : "2023-06-07T03:54:00.8380567"
     } ],
     "pageable" : {
       "sort" : {
@@ -676,8 +1030,8 @@ Content-Length: 1188
         "unsorted" : false
       },
       "offset" : 0,
-      "pageNumber" : 0,
       "pageSize" : 20,
+      "pageNumber" : 0,
       "unpaged" : false,
       "paged" : true
     },
@@ -688,9 +1042,9 @@ Content-Length: 1188
       "sorted" : true,
       "unsorted" : false
     },
-    "last" : false,
-    "first" : true,
     "numberOfElements" : 2,
+    "first" : true,
+    "last" : false,
     "empty" : false
   }
 }</code></pre>
@@ -698,7 +1052,7 @@ Content-Length: 1188
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_2_4_response_body">1.2.4. Response Body</h4>
+<h4 id="_response_body_4">2.2.4. Response Body</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -873,12 +1227,12 @@ Content-Length: 1188
 </div>
 </div>
 <div class="sect2">
-<h3 id="_1_3_상품_등록">1.3. 상품 등록</h3>
+<h3 id="_상품_등록">2.3. 상품 등록</h3>
 <div class="sect3">
-<h4 id="_1_3_1_http_request">1.3.1. HTTP Request</h4>
+<h4 id="_http_request_5">2.3.1. HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/products HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /api/products HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer TestToken
 Content-Length: 213
@@ -898,7 +1252,7 @@ Host: localhost:12376
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_3_2_request_parameter">1.3.2. Request Parameter</h4>
+<h4 id="_request_parameter_4">2.3.2. Request Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -957,10 +1311,10 @@ Host: localhost:12376
 </table>
 </div>
 <div class="sect3">
-<h4 id="_1_3_3_http_response">1.3.3. HTTP Response</h4>
+<h4 id="_http_response_5">2.3.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -972,28 +1326,33 @@ Content-Length: 1
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_3_4_response_body">1.3.4. Response Body</h4>
+<h4 id="_response_body_5">2.3.4. Response Body</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code>1</code></pre>
+<pre class="prettyprint highlight nowrap"><code>1</code></pre>
 </div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>등록된 제품의 ID 값이 리턴됩니다.</p>
-</li>
-</ul>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+등록된 제품의 ID 값이 리턴됩니다.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_1_4_상품_수정">1.4. 상품 수정</h3>
+<h3 id="_상품_수정">2.4. 상품 수정</h3>
 <div class="sect3">
-<h4 id="_1_4_1_http_request">1.4.1. HTTP Request</h4>
+<h4 id="_http_request_6">2.4.1. HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /api/products/1 HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">PATCH /api/products/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer TestToken
 Content-Length: 222
@@ -1013,7 +1372,7 @@ Host: localhost:12376
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_4_2_request_parameter">1.4.2. Request Parameter</h4>
+<h4 id="_request_parameter_5">2.4.2. Request Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 2. /api/products/{id}</caption>
 <colgroup>
@@ -1091,10 +1450,10 @@ Host: localhost:12376
 </table>
 </div>
 <div class="sect3">
-<h4 id="_1_4_3_http_response">1.4.3. HTTP Response</h4>
+<h4 id="_http_response_6">2.4.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers</code></pre>
@@ -1102,21 +1461,21 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_4_4_response_body">1.4.4. Response Body</h4>
+<h4 id="_response_body_6">2.4.4. Response Body</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code></code></pre>
+<pre class="prettyprint highlight nowrap"><code></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_1_5_상품_삭제">1.5. 상품 삭제</h3>
+<h3 id="_상품_삭제">2.5. 상품 삭제</h3>
 <div class="sect3">
-<h4 id="_1_5_1_http_request">1.5.1. HTTP Request</h4>
+<h4 id="_http_request_7">2.5.1. HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/products/1 HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">DELETE /api/products/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer TestToken
 Host: localhost:12376</code></pre>
@@ -1124,7 +1483,7 @@ Host: localhost:12376</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_5_2_request_parameter">1.5.2. Request Parameter</h4>
+<h4 id="_request_parameter_6">2.5.2. Request Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 3. /api/products/{id}</caption>
 <colgroup>
@@ -1146,10 +1505,10 @@ Host: localhost:12376</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_1_5_3_http_response">1.5.3. HTTP Response</h4>
+<h4 id="_http_response_7">2.5.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers</code></pre>
@@ -1157,21 +1516,21 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_5_4_response_body">1.5.4. Response Body</h4>
+<h4 id="_response_body_7">2.5.4. Response Body</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code></code></pre>
+<pre class="prettyprint highlight nowrap"><code></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_1_6_상품_좋아요_추가">1.6. 상품 좋아요 추가</h3>
+<h3 id="_상품_좋아요_추가">2.6. 상품 좋아요 추가</h3>
 <div class="sect3">
-<h4 id="_1_6_1_http_request">1.6.1. HTTP Request</h4>
+<h4 id="_http_request_8">2.6.1. HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/products/like HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /api/products/like HTTP/1.1
 Authorization: Bearer TestToken
 Host: localhost:12376
 Content-Type: application/x-www-form-urlencoded
@@ -1181,7 +1540,7 @@ product_id=1</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_6_2_request_parameter">1.6.2. Request Parameter</h4>
+<h4 id="_request_parameter_7">2.6.2. Request Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1202,10 +1561,10 @@ product_id=1</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_1_6_3_http_response">1.6.3. HTTP Response</h4>
+<h4 id="_http_response_8">2.6.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers</code></pre>
@@ -1213,28 +1572,28 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_6_3_response_body">1.6.3. Response Body</h4>
+<h4 id="_response_body_8">2.6.4. Response Body</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code></code></pre>
+<pre class="prettyprint highlight nowrap"><code></code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_1_7_상품_좋아요_삭제">1.7 상품 좋아요 삭제</h3>
+<h3 id="_상품_좋아요_삭제">2.7. 상품 좋아요 삭제</h3>
 <div class="sect3">
-<h4 id="_1_7_1_http_request">1.7.1. HTTP Request</h4>
+<h4 id="_http_request_9">2.7.1. HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /api/products/like HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">PATCH /api/products/like HTTP/1.1
 Authorization: Bearer TestToken
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_7_2_request_parameter">1.7.2. Request Parameter</h4>
+<h4 id="_request_parameter_8">2.7.2. Request Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1255,10 +1614,10 @@ Host: localhost:8080</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_1_7_3_http_response">1.7.3. HTTP Response</h4>
+<h4 id="_http_response_9">2.7.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers</code></pre>
@@ -1266,10 +1625,10 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_1_7_4_response_body">1.7.4. Response Body</h4>
+<h4 id="_response_body_9">2.7.4. Response Body</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code></code></pre>
+<pre class="prettyprint highlight nowrap"><code></code></pre>
 </div>
 </div>
 </div>
@@ -1277,22 +1636,22 @@ Vary: Access-Control-Request-Headers</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_2_주소_api">2. 주소 API</h2>
+<h2 id="_주소_api">3. 주소 API</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_2_1_주소_검색">2.1. 주소 검색</h3>
+<h3 id="_주소_검색">3.1. 주소 검색</h3>
 <div class="sect3">
-<h4 id="_2_1_1_http_request">2.1.1. HTTP Request</h4>
+<h4 id="_http_request_10">3.1.1. HTTP Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/address/search?searchWord=%EB%A9%B4%EB%AA%A9%EB%8F%99 HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /api/address/search?searchWord=%EB%A9%B4%EB%AA%A9%EB%8F%99 HTTP/1.1
 Authorization: Bearer TestToken
 Host: localhost:12376</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_2_1_2_request_parameter">2.1.2. Request Parameter</h4>
+<h4 id="_request_parameter_9">3.1.2. Request Parameter</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1313,10 +1672,10 @@ Host: localhost:12376</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_2_1_3_http_response">2.1.3. HTTP Response</h4>
+<h4 id="_http_response_10">3.1.3. HTTP Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1325,19 +1684,19 @@ Content-Length: 239
 
 [ {
   "id" : 1120005200,
-  "addr" : "서울특별시 성동구 면목동"
+  "name" : "서울특별시 성동구 면목동"
 }, {
   "id" : 1123000100,
-  "addr" : "서울특별시 동대문구 면목동"
+  "name" : "서울특별시 동대문구 면목동"
 }, {
   "id" : 1126010100,
-  "addr" : "서울특별시 중랑구 면목동"
+  "name" : "서울특별시 중랑구 면목동"
 } ]</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_2_1_4_response_body">2.1.4. Response Body</h4>
+<h4 id="_response_body_10">3.1.4. Response Body</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1358,7 +1717,7 @@ Content-Length: 239
 <td class="tableblock halign-left valign-top"><p class="tableblock">주소 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].addr</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">주소명</p></td>
 </tr>
@@ -1369,15 +1728,15 @@ Content-Length: 239
 </div>
 </div>
 <div class="sect1">
-<h2 id="_3_토큰_api">3. 토큰 API</h2>
+<h2 id="_토큰_api">4. 토큰 API</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_3_1_액세스_토큰_갱신">3.1. 액세스 토큰 갱신</h3>
+<h3 id="_액세스_토큰_갱신">4.1. 액세스 토큰 갱신</h3>
 <div class="sect3">
-<h4 id="_3_1_1_http_request">3.1.1. Http Request</h4>
+<h4 id="_http_request_11">4.1.1. Http Request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /api/token HTTP/1.1
+<pre class="prettyprint highlight nowrap"><code data-lang="http">PATCH /api/token HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Host: localhost:12376
 Cookie: refresh_token=VALID_REFRESH_TOKEN</code></pre>
@@ -1385,22 +1744,22 @@ Cookie: refresh_token=VALID_REFRESH_TOKEN</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_1_2_request_parameter">3.1.2. Request Parameter</h4>
+<h4 id="_request_parameter_10">4.1.2. Request Parameter</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code></code></pre>
+<pre class="prettyprint highlight nowrap"><code></code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_1_3_http_response">3.1.3. Http Response</h4>
+<h4 id="_http_response_11">4.1.3. Http Response</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Wed, 28 Jun 2023 14:55:54 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:53:56 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 199
 
@@ -1415,7 +1774,7 @@ Content-Length: 199
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_1_4_response_body">3.1.4. Response Body</h4>
+<h4 id="_response_body_11">4.1.4. Response Body</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1461,12 +1820,142 @@ Content-Length: 199
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_카테고리_api">5. 카테고리 API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_카테고리_조회">5.1. 카테고리 조회</h3>
+<div class="sect3">
+<h4 id="_http_request_12">5.1.1. Http Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /api/categories HTTP/1.1
+Host: localhost:12376</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_parameter_11">5.1.2. Request Parameter</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_response_12">5.1.3. Http Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 779
+
+{
+  "data" : [ {
+    "id" : "CT_PS",
+    "category" : "Play Station",
+    "lowerCategories" : [ {
+      "id" : "CT_PS2",
+      "category" : "PS2",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_PS3",
+      "category" : "PS3",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_PS4",
+      "category" : "PS4",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_PS5",
+      "category" : "PS5",
+      "lowerCategories" : [ ]
+    } ]
+  }, {
+    "id" : "CT_XBOX",
+    "category" : "Xbox",
+    "lowerCategories" : [ {
+      "id" : "CT_XBOX360",
+      "category" : "Xbox 360 Series",
+      "lowerCategories" : [ ]
+    }, {
+      "id" : "CT_XBOXOne",
+      "category" : "Xbox One Series",
+      "lowerCategories" : [ ]
+    } ]
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_body_12">5.1.4. Response Body</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카테고리명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories[].category</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].lowerCategories[].lowerCategories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">하위 카테고리 리스트</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.5<br>
-Last updated 2023-05-29 23:53:01 +0900
+Version 0.1<br>
+Last updated 2023-06-07 03:53:51 +0900
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
 </body>
 </html>

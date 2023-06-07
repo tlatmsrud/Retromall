@@ -3,6 +3,7 @@ package com.retro.retromall.controller
 import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
 import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
 import com.retro.common.JwtTokenProvider
+import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.token.TokenController
 import com.retro.retromall.token.dto.TokenDto
 import com.retro.retromall.token.service.RedisTokenService
@@ -71,10 +72,10 @@ class TokenControllerTest{
             .willReturn(tokenDto)
 
         given(tokenService.renewAccessToken(INVALID_REFRESH_TOKEN))
-            .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
+            .willThrow(UnauthorizedAccessException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
 
         given(tokenService.renewAccessToken(""))
-            .willThrow(IllegalArgumentException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
+            .willThrow(UnauthorizedAccessException("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요."))
 
     }
 
@@ -106,13 +107,13 @@ class TokenControllerTest{
     }
 
     @Test
-    @DisplayName("유요하지 않은 리프레시 토큰을 통한 토큰 갱신")
+    @DisplayName("유효하지 않은 리프레시 토큰을 통한 토큰 갱신")
     fun updateTokenByInvalidRefreshToken(){
         mockMvc.perform(
             MockMvcRequestBuilders.patch("/api/token")
                 .cookie(Cookie("refresh_token", INVALID_REFRESH_TOKEN))
         )
-            .andExpect(status().isOk)
+            .andExpect(status().isUnauthorized)
             .andExpect(content().string(containsString("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요.")))
 
         verify(tokenService).renewAccessToken(INVALID_REFRESH_TOKEN)
@@ -125,7 +126,7 @@ class TokenControllerTest{
             MockMvcRequestBuilders.patch("/api/token")
                 .cookie(Cookie("refresh_token", ""))
         )
-            .andExpect(status().isOk)
+            .andExpect(status().isUnauthorized)
             .andExpect(content().string(containsString("유효하지 않는 토큰입니다. 로그인을 다시 시도해주세요.")))
 
         verify(tokenService).renewAccessToken("")
