@@ -3,8 +3,8 @@ package com.retro.retromall.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
 import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
-import com.retro.common.JwtTokenProvider
-import com.retro.exception.ProductNotFoundException
+import com.retro.aop.JwtTokenProvider
+import com.retro.exception.ProductException
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.controller.ProductController
 import com.retro.retromall.product.dto.CreateProductRequest
@@ -109,12 +109,12 @@ class ProductControllerTest {
             .willReturn(1L)
 
         given(productService.updateProduct(authenticationAttributes, 100, generateValidUpdateRequest()))
-            .willThrow(ProductNotFoundException("해당 상품을 찾을 수 없습니다."))
+            .willThrow(ProductException("해당 상품을 찾을 수 없습니다."))
 
         willDoNothing().given(productService).deleteProduct(authenticationAttributes, 1);
 
         given(productService.deleteProduct(authenticationAttributes, 100))
-            .willThrow(ProductNotFoundException("해당 상품을 찾을 수 없습니다."))
+            .willThrow(ProductException("해당 상품을 찾을 수 없습니다."))
 
     }
 

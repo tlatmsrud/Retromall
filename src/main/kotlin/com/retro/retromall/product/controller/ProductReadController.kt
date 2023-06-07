@@ -1,6 +1,6 @@
 package com.retro.retromall.product.controller
 
-import com.retro.common.annotation.MemberAuthentication
+import com.retro.aop.annotation.MemberAuthentication
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse

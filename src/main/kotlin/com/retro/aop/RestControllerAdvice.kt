@@ -1,7 +1,8 @@
-package com.retro.common
+package com.retro.aop
 
 import com.retro.exception.ProductException
 import com.retro.exception.UnauthorizedAccessException
+import com.retro.retromall.address.exception.AddressException
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
@@ -16,8 +17,8 @@ import javax.validation.ConstraintViolationException
 
 @ControllerAdvice
 class RestControllerAdvice {
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun illegalArgumentException(e : IllegalArgumentException): ResponseEntity<Any>{
+    @ExceptionHandler(AddressException::class)
+    fun addressException(e : AddressException): ResponseEntity<Any>{
         return ResponseEntity.ok(ErrorResponse(e.message))
     }
     @ExceptionHandler(ProductException::class)

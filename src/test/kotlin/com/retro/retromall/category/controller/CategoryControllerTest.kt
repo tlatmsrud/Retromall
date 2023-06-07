@@ -3,7 +3,7 @@ package com.retro.retromall.category.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
 import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
 import com.retro.retromall.category.dto.CategoryListResponse
 import com.retro.retromall.category.service.CategoryReadService
 import org.hamcrest.CoreMatchers

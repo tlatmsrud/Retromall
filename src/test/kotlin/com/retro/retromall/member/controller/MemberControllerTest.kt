@@ -3,7 +3,7 @@ package com.retro.retromall.member.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
 import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.dto.TokenAttributes
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.ArgumentMatchers.eq
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -34,7 +33,6 @@ import org.springframework.restdocs.request.RequestDocumentation.requestParamete
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders

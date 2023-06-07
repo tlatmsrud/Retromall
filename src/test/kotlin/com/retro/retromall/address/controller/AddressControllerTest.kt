@@ -3,7 +3,7 @@ package com.retro.retromall.address.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
 import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
 import com.retro.retromall.address.dto.AddressResponse
 import com.retro.retromall.address.service.AddressService
 import org.hamcrest.CoreMatchers.containsString

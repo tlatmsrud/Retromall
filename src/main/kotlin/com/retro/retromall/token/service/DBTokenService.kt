@@ -1,7 +1,7 @@
 package com.retro.retromall.token.service
 
 import com.google.common.primitives.UnsignedInts.toLong
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
 import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.repository.MemberRepository

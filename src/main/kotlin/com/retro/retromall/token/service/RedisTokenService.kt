@@ -1,11 +1,10 @@
 package com.retro.retromall.token.service
 
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
 import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.token.dto.TokenDto
-import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Primary
 import org.springframework.data.redis.core.RedisTemplate

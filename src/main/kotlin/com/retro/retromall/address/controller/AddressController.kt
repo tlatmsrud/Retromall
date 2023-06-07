@@ -1,6 +1,6 @@
 package com.retro.retromall.address.controller
 
-import com.retro.common.annotation.MemberAuthentication
+import com.retro.aop.annotation.MemberAuthentication
 import com.retro.retromall.address.dto.AddressResponse
 import com.retro.retromall.address.service.AddressService
 import com.retro.retromall.member.dto.AuthenticationAttributes

@@ -4,7 +4,9 @@ import com.retro.config.RedisCacheConfig
 import com.retro.retromall.address.domain.AddressEntity
 import com.retro.retromall.address.domain.repository.AddressRepository
 import com.retro.retromall.address.dto.AddressResponse
+import com.retro.retromall.address.exception.AddressException
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
@@ -20,7 +22,7 @@ class AddressService (
 */
     fun findById(id : Long): AddressEntity{
         return addressRepository.findById(id).orElseThrow {
-            IllegalArgumentException("유효하지 않는 주소 ID 입니다. 관리자에게 문의해주세요.")
+            AddressException("유효하지 않는 주소 ID 입니다. 관리자에게 문의해주세요.", HttpStatus.NO_CONTENT)
         }
     }
 

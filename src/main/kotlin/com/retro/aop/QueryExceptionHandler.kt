@@ -1,7 +1,6 @@
-package com.retro.common
+package com.retro.aop
 
 import org.hibernate.QueryException
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import java.sql.SQLIntegrityConstraintViolationException
 

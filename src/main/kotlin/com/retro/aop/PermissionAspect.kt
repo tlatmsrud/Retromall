@@ -1,5 +1,6 @@
-package com.retro.common.aop
+package com.retro.aop
 
+import com.retro.aop.annotation.RequirePermission
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around

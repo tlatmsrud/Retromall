@@ -2,7 +2,7 @@ package com.retro.retromall.controller
 
 import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
 import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
 import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.token.TokenController
 import com.retro.retromall.token.dto.TokenDto
