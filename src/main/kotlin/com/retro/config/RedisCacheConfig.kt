@@ -15,6 +15,9 @@ import java.time.Duration
 @Configuration
 @EnableCaching
 class RedisCacheConfig {
+    companion object {
+        const val ADDRESS_LIST = "addressList"
+    }
 
     @Bean
     fun redisCacheManager(cf: RedisConnectionFactory?): CacheManager? {

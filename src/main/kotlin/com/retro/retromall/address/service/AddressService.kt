@@ -1,5 +1,6 @@
 package com.retro.retromall.address.service
 
+import com.retro.config.RedisCacheConfig
 import com.retro.retromall.address.domain.AddressEntity
 import com.retro.retromall.address.domain.repository.AddressRepository
 import com.retro.retromall.address.dto.AddressResponse
@@ -23,7 +24,7 @@ class AddressService (
         }
     }
 
-    @Cacheable(value = ["AllAddress"], key = "", cacheManager = "redisCacheManager")
+    @Cacheable(value = [RedisCacheConfig.ADDRESS_LIST], key = "", cacheManager = "redisCacheManager")
     fun searchAllAddress() : List<AddressResponse> {
         val list = addressRepository.findAll()
         return list.stream()
