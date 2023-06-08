@@ -23,10 +23,10 @@ class RedisConfig(
         return LettuceConnectionFactory(host, port)
     }
     @Bean
-    fun redisTemplate(): RedisTemplate<String, Long> {
+    fun redisTemplate(): RedisTemplate<String, Any> {
         val objectMapper = ObjectMapper()
         objectMapper.enable(DeserializationFeature.USE_LONG_FOR_INTS)
-        val template = RedisTemplate<String, Long>()
+        val template = RedisTemplate<String, Any>()
         redisConnectionFactory()?.let { template.setConnectionFactory(it) }
         template.keySerializer = StringRedisSerializer()
         template.valueSerializer = GenericJackson2JsonRedisSerializer(objectMapper)
