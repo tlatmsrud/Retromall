@@ -45,3 +45,4 @@ refresh-token-cookie:
 autocomplete:
   suffix: '*'
   limit: 5
+  key: auto-complete

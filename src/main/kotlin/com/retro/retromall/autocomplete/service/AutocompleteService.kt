@@ -12,15 +12,16 @@ import kotlin.streams.toList
 class AutocompleteService (
     private val redisTemplate : RedisTemplate<String, String>,
     @Value("\${autocomplete.limit}") private val limit: Long,
-    @Value("\${autocomplete.suffix}") private val suffix : String
+    @Value("\${autocomplete.suffix}") private val suffix : String,
+    @Value("\${autocomplete.key}") private val key : String
 ){
     fun getAutocomplete(searchWord : String) : AutocompleteResponse {
         val zSetOperations = redisTemplate.opsForZSet()
         var autoCompleteList  = emptyList<String>()
 
-        zSetOperations.rank("auto-complete", searchWord)?.let {
+        zSetOperations.rank(key, searchWord)?.let {
 
-            val rangeList = zSetOperations.range("auto-complete", it, -1) as Set<String>
+            val rangeList = zSetOperations.range(key, it, -1) as Set<String>
 
             autoCompleteList =  rangeList.stream()
                 .filter { value -> value.endsWith(suffix) && value.contains(searchWord)}
