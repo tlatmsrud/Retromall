@@ -53,7 +53,7 @@ class RedisTokenServiceTest {
     @BeforeEach
     fun setUp(){
 
-        tokenService = RedisTokenService(REFRESH_TOKEN_COOKIE_DAY, memberRepository, jwtTokenProvider, redisTemplate as RedisTemplate<String, Long>)
+        tokenService = RedisTokenService(REFRESH_TOKEN_COOKIE_DAY, memberRepository, jwtTokenProvider, redisTemplate as RedisTemplate<String, String>)
 
         val token = Token(1, VALID_REFRESH_TOKEN, Date().time + 2592000000)
         val expiredToken = Token(2, EXPIRED_REFRESH_TOKEN,Date().time - toLong(86400000))
@@ -87,11 +87,11 @@ class RedisTokenServiceTest {
         given(jwtTokenProvider.generateRefreshToken(any(MemberAttributes::class.java)))
             .willReturn(generatedRefreshTokenDto)
 
-        given(redisTemplate.opsForValue()).willReturn(valueOperations as ValueOperations<String, Long>)
+        given(redisTemplate.opsForValue()).willReturn(valueOperations as ValueOperations<String, String>)
 
-        willDoNothing().given(valueOperations).set(any(String::class.java), any(Long::class.java), eq(Duration.ofDays(30)))
+        willDoNothing().given(valueOperations).set(any(String::class.java), any(String::class.java), eq(Duration.ofDays(30)))
 
-        given(valueOperations.get(VALID_REFRESH_TOKEN)).willReturn(1L)
+        given(valueOperations.get(VALID_REFRESH_TOKEN)).willReturn(1L.toString())
 
         given(valueOperations.get(INVALID_REFRESH_TOKEN)).willReturn(null)
         given(valueOperations.get(EXPIRED_REFRESH_TOKEN)).willReturn(null)
