@@ -80,7 +80,6 @@ class RedisTokenService(
      * @throws IllegalArgumentException - 기간이 만료되거나 비정상적인 토큰일 경우 예외 발생
      */
     override fun getMemberIdByValidRefreshToken(refreshToken : String) : Long {
-        val ops = redisTemplate.opsForValue()
         if(!jwtTokenProvider.validateToken(refreshToken)){
             throw UnauthorizedAccessException("위변조된 리프레시 토큰입니다. 다시 로그인해주세요.")
         }
