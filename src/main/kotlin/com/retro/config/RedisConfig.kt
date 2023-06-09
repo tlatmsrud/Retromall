@@ -24,8 +24,6 @@ class RedisConfig(
     }
     @Bean
     fun redisTemplate(): RedisTemplate<String, String> {
-        val objectMapper = ObjectMapper()
-        objectMapper.enable(DeserializationFeature.USE_LONG_FOR_INTS)
         val template = RedisTemplate<String, String>()
         redisConnectionFactory()?.let { template.setConnectionFactory(it) }
         template.keySerializer = StringRedisSerializer()
