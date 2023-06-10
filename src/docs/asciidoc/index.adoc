@@ -193,3 +193,19 @@ include::{snippets}/getCategoryList/http-response.adoc[]
 
 ==== Response Body
 include::{snippets}/getCategoryList/response-fields.adoc[]
+
+== 자동완성 API
+
+=== 자동완성 조회
+
+==== Http Request
+include::{snippets}/getAutocompleteWithValidSearchWord/http-request.adoc[]
+
+==== Request Parameter
+include::{snippets}/getAutocompleteWithValidSearchWord/path-parameters.adoc[]
+
+==== Http Response
+include::{snippets}/getAutocompleteWithValidSearchWord/http-response.adoc[]
+
+==== Response Body
+include::{snippets}/getAutocompleteWithValidSearchWord/response-fields.adoc[]

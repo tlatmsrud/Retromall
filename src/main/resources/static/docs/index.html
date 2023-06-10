@@ -477,6 +477,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_카테고리_조회">5.1. 카테고리 조회</a></li>
 </ul>
 </li>
+<li><a href="#_자동완성_api">6. 자동완성 API</a>
+<ul class="sectlevel2">
+<li><a href="#_자동완성_조회">6.1. 자동완성 조회</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -538,7 +543,7 @@ Host: localhost:12376</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:53:58 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Mon, 10 Jul 2023 08:39:45 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 500
 
@@ -681,7 +686,7 @@ Host: localhost:12376</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:53:57 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=refreshToken; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Mon, 10 Jul 2023 08:39:45 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 500
 
@@ -858,8 +863,8 @@ Content-Length: 383
   "hashTags" : [ ],
   "images" : [ ],
   "address" : "서울특별시 종로구",
-  "createdAt" : "2023-06-07T03:54:00.9980582",
-  "modifiedAt" : "2023-06-07T03:54:00.9980582",
+  "createdAt" : "2023-06-10T17:39:47.3303493",
+  "modifiedAt" : "2023-06-10T17:39:47.3303493",
   "author" : "author"
 }</code></pre>
 </div>
@@ -1010,8 +1015,8 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-06-07T03:54:00.8380567",
-      "modifiedAt" : "2023-06-07T03:54:00.8380567"
+      "createdAt" : "2023-06-10T17:39:47.2093468",
+      "modifiedAt" : "2023-06-10T17:39:47.2093468"
     }, {
       "productId" : 1,
       "author" : "테스터1",
@@ -1020,14 +1025,14 @@ Content-Length: 1188
       "likes" : 0,
       "thumbnail" : "썸네일 이미지 URL",
       "addr" : "서울특별시",
-      "createdAt" : "2023-06-07T03:54:00.8380567",
-      "modifiedAt" : "2023-06-07T03:54:00.8380567"
+      "createdAt" : "2023-06-10T17:39:47.2093468",
+      "modifiedAt" : "2023-06-10T17:39:47.2093468"
     } ],
     "pageable" : {
       "sort" : {
         "empty" : false,
-        "sorted" : true,
-        "unsorted" : false
+        "unsorted" : false,
+        "sorted" : true
       },
       "offset" : 0,
       "pageSize" : 20,
@@ -1039,12 +1044,12 @@ Content-Length: 1188
     "number" : 0,
     "sort" : {
       "empty" : false,
-      "sorted" : true,
-      "unsorted" : false
+      "unsorted" : false,
+      "sorted" : true
     },
-    "numberOfElements" : 2,
     "first" : true,
     "last" : false,
+    "numberOfElements" : 2,
     "empty" : false
   }
 }</code></pre>
@@ -1759,7 +1764,7 @@ Cookie: refresh_token=VALID_REFRESH_TOKEN</code></pre>
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
-Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Thu, 6 Jul 2023 18:53:56 GMT; Secure; HttpOnly
+Set-Cookie: refresh-token=NEW_REFRESH_TOKEN; Path=${refresh-token-cookie.path}; Max-Age=2592000; Expires=Mon, 10 Jul 2023 08:39:43 GMT; Secure; HttpOnly
 Content-Type: application/json;charset=UTF-8
 Content-Length: 199
 
@@ -1948,11 +1953,91 @@ Content-Length: 779
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_자동완성_api">6. 자동완성 API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_자동완성_조회">6.1. 자동완성 조회</h3>
+<div class="sect3">
+<h4 id="_http_request_13">6.1.1. Http Request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /api/autocomplete/%ED%94%8C%EB%A0%88%EC%9D%B4%EC%8A%A4%ED%85%8C%EC%9D%B4%EC%85%98 HTTP/1.1
+Host: localhost:12376</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_request_parameter_12">6.1.2. Request Parameter</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. /api/autocomplete/{searchWord}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>searchWord</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">검색어</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response_13">6.1.3. Http Response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 167
+
+{
+  "list" : [ "플레이스테이션 2 슬림라인", "플레이스테이션 2", "플레이스테이션 3", "플레이스테이션 4", "플레이스테이션 5" ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_body_13">6.1.4. Response Body</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>list</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">자동완성 리스트</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.1<br>
-Last updated 2023-06-07 03:53:51 +0900
+Last updated 2023-06-10 17:39:20 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
