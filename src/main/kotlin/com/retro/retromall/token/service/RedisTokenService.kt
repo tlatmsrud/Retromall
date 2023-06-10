@@ -26,7 +26,7 @@ class RedisTokenService(
     private val refreshTokenCookieDay: Long,
     private val memberRepository: MemberRepository,
     private val jwtTokenProvider: JwtTokenProvider,
-    private val redisTemplate : RedisTemplate<String, Long>
+    private val redisTemplate : RedisTemplate<String, String>
 ) : TokenService {
     /**
      * 토큰을 생성한다.
@@ -44,7 +44,7 @@ class RedisTokenService(
 
         val refreshTokenDto = jwtTokenProvider.generateRefreshToken(attributes)
 
-        redisTemplate.opsForValue().set(refreshTokenDto.refreshToken, memberId, Duration.ofDays(refreshTokenCookieDay))
+        redisTemplate.opsForValue().set(refreshTokenDto.refreshToken, memberId.toString(), Duration.ofDays(refreshTokenCookieDay))
 
         return TokenDto(accessTokenDto.grantType, accessTokenDto.accessToken, refreshTokenDto.refreshToken
                 , accessTokenDto.expirationAccessToken, refreshTokenDto.expirationRefreshToken)
@@ -80,16 +80,14 @@ class RedisTokenService(
      * @throws IllegalArgumentException - 기간이 만료되거나 비정상적인 토큰일 경우 예외 발생
      */
     override fun getMemberIdByValidRefreshToken(refreshToken : String) : Long {
-
         if(!jwtTokenProvider.validateToken(refreshToken)){
             throw UnauthorizedAccessException("위변조된 리프레시 토큰입니다. 다시 로그인해주세요.")
         }
 
-        val memberId = redisTemplate.opsForValue().get(refreshToken) ?:{
-            throw UnauthorizedAccessException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
+        redisTemplate.opsForValue().get(refreshToken)?.let {
+            return it.toLong()
         }
-
-        return memberId as Long
+        throw UnauthorizedAccessException("유효하지 않은 리프레시 토큰입니다. 다시 로그인해주세요.")
     }
 }
 
