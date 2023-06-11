@@ -1,12 +1,12 @@
 package com.retro.retromall.member.service
 
-import com.retro.retromall.auth.service.OAuthService
+import com.retro.retromall.oauth.service.OAuthService
 import com.retro.retromall.member.domain.MemberEntity
 import com.retro.retromall.member.dto.LoginResponse
 import com.retro.retromall.member.dto.TokenAttributes
-import com.retro.retromall.auth.client.dto.OAuthMemberAttributes
+import com.retro.retromall.oauth.client.dto.OAuthMemberAttributes
 import com.retro.retromall.member.enums.OAuthType
-import com.retro.retromall.auth.client.dto.OAuthAuthorizationCode
+import com.retro.retromall.oauth.client.dto.OAuthAuthorizationCode
 import com.retro.retromall.member.repository.MemberRepository
 import com.retro.retromall.member.support.MemberFactory
 import com.retro.retromall.token.service.TokenService

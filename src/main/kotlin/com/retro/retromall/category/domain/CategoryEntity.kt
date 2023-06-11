@@ -19,6 +19,9 @@ class CategoryEntity(
     @JoinColumn(name = "parent")
     var parent: CategoryEntity?
 ) {
+    constructor(
+        name: String, id: String
+    ) : this(name, id, mutableListOf<CategoryEntity>(), null)
     fun addLowerCategory(categoryEntity: CategoryEntity) {
         this.lowerCategoryListEntity.add(categoryEntity)
         categoryEntity.parent = this

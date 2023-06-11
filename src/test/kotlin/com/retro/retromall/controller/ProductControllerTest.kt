@@ -1,6 +1,9 @@
 package com.retro.retromall.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.retro.ApiDocumentUtils
+import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
+import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
 import com.retro.common.JwtTokenProvider
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.controller.ProductController
@@ -18,12 +21,20 @@ import org.mockito.Mockito
 import org.mockito.Mockito.verify
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
+import org.springframework.restdocs.payload.JsonFieldType
+import org.springframework.restdocs.payload.PayloadDocumentation
+import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -33,6 +44,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.filter.CharacterEncodingFilter
+import javax.validation.constraints.NotBlank
 
 @WebMvcTest(ProductController::class)
 @ActiveProfiles("local")
@@ -75,6 +87,11 @@ class ProductControllerTest {
             permissions = "CREATE_PRODUCT, MODIFY_PRODUCT, DELETE_PRODUCT"
         )
     }
+    private fun headerBuild(): HttpHeaders {
+        val header = HttpHeaders()
+        header.set("Authorization","Bearer TestToken")
+        return header
+    }
 
     @BeforeEach
     fun setUp(webApplicationContext : WebApplicationContext,
@@ -111,13 +128,29 @@ class ProductControllerTest {
     fun createProductByValidRequest(){
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/products")
-                .header("Authorization","Bearer TestToken")
+                .headers(headerBuild())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(generateValidCreateRequest()))
             )
             .andExpect(status().isOk)
             .andExpect(content().string("1"))
-            .andDo(document("createProductByValidRequest"))
+            .andDo(
+                document("createProductByValidRequest"
+                    , getDocumentRequest()
+                    , getDocumentResponse()
+                    , requestFields(
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("내용"),
+                        fieldWithPath("amount").type(JsonFieldType.NUMBER).description("가격"),
+                        fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리"),
+                        fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("썸네일 URL"),
+                        fieldWithPath("images").type(JsonFieldType.ARRAY).description("이미지 URL 리스트"),
+                        fieldWithPath("hashTags").type(JsonFieldType.ARRAY).description("해시태그 리스트"),
+                        fieldWithPath("addressId").type(JsonFieldType.NUMBER).description("주소 ID")
+                    )
+                    
+                )
+            )
 
         verify(productService).createProduct(
             any(AuthenticationAttributes::class.java), any(CreateProductRequest::class.java))
@@ -125,10 +158,11 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("유효하지 않은 요청값을 통한 제품 등록")
     fun createProductByInvalidRequest(){
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/products")
-                .header("Authorization","Bearer TestToken")
+                .headers(headerBuild())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(generateInvalidCreateRequest()))
         )
@@ -141,13 +175,31 @@ class ProductControllerTest {
     @DisplayName("유효한 요청값을 통한 제품수정")
     fun updateProductByValidRequest(){
         mockMvc.perform(
-            MockMvcRequestBuilders.patch("/api/products/{id}",1)
-                .header("Authorization","Bearer TestToken")
+            RestDocumentationRequestBuilders.patch("/api/products/{id}",1)
+                .headers(headerBuild())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(generateValidUpdateRequest()))
         )
             .andExpect(status().isOk)
-            .andDo(document("updateProductByValidRequest"))
+            .andDo(
+                document("updateProductByValidRequest"
+                    ,getDocumentRequest()
+                    ,getDocumentResponse()
+                    ,pathParameters(
+                        parameterWithName("id").description("제품 ID")
+                    )
+                    ,requestFields(
+                        fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("내용"),
+                        fieldWithPath("amount").type(JsonFieldType.NUMBER).description("가격"),
+                        fieldWithPath("category").type(JsonFieldType.STRING).description("카테고리"),
+                        fieldWithPath("thumbnail").type(JsonFieldType.STRING).description("썸네일 URL"),
+                        fieldWithPath("images").type(JsonFieldType.ARRAY).description("이미지 URL 리스트"),
+                        fieldWithPath("hashTags").type(JsonFieldType.ARRAY).description("해시태그 리스트"),
+                        fieldWithPath("addressId").type(JsonFieldType.NUMBER).description("주소 ID")
+                    )
+                )
+            )
 
         verify(productService).updateProduct(
             any(AuthenticationAttributes::class.java), eq(1L), any(ProductUpdateRequest::class.java))
@@ -157,8 +209,8 @@ class ProductControllerTest {
     @DisplayName("유효하지 않은 ID를 통한 제품수정")
     fun updateProductByInvalidId(){
         mockMvc.perform(
-            MockMvcRequestBuilders.patch("/api/products/{id}",100)
-                .header("Authorization","Bearer TestToken")
+            RestDocumentationRequestBuilders.patch("/api/products/{id}",100)
+                .headers(headerBuild())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(generateValidUpdateRequest()))
         )
@@ -174,12 +226,20 @@ class ProductControllerTest {
     @DisplayName("유효한 ID에 대한 제품 삭제")
     fun deleteProductByValidId(){
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/api/products/{id}",1)
-                .header("Authorization","Bearer TestToken")
+            RestDocumentationRequestBuilders.delete("/api/products/{id}",1)
+                .headers(headerBuild())
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
-            .andDo(document("deleteProductByValidId"))
+            .andDo(
+                document("deleteProductByValidId"
+                    ,getDocumentRequest()
+                    ,getDocumentResponse()
+                    ,pathParameters(
+                        parameterWithName("id").description("제품 ID")
+                    )
+                )
+            )
 
         verify(productService).deleteProduct(
             any(AuthenticationAttributes::class.java), eq(1L))
@@ -189,8 +249,8 @@ class ProductControllerTest {
     @DisplayName("유효하지 않은 ID에 대한 제품 삭제")
     fun deleteProductByInvalidId(){
         mockMvc.perform(
-            MockMvcRequestBuilders.delete("/api/products/{id}",100)
-                .header("Authorization","Bearer TestToken")
+            RestDocumentationRequestBuilders.delete("/api/products/{id}",100)
+                .headers(headerBuild())
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(status().isOk)
