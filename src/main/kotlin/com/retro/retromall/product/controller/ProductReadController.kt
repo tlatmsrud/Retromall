@@ -40,4 +40,16 @@ class ProductReadController(
     ): ResponseEntity<ProductListResponse> {
         return ResponseEntity.ok(productReadService.getProductList(category, pageable))
     }
+
+    @GetMapping("/search")
+    fun searchProductList(
+        @RequestParam("searchWord") searchWord: String,
+        @PageableDefault(
+            size = 20,
+            sort = ["createdAt"],
+            direction = Sort.Direction.DESC
+        ) pageable : Pageable
+    ): ResponseEntity<ProductListResponse>{
+        return ResponseEntity.ok(productReadService.searchProductList(searchWord, pageable))
+    }
 }
