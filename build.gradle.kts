@@ -111,3 +111,8 @@ tasks.asciidoctor {
 tasks.build {
     dependsOn(tasks.asciidoctor)
 }
+
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
