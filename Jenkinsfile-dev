@@ -39,13 +39,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sshPublisher(publishers: [
                         sshPublisherDesc(configName: 'ubuntu-server', transfers: [
-                            sshTransfer(cleanRemote: false, excludes: '', execCommand: """
+                            sshTransfer(cleanRemote: false, excludes: '', execCommand: '''
                                 sh('docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD')
                                 sh('docker pull $registryUrl/$imageName:$version')
                                 cd /home/ubuntu/retromall 
                                 chmod 755 dev.sh 
                                 sh('sh dev.sh $imageName $version')
-                            """, execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                            ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
                         ])
                     ])
                 }
