@@ -6,7 +6,7 @@ pipeline {
         imageName = 'retromall'
         version = '0.1'
         credentialsId = 'dockerhub-id'
-        workspaceDir = "/home/ubuntu/retromall"
+        workDir = "/home/ubuntu/retromall"
     }
     stages {
         stage("build jar") {
@@ -34,16 +34,14 @@ pipeline {
             }
         }
 
-        stage('deploy') {
+        stage ('deploy') {
             steps {
-                withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                script {
-                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-      
-                    sh "docker pull ${registryUrl}/${imageName}:${version}"
-                    
-                    script {
-                        dir(workspaceDir) {
+                sshagent(credentials: ['ubuntu-server']) {
+                    withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                        sh "docker pull ${registryUrl}/${imageName}:${version}"
+                        script {
+                            dir(workspaceDir) {
                                 sh "sh dev.sh ${imageName} ${version}"
                             }
                         }
@@ -51,5 +49,31 @@ pipeline {
                 }
             }
         }
+
+        // stage ('deploy') {
+        //     steps {
+        //         // 원격 서버에 파일 전송
+        //         sshPublisher(
+        //             continueOnError: true,
+        //             failOnError: false,
+        //             publishers: [
+        //                 sshPublisherDesc(
+        //                     configName: 'ubuntu-server',
+        //                     transfers: [
+        //                         // sshTransfer(
+        //                         //     sourceFiles: 'init.sql',
+        //                         //     execCommand: "cd ${env.REMOTE_WORK_DIR} && chmod +rwx init.sql && cp init.sql ${env.REMOTE_PATH}"
+        //                         // ),
+        //                         sshTransfer(
+        //                             // sourceFiles: "build/libs/${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar",
+        //                             // removePrefix: 'build/libs/',
+        //                             execCommand: "cd ${workDir} && chmod +x dev.sh && sh dev.sh ${imageName} ${version}"
+        //                         )
+        //                     ]
+        //                 )
+        //             ]
+        //         )
+        //     }
+        // }
     }
 }
