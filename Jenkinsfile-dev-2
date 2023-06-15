@@ -6,6 +6,7 @@ pipeline {
         imageName = 'retromall'
         version = '0.1'
         credentialsId = 'dockerhub-id'
+        workspaceDir = "/home/ubuntu/retromall"
     }
     stages {
         stage("build jar") {
@@ -41,9 +42,9 @@ pipeline {
       
                     sh "docker pull ${registryUrl}/${imageName}:${version}"
       
-                    cd /home/ubuntu/retromall
-
-                    sh "sh dev.sh ${imageName} ${version}"
+                    dir(workspaceDir) {
+                            sh "sh dev.sh ${imageName} ${version}"
+                        }
                     }
                 }
             }
