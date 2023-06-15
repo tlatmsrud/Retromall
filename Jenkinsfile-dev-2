@@ -6,7 +6,7 @@ pipeline {
         imageName = 'retromall'
         version = '0.0.1'
         dockerfilePath = '/home/ubuntu/retromall/jenkins_home/workspace/retromall-dev/Dockerfile'
-        credentialsId = ''
+        credentialsId = 'dockerhub-id'
     }
     stages {
         stage ('build docker image') {
@@ -22,20 +22,19 @@ pipeline {
                 script {
                     docker.withRegistry("https://${registryUrl}", credentialsId) {
                         docker.image("${registryUrl}/${imageName}:${version}").push()
-                        docker.image("${registryUrl}/${imageName}:${version}").push('latest')
                     }
                 }
             }
         }
 
-        stage ('push') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
+        // stage ('push') {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+        //                 dockerImage.push()
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
