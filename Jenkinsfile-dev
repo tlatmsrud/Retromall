@@ -34,7 +34,7 @@ pipeline {
             }
         }
         
-        stage('docker pull') {
+        stage('deploy') {
             steps {
                 withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sshPublisher(publishers: [
