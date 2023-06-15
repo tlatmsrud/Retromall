@@ -2,58 +2,52 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_NAME = "Retromall"
-        PROJECT_VERSION = "0.1"
-
-        REMOTE_SERVER = credentials('ubuntu-server')
-        // 원격 서버의 SSH 포트 번호
-        REMOTE_PORT = "22"
-        // 원격 서버의 계정 이름
-        REMOTE_USER = "ubuntu"
-        // 원격 서버에 복사할 경로
-        REMOTE_PATH = "/home/ubuntu/retromall/dev"
-        // 원격 서버 작업 경로
-        REMOTE_WORK_DIR = "/home/ubuntu/retromall/bin"
+        registryUrl = 'dlwlgh9412'
+        imageName = 'retromall'
+        version = '0.1'
+        credentialsId = 'dockerhub-id'
+        workDir = "/home/ubuntu/retromall"
     }
-
     stages {
-        stage("Checkout") {
-            steps {
-                // GitHub에서 프로젝트 체크아웃
-                checkout scm
-            }
-        }
-
-        stage("Build") {
+        stage("build jar") {
             steps {
                 // 프로젝트 빌드
-                sh './gradlew clean build -x test'
+                sh './gradlew build -x test'
             }
         }
 
-        stage("Deploy") {
+        stage ('build docker image') {
             steps {
-                // 원격 서버에 파일 전송
-                sshPublisher(
-                    continueOnError: true,
-                    failOnError: false,
-                    publishers: [
-                        sshPublisherDesc(
-                            configName: 'retromall-ubuntu',
-                            transfers: [
-                                sshTransfer(
-                                    sourceFiles: 'init.sql',
-                                    execCommand: "cd ${env.REMOTE_WORK_DIR} && chmod +rwx init.sql && cp init.sql ${env.REMOTE_PATH}"
-                                ),
-                                sshTransfer(
-                                    sourceFiles: "build/libs/${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar",
-                                    removePrefix: 'build/libs/',
-                                    execCommand: "cd ${env.REMOTE_WORK_DIR} && cp ${env.PROJECT_NAME}-${env.PROJECT_VERSION}.jar ${env.REMOTE_PATH} && cd ${env.REMOTE_PATH} && chmod +x deploy.sh && sh deploy.sh ${env.PROJECT_NAME} ${env.PROJECT_VERSION}"
-                                )
-                            ]
-                        )
-                    ]
-                )
+                script {
+                    dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "--build-arg TARGET=${imageName}-${version} .")
+                }
+            }
+        }
+
+        stage ('tag docker image && push') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', credentialsId) {
+                        docker.image("${registryUrl}/${imageName}:${version}").push()
+                    }
+                }
+            }
+        }
+        
+        stage('docker pull') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sshPublisher(publishers: [
+                        sshPublisherDesc(configName: 'ubuntu-server', transfers: [
+                            sshTransfer(cleanRemote: false, excludes: '', execCommand: """
+                                docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+                                docker pull ${registryUrl}/${imageName}:${version}
+                                cd /home/ubuntu/retromall
+                                sh "sh dev.sh ${imageName} ${version}"
+                            """, execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                        ])
+                    ])
+                }
             }
         }
     }
