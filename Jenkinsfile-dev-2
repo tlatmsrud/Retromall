@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         registryUrl = 'dlwlgh9412'
-        imageName = 'Retromall'
+        imageName = 'retromall'
         version = '0.1'
         dockerfilePath = '/home/ubuntu/retromall/jenkins_home/workspace/retromall-dev/Dockerfile'
         credentialsId = 'dockerhub-id'
