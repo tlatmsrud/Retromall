@@ -41,7 +41,6 @@ pipeline {
                         sshPublisherDesc(configName: 'ubuntu-server', transfers: [
                             sshTransfer(cleanRemote: false, excludes: '', execCommand: '''
                             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-                            docker pull $registryUrl/$imageName:$version
                             ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
                         ])
                     ])
