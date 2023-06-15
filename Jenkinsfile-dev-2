@@ -41,7 +41,7 @@ pipeline {
                         sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                         sh "docker pull ${registryUrl}/${imageName}:${version}"
                         script {
-                            dir(workspaceDir) {
+                            dir(workDir) {
                                 sh "sh dev.sh ${imageName} ${version}"
                             }
                         }
