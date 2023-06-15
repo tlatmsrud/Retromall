@@ -58,21 +58,21 @@ pipeline {
             }
         }
 
-        stage('mov workDir') {
-            steps {
-                sshPublisher(publishers: [
-                    sshPublisherDesc(configName: 'ubuntu-server', transfers: [
-                        sshTransfer(cleanRemote: false, excludes: '', execCommand: "cd /home/ubuntu/retromall", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
-                    ])
-                ])
-            }
-        }
+        // stage('mov workDir') {
+        //     steps {
+        //         sshPublisher(publishers: [
+        //             sshPublisherDesc(configName: 'ubuntu-server', transfers: [
+        //                 sshTransfer(cleanRemote: false, excludes: '', execCommand: "cd /home/ubuntu/retromall", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+        //             ])
+        //         ])
+        //     }
+        // }
 
         stage('deploy') {
             steps {
                 sshPublisher(publishers: [
                     sshPublisherDesc(configName: 'ubuntu-server', transfers: [
-                        sshTransfer(cleanRemote: false, excludes: '', execCommand: "sh dev.sh ${imageName} ${version}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                        sshTransfer(cleanRemote: false, excludes: '', execCommand: "sh /home/ubuntu/retromall/dev.sh ${imageName} ${version}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
                     ])
                 ])
             }
