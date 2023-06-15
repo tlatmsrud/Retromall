@@ -37,12 +37,14 @@ pipeline {
         stage('deploy') {
             steps {
                 sshagent(credentials: ['ubuntu-server']) {
-                    sshCommand remote: 'your-remote-server', command: """
-                        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} &&
-                        docker pull ${registryUrl}/${imageName}:${version} &&
-                        cd /path/to/your/script/directory &&
-                        sh your-script.sh
-                    """
+                    withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sshCommand remote: 'your-remote-server', command: """
+                            docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} &&
+                            docker pull ${registryUrl}/${imageName}:${version} &&
+                            cd /path/to/your/script/directory &&
+                            sh your-script.sh
+                        """
+                    }
                 }
             }
         }
@@ -51,7 +53,7 @@ pipeline {
         // stage ('deploy') {
         //     steps {
         //         sshagent(credentials: ['ubuntu-server']) {
-        //             withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    // withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
         //                 sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
         //                 sh "docker pull ${registryUrl}/${imageName}:${version}"
         //                 script {
