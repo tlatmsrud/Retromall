@@ -24,7 +24,7 @@ class AutocompleteService (
             val rangeList = zSetOperations.range(key, it, -1) as Set<String>
 
             autoCompleteList =  rangeList.stream()
-                .filter { value -> value.endsWith(suffix) && value.contains(searchWord)}
+                .filter { value -> value.endsWith(suffix) && value.startsWith(searchWord)}
                 .map { value -> StringUtils.removeEnd(value,suffix) }
                 .limit(limit)
                 .toList()

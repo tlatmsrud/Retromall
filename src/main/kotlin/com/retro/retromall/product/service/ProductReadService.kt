@@ -32,4 +32,8 @@ class ProductReadService(
     fun getProductList(category: String?, pageable: Pageable): ProductListResponse? {
         return productRepository.selectProductList(category, pageable)
     }
+
+    fun searchProductList(searchWord: String, pageable: Pageable): ProductListResponse? {
+        return productRepository.selectProductListBySearchWord(searchWord,pageable)
+    }
 }

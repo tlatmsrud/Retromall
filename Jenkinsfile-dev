@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_NAME = "retromall"
-        PROJECT_VERSION = "0.5"
+        PROJECT_NAME = "Retromall"
+        PROJECT_VERSION = "0.1"
 
         REMOTE_SERVER = credentials('ubuntu-server')
         // 원격 서버의 SSH 포트 번호
