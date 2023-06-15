@@ -37,7 +37,7 @@ pipeline {
         stage('deploy') {
             steps {
                 sshagent(credentials: ['ubuntu-server']) {
-                    withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sshCommand remote: 'your-remote-server', command: """
                             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} &&
                             docker pull ${registryUrl}/${imageName}:${version} &&
