@@ -34,20 +34,23 @@ pipeline {
             }
         }
         
-        stage('deploy') {
+        stage('docker pull') {
             steps {
-                sshagent(credentials: ['ubuntu-server']) {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sshCommand remote: 'your-remote-server', command: """
-                            docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} &&
-                            docker pull ${registryUrl}/${imageName}:${version} &&
-                            cd /path/to/your/script/directory &&
-                            sh your-script.sh
-                        """
-                    }
+                withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sshPublisher(publishers: [
+                        sshPublisherDesc(configName: 'ubuntu-server', transfers: [
+                            sshTransfer(cleanRemote: false, excludes: '', execCommand: """
+                                docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+                                docker pull ${registryUrl}/${imageName}:${version}
+                                cd /home/ubuntu/retromall
+                                sh "sh dev.sh ${imageName} ${version}"
+                            """, execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                        ])
+                    ])
                 }
             }
         }
+
 
 
         // stage ('deploy') {
