@@ -40,8 +40,8 @@ pipeline {
                     sshPublisher(publishers: [
                         sshPublisherDesc(configName: 'ubuntu-server', transfers: [
                             sshTransfer(cleanRemote: false, excludes: '', execCommand: """
-                                docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-                                docker pull ${registryUrl}/${imageName}:${version}
+                                sh('docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD')
+                                sh('docker pull $registryUrl/$imageName:$version')
                                 cd /home/ubuntu/retromall 
                                 chmod 755 dev.sh 
                                 sh('sh dev.sh $imageName $version')
