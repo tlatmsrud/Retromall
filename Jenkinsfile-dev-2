@@ -1,5 +1,5 @@
 pipeline {
-    agent_any
+    agent any
 
     environment {
         registryUrl = 'dlwlgh9412'
