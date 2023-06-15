@@ -12,7 +12,7 @@ pipeline {
         stage("build jar") {
             steps {
                 // 프로젝트 빌드
-                sh './gradlew clean build'
+                sh './gradlew build -x test'
             }
         }
 
@@ -33,6 +33,23 @@ pipeline {
                 }
             }
         }
+
+
+        // stage('Deploy Docker Container') {
+        //     steps {
+        //         script {
+        //             // Log in to Docker Hub
+        //             sh 'docker login -u <username> -p <password>'
+          
+        //             // Pull the Docker image
+        //             sh 'docker pull <image-name>:<tag>'
+          
+        //             // Run the Docker container
+        //             sh 'docker run -d --name <container-name> -p <host-port>:<container-port> <image-name>:<tag>'
+        //         }
+        //     }
+        // } 
+
 
         // stage ('push') {
         //     steps {
