@@ -33,22 +33,48 @@ pipeline {
                 }
             }
         }
-        
-        stage('deploy') {
+
+        stage('docker login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sshPublisher(publishers: [
                         sshPublisherDesc(configName: 'ubuntu-server', transfers: [
-                            sshTransfer(cleanRemote: false, excludes: '', execCommand: '''
-                                docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-                                docker pull $registryUrl/$imageName:$version
-                                cd /home/ubuntu/retromall 
-                                chmod 755 dev.sh 
-                                sh dev.sh $imageName $version
-                            ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                            sshTransfer(cleanRemote: false, excludes: '', execCommand: 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
                         ])
                     ])
                 }
+            }
+        }
+
+        stage('docker pull') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sshPublisher(publishers: [
+                        sshPublisherDesc(configName: 'ubuntu-server', transfers: [
+                            sshTransfer(cleanRemote: false, excludes: '', execCommand: 'docker pull $registryUrl/$imageName:$version', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                        ])
+                    ])
+                }
+            }
+        }
+
+        stage('mov workDir') {
+            steps {
+                sshPublisher(publishers: [
+                    sshPublisherDesc(configName: 'ubuntu-server', transfers: [
+                        sshTransfer(cleanRemote: false, excludes: '', execCommand: 'cd /home/ubuntu/retromall', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                    ])
+                ])
+            }
+        }
+
+        stage('deploy') {
+            steps {
+                sshPublisher(publishers: [
+                    sshPublisherDesc(configName: 'ubuntu-server', transfers: [
+                        sshTransfer(cleanRemote: false, excludes: '', execCommand: 'sh dev.sh $imageName $version', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                    ])
+                ])
             }
         }
     }
