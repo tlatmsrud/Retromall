@@ -42,7 +42,9 @@ pipeline {
                             sshTransfer(cleanRemote: false, excludes: '', execCommand: """
                                 docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
                                 docker pull ${registryUrl}/${imageName}:${version}
-                                cd /home/ubuntu/retromall && chmod 644 dev.sh && sh "dev.sh ${imageName} ${version}"
+                                cd /home/ubuntu/retromall 
+                                chmod 644 dev.sh 
+                                sh "sh dev.sh ${imageName} ${version}"
                             """, execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
                         ])
                     ])
