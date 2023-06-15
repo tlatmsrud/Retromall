@@ -12,7 +12,8 @@ pipeline {
         stage ('build docker image') {
             steps {
                 script {
-                    dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "-f ${dockerfilePath} .")
+                    // dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "-f ${dockerfilePath} .")
+                    dockerImage = docker.build("${registryUrl}/${imageName}:${version}")
                 }
             }
         }
