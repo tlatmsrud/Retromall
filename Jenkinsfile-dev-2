@@ -1,0 +1,39 @@
+pipeline {
+    environment {
+        registryUrl = 'dlwlgh9412'
+        imageName = 'retromall'
+        version = '0.0.1'
+        dockerfilePath = './Dockerfile'
+        credentialsId = ''
+    }
+    stages {
+        stage ('build docker image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "-f ${dockerfilePath} .")
+                }
+            }
+        }
+
+        stage ('tag docker image') {
+            steps {
+                script {
+                    docker.withRegistry("https://${registryUrl}", credentialsId) {
+                        docker.image("${registryUrl}/${imageName}:${version}").push()
+                        docker.image("${registryUrl}/${imageName}:${version}").push('latest')
+                    }
+                }
+            }
+        }
+
+        stage ('push') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+    }
+}
