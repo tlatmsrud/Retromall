@@ -12,8 +12,8 @@ pipeline {
         stage ('build docker image') {
             steps {
                 script {
-                    def path = pwd()
-                    echo "${path}"
+                    def list = ls()
+                    echo "${list}"
                     // dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "-f ${dockerfilePath} .")
                     dockerImage = docker.build("${registryUrl}/${imageName}:${version}")
                 }
