@@ -12,8 +12,17 @@ pipeline {
         stage ('build docker image') {
             steps {
                 script {
-                    def list = ls()
-                    echo "${list}"
+                              sh """
+                                # List the files in the directory
+                                ls -l
+
+                                # Check if Dockerfile exists
+                                if [ -f Dockerfile ]; then
+                                  echo 'Dockerfile exists'
+                                else
+                                  echo 'Dockerfile does not exist'
+                                fi
+                              """
                     // dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "-f ${dockerfilePath} .")
                     dockerImage = docker.build("${registryUrl}/${imageName}:${version}")
                 }
