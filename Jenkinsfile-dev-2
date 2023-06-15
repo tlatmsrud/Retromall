@@ -12,7 +12,6 @@ pipeline {
         stage ('build docker image') {
             steps {
                 script {
-                    cd jenkins/jenkins_home/workspace/retromall-dev
                     dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "-f ${dockerfilePath} .")
                 }
             }
