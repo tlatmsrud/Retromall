@@ -39,10 +39,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sshPublisher(publishers: [
                         sshPublisherDesc(configName: 'ubuntu-server', transfers: [
-                            sshTransfer(cleanRemote: false, excludes: '', execCommand: sh '''
+                            sshTransfer(cleanRemote: false, excludes: '', execCommand: sh """
                             'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                             "docker pull ${registryUrl}/${imageName}:${version}"
-                            ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
+                            """, execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '')
                         ])
                     ])
                 }
