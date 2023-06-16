@@ -1,5 +1,6 @@
 package com.retro.retromall.product.service
 
+import com.retro.retromall.autocomplete.service.AutocompleteService
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.domain.repository.ProductRepository
 import com.retro.retromall.product.dto.ProductResponse
@@ -15,6 +16,7 @@ import org.springframework.util.StopWatch
 @Transactional(readOnly = true)
 class ProductReadService(
     private val productRepository: ProductRepository
+    , private val autocompleteService : AutocompleteService
 ) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ProductReadService::class.java)
@@ -34,6 +36,7 @@ class ProductReadService(
     }
 
     fun searchProductList(searchWord: String, pageable: Pageable): ProductListResponse? {
+        autocompleteService.addAutocomplete(searchWord)
         return productRepository.selectProductListBySearchWord(searchWord,pageable)
     }
 }
