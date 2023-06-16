@@ -46,3 +46,4 @@ autocomplete:
   suffix: '*'
   limit: 5
   key: auto-complete
+  score-key: auto-complete-score
