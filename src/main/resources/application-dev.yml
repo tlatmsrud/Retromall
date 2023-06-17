@@ -44,6 +44,6 @@ refresh-token-cookie:
 
 autocomplete:
   suffix: '*'
-  limit: 5
+  limit: 10
   key: auto-complete
   score-key: auto-complete-score
