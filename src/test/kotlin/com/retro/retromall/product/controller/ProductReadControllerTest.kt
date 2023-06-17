@@ -2,7 +2,7 @@ package com.retro.retromall.product.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.retro.ApiDocumentUtils
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse

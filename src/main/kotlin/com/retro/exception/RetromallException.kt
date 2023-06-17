@@ -1,5 +1,8 @@
 package com.retro.exception
 
-class RetromallException(
-    override val message: String
+import org.springframework.http.HttpStatus
+
+open class RetromallException(
+    override val message: String,
+    open val httpStatus: HttpStatus
 ) : RuntimeException(message)

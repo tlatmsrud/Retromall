@@ -1,6 +1,6 @@
 package com.retro.retromall.product.controller
 
-import com.retro.common.annotation.MemberAuthentication
+import com.retro.aop.annotation.MemberAuthentication
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.dto.ProductListResponse
 import com.retro.retromall.product.dto.ProductResponse
@@ -39,5 +39,17 @@ class ProductReadController(
         ) pageable: Pageable
     ): ResponseEntity<ProductListResponse> {
         return ResponseEntity.ok(productReadService.getProductList(category, pageable))
+    }
+
+    @GetMapping("/search")
+    fun searchProductList(
+        @RequestParam("searchWord") searchWord: String,
+        @PageableDefault(
+            size = 20,
+            sort = ["createdAt"],
+            direction = Sort.Direction.DESC
+        ) pageable : Pageable
+    ): ResponseEntity<ProductListResponse>{
+        return ResponseEntity.ok(productReadService.searchProductList(searchWord, pageable))
     }
 }

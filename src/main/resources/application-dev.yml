@@ -41,3 +41,8 @@ refresh-token-cookie:
   path: /api/token
   name: refresh-token
   day: 30
+
+autocomplete:
+  suffix: '*'
+  limit: 5
+  key: auto-complete

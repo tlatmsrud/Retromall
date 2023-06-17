@@ -1,4 +1,4 @@
-package com.retro.common.aop
+package com.retro.aop.annotation
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

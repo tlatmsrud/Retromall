@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    environment {
+        registryUrl = 'dlwlgh9412'
+        imageName = 'retromall'
+        version = '0.1'
+        credentialsId = 'dockerhub-id'
+    }
+    stages {
+        stage("build jar") {
+            steps {
+                // 프로젝트 빌드
+                sh './gradlew build -x test'
+            }
+        }
+
+        stage ('build docker image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${registryUrl}/${imageName}:${version}", "--build-arg TARGET=${imageName}-${version} .")
+                }
+            }
+        }
+
+        stage ('tag docker image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', credentialsId) {
+                        docker.image("${registryUrl}/${imageName}:${version}").push()
+                    }
+                }
+            }
+        }
+
+        stage('deploy') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                script {
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+      
+                    sh "docker pull ${imageName}:${version}"
+      
+                    sh 'docker run -d --name <container-name> -p <host-port>:<container-port> <image-name>:<tag>'
+                    }
+                }
+            }
+        }
+    }
+}

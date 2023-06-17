@@ -1,6 +1,6 @@
 package com.retro.retromall.product.support
 
-import com.retro.exception.ProductNotFoundException
+import com.retro.exception.ProductException
 import com.retro.retromall.authorization.enums.Permission
 import com.retro.retromall.category.service.CategoryReadService
 import com.retro.retromall.member.dto.AuthenticationAttributes
@@ -42,7 +42,7 @@ class ProductModifier(
 
     private fun getProductById(productId: Long): ProductEntity {
         return productRepository.findById(productId)
-            .orElseThrow { throw ProductNotFoundException("해당 상품을 찾을 수 없습니다.") }
+            .orElseThrow { throw ProductException("해당 상품을 찾을 수 없습니다.") }
     }
 
     private fun checkProductPermission(

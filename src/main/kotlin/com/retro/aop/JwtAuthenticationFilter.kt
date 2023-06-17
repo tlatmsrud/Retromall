@@ -1,6 +1,5 @@
-package com.retro.common
+package com.retro.aop
 
-import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 import org.springframework.web.filter.GenericFilterBean
 import javax.servlet.FilterChain

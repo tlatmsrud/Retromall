@@ -1,7 +1,8 @@
 package com.retro.retromall.token.service
 
 import com.google.common.primitives.UnsignedInts.toLong
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
+import com.retro.exception.UnauthorizedAccessException
 import com.retro.retromall.member.dto.MemberAttributes
 import com.retro.retromall.member.enums.OAuthType
 import com.retro.retromall.member.repository.MemberRepository
@@ -52,7 +53,7 @@ class RedisTokenServiceTest {
     @BeforeEach
     fun setUp(){
 
-        tokenService = RedisTokenService(REFRESH_TOKEN_COOKIE_DAY, memberRepository, jwtTokenProvider, redisTemplate as RedisTemplate<String, Long>)
+        tokenService = RedisTokenService(REFRESH_TOKEN_COOKIE_DAY, memberRepository, jwtTokenProvider, redisTemplate as RedisTemplate<String, String>)
 
         val token = Token(1, VALID_REFRESH_TOKEN, Date().time + 2592000000)
         val expiredToken = Token(2, EXPIRED_REFRESH_TOKEN,Date().time - toLong(86400000))
@@ -86,11 +87,11 @@ class RedisTokenServiceTest {
         given(jwtTokenProvider.generateRefreshToken(any(MemberAttributes::class.java)))
             .willReturn(generatedRefreshTokenDto)
 
-        given(redisTemplate.opsForValue()).willReturn(valueOperations as ValueOperations<String, Long>)
+        given(redisTemplate.opsForValue()).willReturn(valueOperations as ValueOperations<String, String>)
 
-        willDoNothing().given(valueOperations).set(any(String::class.java), any(Long::class.java), eq(Duration.ofDays(30)))
+        willDoNothing().given(valueOperations).set(any(String::class.java), any(String::class.java), eq(Duration.ofDays(30)))
 
-        given(valueOperations.get(VALID_REFRESH_TOKEN)).willReturn(1L)
+        given(valueOperations.get(VALID_REFRESH_TOKEN)).willReturn(1L.toString())
 
         given(valueOperations.get(INVALID_REFRESH_TOKEN)).willReturn(null)
         given(valueOperations.get(EXPIRED_REFRESH_TOKEN)).willReturn(null)
@@ -115,19 +116,19 @@ class RedisTokenServiceTest {
     }
 
     @Test
-    @DisplayName("유효하지 않은 리프레시 토큰 / IllegalArgumentException 예외 발생")
+    @DisplayName("유효하지 않은 리프레시 토큰 / UnauthorizedAccessException 예외 발생")
     fun renewAccessTokenByInvalidToken() {
         assertThatThrownBy{ tokenService.renewAccessToken(INVALID_REFRESH_TOKEN) }
-            .isInstanceOf(IllegalArgumentException::class.java)
+            .isInstanceOf(UnauthorizedAccessException::class.java)
 
         verify(jwtTokenProvider).validateToken(INVALID_REFRESH_TOKEN)
     }
 
     @Test
-    @DisplayName("유효기간이 지난 리프레시 토큰 / IllegalArgumentException 예외 발생")
+    @DisplayName("유효기간이 지난 리프레시 토큰 / UnauthorizedAccessException 예외 발생")
     fun renewAccessTokenByExpiredRefreshToken() {
         assertThatThrownBy{ tokenService.renewAccessToken(EXPIRED_REFRESH_TOKEN) }
-            .isInstanceOf(IllegalArgumentException::class.java)
+            .isInstanceOf(UnauthorizedAccessException::class.java)
 
         verify(jwtTokenProvider).validateToken(EXPIRED_REFRESH_TOKEN)
     }
@@ -144,7 +145,7 @@ class RedisTokenServiceTest {
     @DisplayName("유효하지 않은 리프레시 토큰을 통한 토큰 엔티티 조회")
     fun getValidTokenByInvalidRefreshToken(){
         assertThatThrownBy { tokenService.getMemberIdByValidRefreshToken(INVALID_REFRESH_TOKEN) }
-            .isInstanceOf(IllegalArgumentException::class.java)
+            .isInstanceOf(UnauthorizedAccessException::class.java)
 
         verify(jwtTokenProvider).validateToken(INVALID_REFRESH_TOKEN)
     }
@@ -153,7 +154,7 @@ class RedisTokenServiceTest {
     @DisplayName("유효기간이 만료된 리프레시 토큰을 통한 토큰 엔티티 조회")
     fun getValidTokenByExpiredRefreshToken(){
         assertThatThrownBy { tokenService.getMemberIdByValidRefreshToken(EXPIRED_REFRESH_TOKEN) }
-            .isInstanceOf(IllegalArgumentException::class.java)
+            .isInstanceOf(UnauthorizedAccessException::class.java)
 
         verify(jwtTokenProvider).validateToken(EXPIRED_REFRESH_TOKEN)
     }

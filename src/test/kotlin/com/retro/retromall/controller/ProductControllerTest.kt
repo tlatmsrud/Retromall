@@ -1,10 +1,10 @@
 package com.retro.retromall.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.retro.ApiDocumentUtils
 import com.retro.ApiDocumentUtils.Companion.getDocumentRequest
 import com.retro.ApiDocumentUtils.Companion.getDocumentResponse
-import com.retro.common.JwtTokenProvider
+import com.retro.aop.JwtTokenProvider
+import com.retro.exception.ProductException
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import com.retro.retromall.product.controller.ProductController
 import com.retro.retromall.product.dto.CreateProductRequest
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.eq
-import org.mockito.BDDMockito
 import org.mockito.BDDMockito.*
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
@@ -25,14 +24,11 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation
 import org.springframework.restdocs.payload.PayloadDocumentation.*
-import org.springframework.restdocs.request.RequestDocumentation
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.context.ActiveProfiles
@@ -44,7 +40,6 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.springframework.web.filter.CharacterEncodingFilter
-import javax.validation.constraints.NotBlank
 
 @WebMvcTest(ProductController::class)
 @ActiveProfiles("local")
@@ -114,12 +109,12 @@ class ProductControllerTest {
             .willReturn(1L)
 
         given(productService.updateProduct(authenticationAttributes, 100, generateValidUpdateRequest()))
-            .willThrow(IllegalArgumentException("해당 상품을 찾을 수 없습니다."))
+            .willThrow(ProductException("해당 상품을 찾을 수 없습니다."))
 
         willDoNothing().given(productService).deleteProduct(authenticationAttributes, 1);
 
         given(productService.deleteProduct(authenticationAttributes, 100))
-            .willThrow(IllegalArgumentException("해당 상품을 찾을 수 없습니다."))
+            .willThrow(ProductException("해당 상품을 찾을 수 없습니다."))
 
     }
 

@@ -154,6 +154,40 @@ class ProductRepositoryCustomImpl(
             .fetchOne()
     }
 
+    override fun selectProductListBySearchWord(searchWord: String, pageable: Pageable): ProductListResponse {
+        val query = jpaQueryFactory.select(
+            Projections.constructor(
+                ProductListResponse.Data::class.java,
+                productEntity.id,
+                memberEntity.nickname,
+                productEntity.title,
+                productEntity.amount,
+                productEntity.likes,
+                productEntity.thumbnail,
+                addressEntity.addr,
+                productEntity.createdAt,
+                productEntity.modifiedAt
+            )
+        )
+            .from(productEntity)
+            .innerJoin(memberEntity).on(productEntity.authorId.eq(memberEntity.id))
+            .innerJoin(addressEntity).on(productEntity.addressId.eq(addressEntity.id))
+            .where(containsSearchWord(searchWord))
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong() + 1)
+        QueryDslUtils.setOrderBy(query, productEntity.type, productEntity.metadata, pageable)
+
+        val content = query.fetch()
+
+        var hasNext = false
+        if (content.size > pageable.pageSize) {
+            content.removeAt(pageable.pageSize)
+            hasNext = true
+        }
+
+        return ProductListResponse(data = SliceImpl(content, pageable, hasNext))
+    }
+
     private fun eqCategory(category: String?): BooleanExpression? {
         return if (StringUtils.hasText(category))
             return productEntity.category.eq(category)
@@ -166,5 +200,11 @@ class ProductRepositoryCustomImpl(
 
     private fun getImages(productEntity: ProductEntity): Set<String> {
         return productEntity.images.stream().map { it.id.url }.collect(Collectors.toSet())
+    }
+
+    private fun containsSearchWord(searchWord: String) : BooleanExpression ?{
+
+        return productEntity.title.contains(searchWord)
+            .or(productEntity.content.contains(searchWord))
     }
 }

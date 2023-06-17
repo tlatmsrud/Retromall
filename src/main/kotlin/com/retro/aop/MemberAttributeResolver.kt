@@ -1,6 +1,6 @@
-package com.retro.common
+package com.retro.aop
 
-import com.retro.common.annotation.MemberAuthentication
+import com.retro.aop.annotation.MemberAuthentication
 import com.retro.retromall.member.dto.AuthenticationAttributes
 import io.jsonwebtoken.Claims
 import org.slf4j.Logger

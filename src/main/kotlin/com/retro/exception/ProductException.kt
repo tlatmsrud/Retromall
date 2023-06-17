@@ -1,5 +1,5 @@
 package com.retro.exception
 
-class ProductNotFoundException(
+class ProductException(
     override val message: String
 ) : RuntimeException(message)

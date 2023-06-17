@@ -1,6 +1,6 @@
 package com.retro.config
 
-import com.retro.common.MemberAttributeResolver
+import com.retro.aop.MemberAttributeResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
